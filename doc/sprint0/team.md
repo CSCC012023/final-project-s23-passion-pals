@@ -5,3 +5,4 @@
 | Nishu Sheth | shethni4 | 1008358279 | nishu.sheth@mail.utoronto.ca | Email | Nishu Sheth |
 | Abulimiti Musitapa | musitapa | 1008011973 | mustafa.musitapa@mail.utoronto.ca | Email | Mustafa |
 | Renzhi Zhao | zhaorenz | 1007870877 | roger.zhao@mail.utoronto.ca | Email | Roger Zhao |
+| Nicholas Louie | louieni1 | 1008279934 | nic.louie@mail.utoronto.ca | Email | Nicholas Louie |
