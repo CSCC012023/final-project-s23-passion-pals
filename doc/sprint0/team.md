@@ -1,4 +1,4 @@
 | Full Name | UTORID | Student Id | Email | Best Way to Contact | Slack Username |
 | -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |
-| Row 1 Cell 1   | Row 1 Cell 2   | Row 1 Cell 3   | Row 1 Cell 1   | Row 1 Cell 2   | Row 1 Cell 3   |
-| Row 2 Cell 1   | Row 2 Cell 2   | Row 2 Cell 3   | Row 2 Cell 1   | Row 2 Cell 2   | Row 2 Cell 3   |
+| Darren Trieu | trieudar | 1008403611 | darrentrieu03@gmail.com | Email | Darren Trieu |
+| Amitoz Jatana | jatanaa1 | 1007926899 | amitoz.jatana@mail.utoronto.ca | Email | Amitoz Jatana |
