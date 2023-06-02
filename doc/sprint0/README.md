@@ -19,9 +19,13 @@ With Passion Pals you can:
 Follow these steps to build and run the project:
 0. To install this application you need the latest version of [Node.js](https://nodejs.org/en/download/)
 1. Clone the repo
-`git clone https://github.com/CSCC012023/final-project-s23-passion-pals.git`
+```
+git clone https://github.com/CSCC012023/final-project-s23-passion-pals.git
+```
 2. Navigate to project directory
-`cd final-project-s23-passion-pals`
+```
+cd final-project-s23-passion-pals
+```
 3. Open two terminals. 
 4. Using one navigate to the server package and initialize the backend
 ```
