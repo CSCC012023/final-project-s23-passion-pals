@@ -1,4 +1,4 @@
-##USER STORIES
+USER STORIES:
 1. As an unregistered user, I would like to sign up using my name, email, username, and password so that I can create an account.
 2. As a user, I would like to verify my email address so that I can ensure the security of my account.
 3. As a user, I would like to reset my password so that if I forget it, I can still have access to my account
