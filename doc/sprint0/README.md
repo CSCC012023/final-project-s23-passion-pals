@@ -24,13 +24,17 @@ Follow these steps to build and run the project:
 `cd final-project-s23-passion-pals`
 3. Open two terminals. 
 4. Using one navigate to the server package and initialize the backend
-`cd server`
-`npm install`
-`npm start`
+```
+cd server
+npm install
+npm start
+```
 5. In the other, navigate to the client package and initialize the frontend
-`cd client`
-`npm install`
-`npm start`
+```
+cd client
+npm install
+npm start
+```
 
 ## Contribution
 We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch, development branch, and deployment branch. We are not using any ticketing or issue website. We will be using pull requests.
