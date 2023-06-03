@@ -17,6 +17,7 @@ With Passion Pals you can:
  - CSS
 
 Follow these steps to build and run the project:
+
 0. To install this application you need the latest version of [Node.js](https://nodejs.org/en/download/)
 1. Clone the repo
 ```
