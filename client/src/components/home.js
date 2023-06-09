@@ -6,12 +6,12 @@ import { Link } from "react-router-dom"
 import { Container, Typography, Grow, Grid} from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import {getPosts} from '../actions/posts'
-import Posts from '../components/Posts/Posts';
-import Form from '../components/Form/Form';
+import Posts from './Posts/Posts';
+import Form from './Form/Form';
 import uoft from '../images/uoft.png';
 import useStyles from '../styles';
 
-function Home (){
+function Post (){
     const classes =  useStyles();
     const dispatch = useDispatch();
 
@@ -34,9 +34,9 @@ function Home (){
               </Grid>
             </Container>
           </Grow>
-          <Link to="/login">Login Page</Link>
+          {/* <Link to="/login">Login Page</Link> */}
         </Container>
       );
 }
 
-export default Home
+export default Post

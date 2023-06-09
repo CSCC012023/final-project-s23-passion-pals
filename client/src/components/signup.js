@@ -3,9 +3,9 @@ import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 
 
-function Login() {
+function Signup() {
     const history=useNavigate();
-
+    console.log("*************8")
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
 
@@ -14,7 +14,7 @@ function Login() {
 
         try{
 
-            await axios.post("http://localhost:8000/",{
+            await axios.post("http://localhost:5000/",{
                 email,password
             })
             .then(res=>{
@@ -40,7 +40,7 @@ function Login() {
 
 
     return (
-        <div className="login">
+        <div className="signup">
 
             <h1>Signup</h1>
 
@@ -55,10 +55,10 @@ function Login() {
             <p>OR</p>
             <br />
 
-            <Link to="/login">Login Page</Link>
+            <Link to="/">Login Page</Link>
 
         </div>
     )
 }
 
-export default Login
+export default Signup

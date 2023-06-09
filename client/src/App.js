@@ -8,16 +8,16 @@ import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
 import uoft from './images/uoft.png';
 import useStyles from './styles';
-import Home from './components/home'
+import Post from './components/home'
 import Login from './components/login'
 import Signup from './components/signup'
 
 const App = () =>{
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<Login/>}/>
+            <Route path="/signup" element={<Signup/>}/>
+            <Route path="/home" element={<Post/>}/>
         </Routes>
     )
 }

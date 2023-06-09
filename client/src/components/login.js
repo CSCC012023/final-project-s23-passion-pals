@@ -15,7 +15,7 @@ function Login() {
 
         try{
 
-            await axios.post("http://localhost:8000/",{
+            await axios.post("http://localhost:5000/",{
                 email,password
             })
             .then(res=>{
@@ -56,7 +56,7 @@ function Login() {
             <p>OR</p>
             <br />
 
-            <Link to="/signup">Signup Page</Link>
+            <Link to="/signup">Sign up Page</Link>
 
         </div>
     )

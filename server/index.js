@@ -27,17 +27,20 @@ app.get("/", cors(), (req,res)=>{
 app.post("/", async(req,res)=>{
     //with help of axios in login page we are getting the exact email and address
     const{email,password}=req.body
-
+    
     try{
         const check=await userAuthentication.findOne({email:email})
         if(check){
+            
             //if it already exist
             res.json("exist")
         }
         else{
+            
             res.json("notexist")
         }
     }catch(e){
+        
         res.json("notexist")
     }
 })
@@ -47,7 +50,7 @@ app.post("/", async(req,res)=>{
 
 
 app.post("/signup", async(req,res)=>{
-    //with help of axios in login page we are getting the exact email and address
+    console.log("*************8")
     const{email,password}=req.body
     const data={
         email:email,
@@ -61,6 +64,7 @@ app.post("/signup", async(req,res)=>{
         }
         else{
             res.json("notexist")
+            
             await userAuthentication.insertMany([data])
         }
     }catch(e){
