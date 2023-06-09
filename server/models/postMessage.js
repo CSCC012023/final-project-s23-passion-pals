@@ -24,7 +24,7 @@ const newSchemaForLogin=new mongoose.Schema({
     }
 })
 
-const userAuthentication = mongoose.model("collection",newSchemaForLogin)
+const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
 
 export {PostMessage,userAuthentication};
 
