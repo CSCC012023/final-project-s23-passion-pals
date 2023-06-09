@@ -16,23 +16,24 @@ const App = ()=>{
     }, [dispatch]);
     return (
         <Container maxWidth="lg">
-          <AppBar className={classes.appBar} position="static" color="inherit">
-            <Typography className={classes.heading} variant="h2" align="center">Passion Pals</Typography>
-            <img className={classes.image} src={uoft} alt="icon" height="60" />
-          </AppBar>
+          <Typography className={classes.heading} variant="h2" align="center">Passion Pals</Typography>
+          <img style={{ position: 'relative', top: '10px', left: '600px' }} src={uoft} alt="icon" height="60" />
           <Grow in>
             <Container>
-              <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
-                <Grid item xs={12} sm={7}>
-                  <Posts  />
-                </Grid>
+              <Grid container justifyContent="center" alignItems="stretch" spacing={3}>
                 <Grid item xs={12} sm={4}>
-                  <Form  />
+                  <Posts />
+                </Grid>
+                <Grid item xs={12} sm={9}>
+                  <Form />
                 </Grid>
               </Grid>
             </Container>
           </Grow>
         </Container>
       );
+      
+      
+      
     };
 export default App;
