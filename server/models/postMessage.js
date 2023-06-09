@@ -4,12 +4,7 @@ const postSchema = mongoose.Schema({
     title: String,
     message: String,
     creator: String,
-    tags: [String], 
     selectedFile: String,
-    likeCount: {
-        type: Number,
-        default: 0
-    },
     createdAt:{
         type: Date,
         default: new Date()
@@ -17,5 +12,20 @@ const postSchema = mongoose.Schema({
 })
 
 const PostMessage = mongoose.model('PostMessage', postSchema);
+
+const newSchemaForLogin=new mongoose.Schema({
+    email:{
+        type:String,
+        required:true
+    },
+    password:{
+        type:String,
+        required:true
+    }
+})
+
+const userAuthentication = mongoose.model("collection",newSchemaForLogin)
+
+export {PostMessage,userAuthentication};
 
 export default PostMessage;
