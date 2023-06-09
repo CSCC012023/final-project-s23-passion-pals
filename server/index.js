@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import postRoutes from './routes/posts.js';
+// import userAuthentication from "./models/postAuth.js"
 
 const app = express();
 
@@ -20,16 +21,20 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
     .catch((error)=> console.log(error.message));
 
 
-app.get("/", cors(), (req,res)=>{
-
+const newSchemaForLogin=new mongoose.Schema({
+    email: String,
+    password: String
 })
 
-app.post("/", async(req,res)=>{
+const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
+app.post("/", async (req,res)=>{
     //with help of axios in login page we are getting the exact email and address
     const{email,password}=req.body
-    
+    //console.log(email, password)
     try{
-        const check=await userAuthentication.findOne({email:email})
+        //console.log(userAuthentication)
+        const check = await userAuthentication.findOne({email:email})
+       // console
         if(check){
             
             //if it already exist
@@ -50,7 +55,7 @@ app.post("/", async(req,res)=>{
 
 
 app.post("/signup", async(req,res)=>{
-    console.log("*************8")
+    //console.log("************gg")
     const{email,password}=req.body
     const data={
         email:email,

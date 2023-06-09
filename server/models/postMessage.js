@@ -12,22 +12,8 @@ const postSchema = mongoose.Schema({
     },      
     
 })
-
 const PostMessage = mongoose.model('PostMessage', postSchema);
 
-const newSchemaForLogin=new mongoose.Schema({
-    email:{
-        type:String,
-        required:true
-    },
-    password:{
-        type:String,
-        required:true
-    }
-})
-
-const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
-
-export {PostMessage,userAuthentication};
 
 export default PostMessage;
+
