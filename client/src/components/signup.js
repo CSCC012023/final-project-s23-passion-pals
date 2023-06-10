@@ -24,6 +24,10 @@ function Signup() {
                 else if(res.data=="notexist"){
                     history("/home",{state:{id:email}})
                 }
+                else if(res.data=="emptyPassword"){
+                    alert("Email and password cannot be empty")
+                }
+                
             })
             .catch(e=>{
                 alert("wrong details")

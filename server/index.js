@@ -54,28 +54,35 @@ app.post("/", async (req,res)=>{
 
 
 
-app.post("/signup", async(req,res)=>{
-    //console.log("************gg")
-    const{email,password}=req.body
-    const data={
-        email:email,
-        password:password
+app.post("/signup", async (req, res) => {
+    const { email, password } = req.body;
+    
+    // Check if the password is empty
+    if (!password||!email) {
+        return res.json("emptyPassword");
     }
-    try{
-        const check=await userAuthentication.findOne({email:email})
-        if(check){
-            //if it already exist
-            res.json("exist")
+  
+    const data = {
+        email: email,
+        password: password
+    };
+
+    try {
+        const check = await userAuthentication.findOne({ email: email });
+
+        if (check) {
+            // If it already exists
+            res.json("exist");
+        } else {
+            res.json("notexist");
+
+            await userAuthentication.insertMany([data]);
         }
-        else{
-            res.json("notexist")
-            
-            await userAuthentication.insertMany([data])
-        }
-    }catch(e){
-        res.json("notexist")
+    } catch (e) {
+        res.json("notexist");
     }
-})
+});
+
 app.listen(8000,()=>{
     console.log("port connected")
 })
