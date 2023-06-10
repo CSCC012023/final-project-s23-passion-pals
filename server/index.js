@@ -61,16 +61,22 @@ app.post("/signup", async(req,res)=>{
         email:email,
         password:password
     }
-    try{
-        const check=await userAuthentication.findOne({email:email})
-        if(check){
-            //if it already exist
-            res.json("exist")
-        }
-        else{
-            res.json("notexist")
-            
-            await userAuthentication.insertMany([data])
+  
+    const data = {
+        email: email,
+        password: password
+    };
+
+    try {
+        const check = await userAuthentication.findOne({ email: email });
+
+        if (check) {
+            // If it already exists
+            res.json("exist");
+        } else {
+            res.json("notexist");
+
+            await userAuthentication.insertMany([data]);
         }
     }catch(e){
         res.json("notexist")
