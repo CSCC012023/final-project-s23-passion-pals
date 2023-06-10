@@ -1,6 +1,8 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
+const newSchemaForLogin=new mongoose.Schema({
+    email: String,
+    password: String
+})
 
-
-
-
-// export default userAuthentication;
+const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
+export default userAuthentication;

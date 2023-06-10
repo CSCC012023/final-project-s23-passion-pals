@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import postRoutes from './routes/posts.js';
 // import userAuthentication from "./models/postAuth.js"
-
+import userAuthentication from './models/postAuth.js'
 const app = express();
 
 
@@ -21,19 +21,19 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
     .catch((error)=> console.log(error.message));
 
 
-const newSchemaForLogin=new mongoose.Schema({
-    email: String,
-    password: String
-})
+// const newSchemaForLogin=new mongoose.Schema({
+//     email: String,
+//     password: String
+// })
 
-const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
+// const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
 app.post("/", async (req,res)=>{
     //with help of axios in login page we are getting the exact email and address
     const{email,password}=req.body
     //console.log(email, password)
     try{
         //console.log(userAuthentication)
-        const check = await userAuthentication.findOne({email:email})
+        const check = await userAuthentication.findOne({email:email, password:password})
        // console
         if(check){
             
