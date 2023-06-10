@@ -61,6 +61,9 @@ app.post("/signup", async (req, res) => {
     if (!password||!email) {
         return res.json("emptyPassword");
     }
+    else if(!email.includes("@gmail.com")){
+        return res.json("wrongFormat")
+    }
   
     const data = {
         email: email,

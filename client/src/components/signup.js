@@ -27,6 +27,9 @@ function Signup() {
                 else if(res.data=="emptyPassword"){
                     alert("Email and password cannot be empty")
                 }
+                else if(res.data=="wrongFormat"){
+                    alert("invalidEmail: Please enter a valid Gmail address.")
+                }
                 
             })
             .catch(e=>{
