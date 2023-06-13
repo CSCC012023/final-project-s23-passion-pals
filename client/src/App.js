@@ -12,6 +12,10 @@ import Post from './components/home'
 import Login from './components/login'
 import Signup from './components/signup'
 import Dash from './components/dashBoard'
+import Profile from './components/Profile'
+import UpdateProfile from './components/UpdateProfile'
+import EventCard from './components/EventCard/eventCard';
+
 
 const App = () =>{
     return (
@@ -20,6 +24,10 @@ const App = () =>{
             <Route path="/signup" element={<Signup/>}/>
             <Route path="/home" element={<Post/>}/>
             <Route path="/dash" element={<Dash/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/updateProfile" element={<UpdateProfile/>}/>
+            <Route path="/eventCard" element={<EventCard/>}/>
+
         </Routes>
     )
 }

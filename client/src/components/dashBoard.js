@@ -13,12 +13,14 @@ function Dash() {
 
             <h1>dash board</h1>
         
-            <Link to="/">Uer Profile page</Link>
+            <Link to="/profile">Uer Profile page</Link>
 
            
             <p>OR</p>
            
             <Link to="/home">Event page</Link>
+            <p>OR</p>
+            <Link to="/eventCard">Event card page</Link>
 
         </div>
     )
