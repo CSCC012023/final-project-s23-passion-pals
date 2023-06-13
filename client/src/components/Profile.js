@@ -6,7 +6,7 @@ export default function Profile() {
   const userId = '6483d98c674f146b488f0503'; 
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/getUsers?userId=${userId}`)
+    axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
       .then(response => {
         setUser(response.data);
       })

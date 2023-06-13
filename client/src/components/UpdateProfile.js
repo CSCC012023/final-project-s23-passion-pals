@@ -14,7 +14,7 @@ function UpdateProfile() {
 
     // Make a PUT request to update the user's profile data
     axios
-      .put(`http://localhost:3001/users/${userId}`, {
+      .put(`http://localhost:5000/users/${userId}`, {
         fname: firstName,
         lname: lastName,
         email: email,

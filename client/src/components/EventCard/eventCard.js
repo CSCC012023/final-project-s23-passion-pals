@@ -8,7 +8,7 @@ export default function EventCard() {
   const [enrolledEvents, setEnrolledEvents] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/events')
+    axios.get('http://localhost:5000/events')
       .then(response => {
         setEvents(response.data);
       })
@@ -20,7 +20,7 @@ export default function EventCard() {
   useEffect(() => {
     const userId = '6483d98c674f146b488f0503';
 
-    axios.get(`http://localhost:3001/getUsers?userId=${userId}`)
+    axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
       .then(response => {
         const user = response.data;
         if (user) {
@@ -37,7 +37,7 @@ export default function EventCard() {
 
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
-      axios.post(`http://localhost:3001/unenroll/${eventId}`, { userId })
+      axios.post(`http://localhost:5000/unenroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
@@ -48,7 +48,7 @@ export default function EventCard() {
         });
     } else {
       // Enroll in the event
-      axios.post(`http://localhost:3001/enroll/${eventId}`, { userId })
+      axios.post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
         })
