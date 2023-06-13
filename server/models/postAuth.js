@@ -4,5 +4,5 @@ const newSchemaForLogin=new mongoose.Schema({
     password: String
 })
 
-const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
+const userAuthentication = mongoose.model("Users",newSchemaForLogin)
 export default userAuthentication;

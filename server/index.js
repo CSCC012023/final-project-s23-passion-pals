@@ -21,10 +21,6 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
     .catch((error)=> console.log(error.message));
 
 
-// const newSchemaForLogin=new mongoose.Schema({
-//     email: String,
-//     password: String
-// })
 
 // const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
 app.post("/", async (req,res)=>{

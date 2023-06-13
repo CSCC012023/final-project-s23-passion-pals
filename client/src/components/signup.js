@@ -22,7 +22,7 @@ function Signup() {
                     alert("User already exists")
                 }
                 else if(res.data=="notexist"){
-                    history("/home",{state:{id:email}})
+                    history("/dash",{state:{id:email}})
                 }
                 else if(res.data=="emptyPassword"){
                     alert("Email and password cannot be empty")

@@ -11,6 +11,7 @@ import useStyles from './styles';
 import Post from './components/home'
 import Login from './components/login'
 import Signup from './components/signup'
+import Dash from './components/dashBoard'
 
 const App = () =>{
     return (
@@ -18,6 +19,7 @@ const App = () =>{
             <Route path="/" element={<Login/>}/>
             <Route path="/signup" element={<Signup/>}/>
             <Route path="/home" element={<Post/>}/>
+            <Route path="/dash" element={<Dash/>}/>
         </Routes>
     )
 }
