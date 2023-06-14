@@ -13,33 +13,27 @@ function Login() {
     async function submit(e){
         e.preventDefault();
 
-        try{
+        try {
+            const response = await axios.post("http://localhost:5000/", {
+              email,
+              password,
+            });
+            
+            if (response.data.status === "exist") {
+              const userId = response.data.userId;
 
-            await axios.post("http://localhost:5000/",{
-                email,password
-            })
-            .then(res=>{
-                
-                if(res.data=="exist"){
-                    history("/dash",{state:{id:email}})
-
-                }
-                else if(res.data=="notexist"){
-                    alert("Please check your email or password")
-                }
-            })
-            .catch(e=>{
-                alert("wrong details")
-                console.log(e);
-            })
-
+              localStorage.setItem("userId", userId);
+              console.log(localStorage);
+              history("/dash", { state: { id: email } });
+            } else if (response.data === "notexist") {
+              alert("Please check your email or password");
+            }
+          } catch (error) {
+            alert("wrong details");
+            console.log(error);
+          }
         }
-        catch(e){
-            console.log(e);
-
-        }
-
-    }
+    
 
 
     return (

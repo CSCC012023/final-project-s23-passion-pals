@@ -10,41 +10,34 @@ function Signup() {
     const [password,setPassword]=useState('')
     const [fname,setFname]=useState('')
     const [lname,setLname]=useState('')
-    async function submit(e){
+    async function submit(e) {
         e.preventDefault();
-
-        try{
-
-            await axios.post("http://localhost:5000/signup",{
-                email,password, fname, lname
-            })
-            .then(res=>{
-                if(res.data=="exist"){
-                    alert("User already exists")
-                }
-                else if(res.data=="notexist"){
-                    history("/dash",{state:{id:email}})
-                }
-                else if(res.data=="emptyPassword"){
-                    alert("Email and password cannot be empty")
-                }
-                else if(res.data=="wrongFormat"){
-                    alert("invalidEmail: Please enter a valid Gmail address.")
-                }
-                
-            })
-            .catch(e=>{
-                alert("wrong details")
-                console.log(e);
-            })
-
+      
+        try {
+          const response = await axios.post("http://localhost:5000/signup", {
+            email,
+            password,
+            fname,
+            lname
+          });
+      
+          if (response.data === "exist") {
+            alert("User already exists");
+          } else if (response.data.status === "notexist") {
+            const userId = response.data.userId;
+            localStorage.setItem("userId", userId);
+            history("/dash", { state: { id: userId } });
+          } else if (response.data === "emptyPassword") {
+            alert("Email and password cannot be empty");
+          } else if (response.data === "wrongFormat") {
+            alert("Invalid email: Please enter a valid Gmail address.");
+          }
+        } catch (error) {
+          alert("Wrong details");
+          console.log(error);
         }
-        catch(e){
-            console.log(e);
-
-        }
-
-    }
+      }
+      
 
 
     return (

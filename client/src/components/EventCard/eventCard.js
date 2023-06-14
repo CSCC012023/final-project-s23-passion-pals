@@ -18,7 +18,7 @@ export default function EventCard() {
   }, []);
 
   useEffect(() => {
-    const userId = '6483d98c674f146b488f0503';
+    const userId = localStorage.getItem("userId");
 
     axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
       .then(response => {
@@ -33,7 +33,7 @@ export default function EventCard() {
   }, []);
 
   const handleEnroll = (eventId) => {
-    const userId = '6483d98c674f146b488f0503';
+    const userId = localStorage.getItem("userId");
 
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event

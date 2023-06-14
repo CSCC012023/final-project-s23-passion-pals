@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const userId = '64892a3c865802a7317ea363'; 
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     axios.get(`http://localhost:5000/getUsers?userId=${userId}`)

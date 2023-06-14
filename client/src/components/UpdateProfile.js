@@ -10,7 +10,7 @@ function UpdateProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userId = '64892a3c865802a7317ea363'; // Replace with the actual user ID
+    const userId = localStorage.getItem("userId");
 
     // Make a PUT request to update the user's profile data
     axios

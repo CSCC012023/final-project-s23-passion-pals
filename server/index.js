@@ -24,29 +24,24 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
 
 
 
-// const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
-app.post("/", async (req,res)=>{
-    //with help of axios in login page we are getting the exact email and address
-    const{email,password}=req.body
-    //console.log(email, password)
-    try{
-        //console.log(userAuthentication)
-        const check = await UserModel.findOne({email:email, password:password})
-       // console
-        if(check){
-            
-            //if it already exist
-            res.json("exist")
-        }
-        else{
-            
-            res.json("notexist")
-        }
-    }catch(e){
+    app.post("/", async (req, res) => {
+        const { email, password } = req.body;
         
-        res.json("notexist")
-    }
-})
+        try {
+          const user = await UserModel.findOne({ email, password });
+          
+          if (user) {
+            
+            res.json({ status: "exist", userId: user._id }); // Include the user ID in the response
+            
+          } else {
+            res.json("notexist");
+          }
+        } catch (e) {
+          res.json("notexist");
+        }
+      });
+      
 
 
 
@@ -77,9 +72,11 @@ app.post("/signup", async (req, res) => {
             // If it already exists
             res.json("exist");
         } else {
-            res.json("notexist");
 
-            await UserModel.insertMany([data]);
+            const newUser = await UserModel.create(data); // Create a new user and get the created user object
+       
+            res.json({ status: "notexist", userId: newUser._id }); // Include the user ID in the response
+            
         }
     } catch (e) {
         res.json("notexist");
