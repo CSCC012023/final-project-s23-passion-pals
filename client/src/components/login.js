@@ -19,8 +19,10 @@ function Login() {
                 email,password
             })
             .then(res=>{
+                
                 if(res.data=="exist"){
                     history("/dash",{state:{id:email}})
+
                 }
                 else if(res.data=="notexist"){
                     alert("Please check your email or password")

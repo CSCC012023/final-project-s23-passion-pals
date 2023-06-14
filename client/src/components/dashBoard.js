@@ -18,7 +18,7 @@ function Dash() {
            
             <p>OR</p>
            
-            <Link to="/home">Event page</Link>
+            <Link to="/home">Event Creation page</Link>
             <p>OR</p>
             <Link to="/eventCard">Event card page</Link>
 

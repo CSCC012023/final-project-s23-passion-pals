@@ -53,7 +53,7 @@ app.post("/", async (req,res)=>{
 
 
 app.post("/signup", async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, fname, lname } = req.body;
     
     // Check if the password is empty
     if (!password||!email) {
@@ -65,7 +65,9 @@ app.post("/signup", async (req, res) => {
   
     const data = {
         email: email,
-        password: password
+        password: password,
+        fname: fname,
+        lname: lname
     };
 
     try {
@@ -229,7 +231,17 @@ app.post('/unenroll/:eventId', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
-
+app.get('/getUserId', (req, res) => {
+    // Retrieve the user ID from the logged-in user's session or token
+    const userId = req.body.userId; // Or retrieve from JWT token, cookies, etc.
+    console.log(userId);
+  
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID not found' });
+    }
+  
+    res.json({ userId });
+  });
 app.listen(5500, () => {
   console.log("Server is running");
 });

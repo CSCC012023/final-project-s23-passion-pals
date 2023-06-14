@@ -8,14 +8,15 @@ function Signup() {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
-
+    const [fname,setFname]=useState('')
+    const [lname,setLname]=useState('')
     async function submit(e){
         e.preventDefault();
 
         try{
 
             await axios.post("http://localhost:5000/signup",{
-                email,password
+                email,password, fname, lname
             })
             .then(res=>{
                 if(res.data=="exist"){
@@ -54,6 +55,8 @@ function Signup() {
             <form action="POST">
                 <input type="email" onChange={(e) => { setEmail(e.target.value) }} placeholder="Email"  />
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
+                <input type="fname" onChange={(e) => { setFname(e.target.value) }} placeholder="First Name" />
+                <input type="lname" onChange={(e) => { setLname(e.target.value) }} placeholder="Last Name" />
                 <input type="submit" onClick={submit} />
 
             </form>
