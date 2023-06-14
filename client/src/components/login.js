@@ -20,7 +20,7 @@ function Login() {
             })
             .then(res=>{
                 if(res.data=="exist"){
-                    history("/home",{state:{id:email}})
+                    history("/dash",{state:{id:email}})
                 }
                 else if(res.data=="notexist"){
                     alert("Please check your email or password")

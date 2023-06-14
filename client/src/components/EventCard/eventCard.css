@@ -1,0 +1,42 @@
+.event-card-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .event-card {
+    display: flex;
+    margin: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .event-image-container {
+    flex: 0 0 200px;
+  }
+  
+  .event-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .event-content {
+    flex: 1;
+    padding: 16px;
+  }
+  
+  .event-name {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  
+  .event-location,
+  .event-date,
+  .event-price,
+  .event-description {
+    margin-bottom: 8px;
+  }
+  
+  /* Add more CSS rules as needed */
+  

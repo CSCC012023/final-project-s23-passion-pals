@@ -3,10 +3,12 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import postRoutes from './routes/posts.js';
-// import userAuthentication from "./models/postAuth.js"
-import userAuthentication from './models/postAuth.js'
-const app = express();
+import UserModel from './models/Users.js';
+import EventCardModel from './models/eventCard.js';
 
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -21,10 +23,6 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
     .catch((error)=> console.log(error.message));
 
 
-// const newSchemaForLogin=new mongoose.Schema({
-//     email: String,
-//     password: String
-// })
 
 // const userAuthentication = mongoose.model("userAuthentication",newSchemaForLogin)
 app.post("/", async (req,res)=>{
@@ -33,7 +31,7 @@ app.post("/", async (req,res)=>{
     //console.log(email, password)
     try{
         //console.log(userAuthentication)
-        const check = await userAuthentication.findOne({email:email, password:password})
+        const check = await UserModel.findOne({email:email, password:password})
        // console
         if(check){
             
@@ -71,7 +69,7 @@ app.post("/signup", async (req, res) => {
     };
 
     try {
-        const check = await userAuthentication.findOne({ email: email });
+        const check = await UserModel.findOne({ email: email });
 
         if (check) {
             // If it already exists
@@ -79,13 +77,159 @@ app.post("/signup", async (req, res) => {
         } else {
             res.json("notexist");
 
-            await userAuthentication.insertMany([data]);
+            await UserModel.insertMany([data]);
         }
     } catch (e) {
         res.json("notexist");
     }
 });
 
-app.listen(8000,()=>{
-    console.log("port connected")
-})
+mongoose.connect("mongodb+srv://Mustafa:mustafa0503@cluster0.seqdo7a.mongodb.net/");
+
+
+const db = mongoose.connection;
+db.on('connected', () => {
+  console.log('Connected to MongoDB Atlas');
+});
+
+
+app.get('/getUsers', (req, res) => {
+  const userId = req.query.userId;
+
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+
+  UserModel.findById(userId)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
+// Route to update a specific user
+app.put('/users/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+
+  const { fname, lname, email } = req.body;
+
+
+  UserModel.findByIdAndUpdate(
+    userId,
+    { fname, lname, email },
+    { new: true }
+  )
+    .then(updatedUser => {
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(updatedUser);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
+app.get('/events', (req, res) => {
+  EventCardModel.find()
+    .then(events => {
+      res.json(events);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
+app.post('/enroll/:eventId', (req, res) => {
+  const eventId = req.params.eventId;
+
+
+  if (!eventId) {
+    return res.status(400).json({ error: 'Event ID is required' });
+  }
+
+
+  const userId = req.body.userId;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+
+  EventCardModel.findById(eventId)
+    .then(event => {
+      if (!event) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+
+
+      UserModel.findByIdAndUpdate(
+        userId,
+        { $addToSet: { enrolledEvents: event._id } },
+        { new: true }
+      )
+        .then(updatedUser => {
+          if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+          }
+          res.json(event);
+        })
+        .catch(err => {
+          res.status(500).json({ error: 'Internal server error' });
+        });
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
+app.post('/unenroll/:eventId', (req, res) => {
+  const eventId = req.params.eventId;
+
+
+  if (!eventId) {
+    return res.status(400).json({ error: 'Event ID is required' });
+  }
+
+
+  const userId = req.body.userId;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+
+  UserModel.findByIdAndUpdate(
+    userId,
+    { $pull: { enrolledEvents: eventId } },
+    { new: true }
+  )
+    .then(updatedUser => {
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(updatedUser);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+app.listen(5500, () => {
+  console.log("Server is running");
+});
