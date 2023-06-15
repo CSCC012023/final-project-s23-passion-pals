@@ -1,43 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from 'react-router-dom';
+import './Profile.css';
+
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
-      .then(response => {
+    axios
+      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .then((response) => {
         setUser(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }, []);
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="container">
+      <div className="profile">
+        <div className="profile-picture">
+          <img src="profile-picture.jpg" alt="Profile" />
+        </div>
+
+        <div className="profile-details">
           {user && (
-            <tr>
-              <td>{user.fname}</td>
-              <td>{user.lname}</td>
-              <td>{user.email}</td>
-            </tr>
+            <>
+              <h2>{user.fname} {user.lname}</h2> 
+              <p className="email">{user.email}</p>
+            </>
           )}
-        </tbody>
-      </table>
+        </div>
 
-      <Link to="/updateProfile">Edit user profile Page</Link>
+        <Link to="/updateProfile" className="edit-button">
+          Edit Profile
+        </Link>
+      </div>
     </div>
-
   );
 }
