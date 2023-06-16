@@ -4,7 +4,7 @@
 ## Iteration 01 - Review & Retrospect
 
 
- * When: June 14 2023 
+ * When: June 16 2023 
  * Where: Online
 
 
