@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import './eventCard.css';
+import './eventCard.css'; // Import the CSS file for the component
 
 export default function EventCard() {
   const [events, setEvents] = useState([]);
@@ -17,8 +17,10 @@ export default function EventCard() {
       });
   }, []);
 
+  const userId = localStorage.getItem('userId');
+
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    
 
     axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
       .then(response => {
@@ -33,7 +35,7 @@ export default function EventCard() {
   }, []);
 
   const handleEnroll = (eventId) => {
-    const userId = localStorage.getItem("userId");
+    
 
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -71,13 +73,10 @@ export default function EventCard() {
             <p className="event-date">Date: {event.eventDate}</p>
             <p className="event-price">Price: {event.eventPrice}</p>
             <p className="event-description">Description: {event.eventDescription}</p>
-            <p className="event-spots-left">Spots Left: {event.spots - enrolledEvents.filter(id => id === event._id).length}</p>
             {enrolledEvents.includes(event._id) ? (
               <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button onClick={() => handleEnroll(event._id)} disabled={event.spots - enrolledEvents.filter(id => id === event._id).length <= 0}>
-                {event.spots - enrolledEvents.filter(id => id === event._id).length <= 0 ? 'Full' : 'Enroll Now'}
-              </button>
+              <button onClick={() => handleEnroll(event._id)}>Enroll Now</button>
             )}
           </div>
         </div>

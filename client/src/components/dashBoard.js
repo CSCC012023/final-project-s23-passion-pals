@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { useNavigate, Link } from "react-router-dom"
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-
-function Dash() {
-
-
-
-
-    return (
-        <div className="dashBoard">
-
-            <h1>dash board</h1>
-        
-            <Link to="/profile">Uer Profile page</Link>
-
-           
-            <p>OR</p>
-           
-            <Link to="/home">Event Creation page</Link>
-            <p>OR</p>
-            <Link to="/eventCard">Event card page</Link>
-
-        </div>
-    )
+export default function Dashboard() {
+  return (
+    <div>
+      <h1>Dash board</h1>
+      <div>
+        <Link to="/profile">User Profile page</Link>
+      </div>
+      <div>
+        <Link to="/home">Event Creation page</Link>
+      </div>
+      <div>
+        <Link to="/eventCard">Event card page</Link>
+      </div>
+    </div>
+  );
 }
-
-export default Dash

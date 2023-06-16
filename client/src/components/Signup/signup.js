@@ -30,11 +30,12 @@ function Signup() {
 
     try {
       const response = await axios.post("http://localhost:5000/signup", {
-        emailSignup,
-        passwordSignup,
-        fname,
-        lname,
-      });
+     email: emailSignup,
+     password: passwordSignup,
+     fname,
+     lname,
+    });
+
 
       if (response.data === "exist") {
         alert("User already exists");
@@ -43,7 +44,7 @@ function Signup() {
         localStorage.setItem("userId", userId);
         signInHistory("/dash", { state: { id: userId } });
       } else if (response.data === "emptyPassword") {
-        alert("Email and password cannot be empty");
+        alert("Fields cannot be empty");
       } else if (response.data === "wrongFormat") {
         alert("Invalid email: Please enter a valid Gmail address.");
       }
@@ -55,49 +56,29 @@ function Signup() {
 
   async function submitLogin(e) {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post("http://localhost:5000/", {
-        emailLogin,
-        passwordLogin,
+        email: emailLogin,
+        password: passwordLogin,
       });
-
+  
       if (response.data.status === "exist") {
         const userId = response.data.userId;
-
         localStorage.setItem("userId", userId);
         console.log(localStorage);
-        loginHistory("/dash", { state: { id: emailLogin } });
+        loginHistory("/dash", { state: { id: userId } });
       } else if (response.data === "notexist") {
         alert("Please check your email or password");
       }
     } catch (error) {
-      alert("wrong details");
+      alert("An error occurred while logging in");
       console.log(error);
     }
   }
+  
 
   return (
-    // <div className="signup">
-
-    //     <h1>Signup</h1>
-
-    //     <form action="POST">
-    //         <input type="email" onChange={(e) => { setSignupEmail(e.target.value) }} placeholder="Email"  />
-    //         <input type="password" onChange={(e) => { setSignupPassword(e.target.value) }} placeholder="Password" />
-    //         <input type="fname" onChange={(e) => { setFname(e.target.value) }} placeholder="First Name" />
-    //         <input type="lname" onChange={(e) => { setLname(e.target.value) }} placeholder="Last Name" />
-    //         <input type="submit" onClick={submit} />
-
-    //     </form>
-
-    //     <br />
-    //     <p>OR</p>
-    //     <br />
-
-    //     <Link to="/">Login Page</Link>
-
-    // </div>
     <div
       className={`container ${
         isRegistrationActive ? "" : "right-panel-active"
@@ -136,14 +117,7 @@ function Signup() {
             }}
           />
           <button onClick={submitSignup}>Register</button>
-          {/* <span>or use your account</span>
-              <div className="social-container">
-                <a href="#" className="social"><i className="lni lni-facebook-fill"></i></a>
-                <a href="#" className="social"><i className="lni lni-google"></i></a>
-                <a href="#" className="social"
-                  ><i className="lni lni-linkedin-original"></i>
-                </a>
-              </div> */}
+          {}
         </form>
       </div>
 
@@ -166,24 +140,9 @@ function Signup() {
             }}
             placeholder="Password"
           />
-          {/* <div className="content">
-                <div className="checkbox">
-                  <input type="checkbox" name="checkbox" id="checkbox" />
-                  <label>Remember me</label>
-                </div>
-                <div className="pass-link">
-                  <a href="#">Forgot password?</a>
-                </div>
-              </div> */}
+          {}
           <button onClick={submitLogin}>Login</button>
-          {/* <span>or use your account</span>
-              <div className="social-container">
-                <a href="#" className="social"><i className="lni lni-facebook-fill"></i></a>
-                <a href="#" className="social"><i className="lni lni-google"></i></a>
-                <a href="#" className="social"
-                  ><i className="lni lni-linkedin-original"></i
-                ></a>
-              </div> */}
+          {}
         </form>
       </div>
 
@@ -198,7 +157,7 @@ function Signup() {
             <p>something about the power of friendship</p>
             <button className="ghost" id="login" onClick={handleSignClick}>
               Login
-              {/* <!-- below is an icon from an icon library. its in the head--> */}
+              {}
               <i className="left arrow login">&larr;</i>
             </button>
           </div>

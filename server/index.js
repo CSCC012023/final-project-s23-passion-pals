@@ -25,23 +25,21 @@ mongoose.connect(CONNECTION_URL,{ useNewUrlParser: true, useUnifiedTopology: tru
 
 
     app.post("/", async (req, res) => {
-        const { email, password } = req.body;
-        
-        try {
-          const user = await UserModel.findOne({ email, password });
-          
-          if (user) {
-            
-            res.json({ status: "exist", userId: user._id }); // Include the user ID in the response
-            
-          } else {
-            res.json("notexist");
-          }
-        } catch (e) {
+      const { email, password } = req.body;
+    
+      try {
+        const user = await UserModel.findOne({ email, password });
+    
+        if (user) {
+          res.json({ status: "exist", userId: user._id });
+        } else {
           res.json("notexist");
         }
-      });
-      
+      } catch (e) {
+        res.json("notexist");
+      }
+    });
+    
 
 
 
@@ -51,7 +49,7 @@ app.post("/signup", async (req, res) => {
     const { email, password, fname, lname } = req.body;
     
     // Check if the password is empty
-    if (!password||!email) {
+    if (!password||!email||!fname||!lname) {
         return res.json("emptyPassword");
     }
     else if(!email.includes("@gmail.com")){
@@ -83,13 +81,6 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-mongoose.connect("mongodb+srv://Mustafa:mustafa0503@cluster0.seqdo7a.mongodb.net/");
-
-
-const db = mongoose.connection;
-db.on('connected', () => {
-  console.log('Connected to MongoDB Atlas');
-});
 
 
 app.get('/getUsers', (req, res) => {
@@ -158,24 +149,20 @@ app.get('/events', (req, res) => {
 app.post('/enroll/:eventId', (req, res) => {
   const eventId = req.params.eventId;
 
-
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
-
 
   const userId = req.body.userId;
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-
   EventCardModel.findById(eventId)
     .then(event => {
       if (!event) {
         return res.status(404).json({ error: 'Event not found' });
       }
-
 
       UserModel.findByIdAndUpdate(
         userId,
@@ -197,21 +184,17 @@ app.post('/enroll/:eventId', (req, res) => {
     });
 });
 
-
 app.post('/unenroll/:eventId', (req, res) => {
   const eventId = req.params.eventId;
-
 
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
 
-
   const userId = req.body.userId;
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
-
 
   UserModel.findByIdAndUpdate(
     userId,
@@ -228,6 +211,7 @@ app.post('/unenroll/:eventId', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
+
 app.get('/getUserId', (req, res) => {
     // Retrieve the user ID from the logged-in user's session or token
     const userId = req.body.userId; // Or retrieve from JWT token, cookies, etc.
@@ -239,6 +223,7 @@ app.get('/getUserId', (req, res) => {
   
     res.json({ userId });
   });
+  
 app.listen(5500, () => {
   console.log("Server is running");
 });
