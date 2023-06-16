@@ -25,5 +25,5 @@ In simple terms, we will complete the following.
 * As a user, I would like to be able to leave events so that I can manage my participation and remove myself from activities I no longer wish to attend
 * As a user, I would like to create an event with all the necessary details so that I can organize and invite others to participate in an activity or experience.
 ## Participants: 
-Backend - Mustafa, Nishu
-Frontend - Roger, Amitoz, Darren, Nic
+* Backend - Mustafa, Nishu
+* Frontend - Roger, Amitoz, Darren, Nic
