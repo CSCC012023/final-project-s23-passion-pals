@@ -16,7 +16,7 @@ In simple terms, we will complete the following.
 * Get started on event details
 
 
-## They will correspond with the following user stories we agreed on in sprint 0.
+### They will correspond with the following user stories we agreed on in sprint 0.
 * As an unregistered user, I would like to sign up using my name, email, username, and password so that I can create an account.(Mustafa back-end and basic front-end)
 * As an registered user, I would like to login using my email and password so that I can access my account(Mustafa back-end and basic front-end)
 * As a user, I would like to reset my password so that if I forget it, I can still have access to my account
