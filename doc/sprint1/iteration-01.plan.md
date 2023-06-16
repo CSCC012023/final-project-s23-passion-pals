@@ -32,10 +32,14 @@ Also possible one on one calls for code reviews, coding sessions, and syncing fr
 #### Artifacts
 
 Jira:
-Utilizing a task management system like Jira can be highly beneficial to organize your team's tasks and track their progress. By creating user stories, assigning tasks, setting priorities, and tracking the status of each task, you can ensure clarity and transparency within the team. Jira allows you to break down larger project goals into manageable tasks, assign them to team members, and monitor their completion. This artifact facilitates efficient task allocation, collaboration, and progress monitoring, ultimately helping the team stay organized and meet project milestones.
+* Jira allows you to create user stories, assign tasks, set priorities, and track the status of each task, which ensures clarity and transparency within the team
+* It also allows you to break down larger project goals into manageable tasks, assign them to team members, and monitor their completion.
+* This artifact facilitates efficient task allocation, collaboration, and progress monitoring, ultimately helping the team stay organized and meet project milestones.
 
 Discord:
-Utilizing tools like Discord for instant messaging, voice chats, and standup meetings enables effective communication within the team. Discord messages can be used for quick discussions, clarifications, and for sharing important updates or announcements. This artifact fosters a collaborative environment, promotes transparency, and ensures everyone is aware of the current state of tasks and the project as a whole.
+* Discord allows instant messaging and voice chats which makes a great environment for standup meetings, as it enables effective communication within the team.
+* It can be used for quick discussions, clarifications, and for sharing important updates or announcements.
+* This artifact fosters a collaborative environment, promotes transparency, and ensures everyone is aware of the current state of tasks and the project as a whole.
 
 
 ## Product
