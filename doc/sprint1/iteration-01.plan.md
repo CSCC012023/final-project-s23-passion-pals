@@ -14,12 +14,12 @@
 #### Roles & responsibilities
 
 
-Mustafa: Login and signup back end
-Nishu: Displaying user profile info, update profile info and display event card info back end
-Amitoz: Profile page, update profile page and assist on login front end
-Nicholas: Create Event page frontend and backend
-Roger: Signup and login front end
-Darren: Create Event page frontend and backend
+* Mustafa: Login and signup back end
+* Nishu: Displaying user profile info, update profile info and display event card info back end
+* Amitoz: Profile page, update profile page and assist on login front end
+* Nicholas: Create Event page frontend and backend
+* Roger: Signup and login front end
+* Darren: Create Event page frontend and backend
 
 
 #### Events
