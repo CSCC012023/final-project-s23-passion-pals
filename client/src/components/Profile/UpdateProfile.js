@@ -111,7 +111,7 @@ function UpdateProfile() {
   };
 
   return (
-    <div className="container">
+    <div className="update-container">
       <form className="update-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>First Name:</label>

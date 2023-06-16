@@ -12,8 +12,8 @@ import Post from "./components/home";
 import Login from "./components/login";
 import Signup from "./components/Signup/signup";
 import Dash from "./components/dashBoard";
-import Profile from "./components/Profile";
-import UpdateProfile from "./components/UpdateProfile";
+import Profile from "./components/Profile/Profile";
+import UpdateProfile from "./components/Profile/UpdateProfile";
 import EventCard from "./components/EventCard/eventCard";
 
 const App = () => {

@@ -1,4 +1,4 @@
-/* .container {
+.profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,4 +69,4 @@
 
 .edit-button:hover {
   background-color: #ff6666;
-} */
+}

@@ -19,7 +19,7 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="container">
+    <div className="profile-container">
       <div className="profile">
         <div className="profile-picture">
           <img src="profile-picture.jpg" alt="Profile" />
