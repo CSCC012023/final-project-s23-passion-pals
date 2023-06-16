@@ -31,11 +31,11 @@ Also possible one on one calls for code reviews, coding sessions, and syncing fr
 
 #### Artifacts
 
+Jira:
+Utilizing a task management system like Jira can be highly beneficial to organize your team's tasks and track their progress. By creating user stories, assigning tasks, setting priorities, and tracking the status of each task, you can ensure clarity and transparency within the team. Jira allows you to break down larger project goals into manageable tasks, assign them to team members, and monitor their completion. This artifact facilitates efficient task allocation, collaboration, and progress monitoring, ultimately helping the team stay organized and meet project milestones.
 
-List/describe the artifacts you will produce in order to organize your team.       
-
-
-We will be keeping track of tasks using Jira for user stories and discord messages/standups for what tasks have been and need to be done. Task prioritization is based on what we as a group agree to complete first. The team together will decide who will do which tasks based on what is needed and how comfortable each member is with each task.
+Discord:
+Utilizing tools like Discord for instant messaging, voice chats, and standup meetings enables effective communication within the team. Discord messages can be used for quick discussions, clarifications, and for sharing important updates or announcements. This artifact fosters a collaborative environment, promotes transparency, and ensures everyone is aware of the current state of tasks and the project as a whole.
 
 
 ## Product
