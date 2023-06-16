@@ -34,12 +34,6 @@
 
 List process-related (i.e. team organization) decisions that, in retrospect, were not as successful as you thought they would be.
 
-
- * 2 - 4 decisions.
- * Ordered from most to least important.
- * Feel free to refer/link to process artifact(s).
-
-
 1.  Excessive use of GitHub branches for development
 * Since all of us were fairly inexperienced with Git version control, we went overboard with creating branches for every small task or bug fix and not regularly merging into dev
 * This led to a complex branch hierarchy and difficulty in tracking changes across different branches
