@@ -17,9 +17,9 @@ In simple terms, we will complete the following.
 
 
 ### They will correspond with the following user stories we agreed on in sprint 0.
-* As an unregistered user, I would like to sign up using my name, email, username, and password so that I can create an account.(Mustafa back-end and basic front-end)
-* As an registered user, I would like to login using my email and password so that I can access my account(Mustafa back-end and basic front-end)
-* As a user, I would like to reset my password so that if I forget it, I can still have access to my account
+* As an unregistered user, I would like to sign up using my name, email, username, and password so that I can create an account.
+* As an registered user, I would like to login using my email and password so that I can access my account.
+* As a user, I would like to reset my password so that if I forget it, I can still have access to my account.
 * As a user, I would like to access the settings page to edit my profile information, including my name, email, password, and user image, so that I can customize and update my personal details according to my preferences.
 * As a user, I would like to view event thumbnails with optional images, titles, themes, time/date, location, short descriptions, and the number of spots left so that I can quickly browse through events and make informed decisions about which ones to explore further
 * As a user, I would like to be able to leave events so that I can manage my participation and remove myself from activities I no longer wish to attend
