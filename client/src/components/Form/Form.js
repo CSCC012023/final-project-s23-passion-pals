@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useStyles from './styles'
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 import { createPost } from "../../actions/posts";
@@ -16,6 +17,7 @@ import {
 } from "@material-ui/core";
 import FileBase from "react-file-base64";
 
+
 const Form = () => {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
@@ -25,7 +27,7 @@ const Form = () => {
     selectedFile: "",
     theme: "",
   });
-
+  const classes =  useStyles();
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createPost(postData));
@@ -87,13 +89,15 @@ const Form = () => {
               }
             />
           </div>
-          <Link
-            to="/dash"
-            type="submit"
+          <Button
             className="submit-button"
+            variant="contained"
+            color="secondary"
+            type="submit"
+            style={{ borderRadius: '40px', padding: '1px 1px', minWidth: '10px', display: 'flex', alignItems: 'center', width: '450px', height: '50px'}}
           >
-            Submit Event
-          </Link>
+            Submit
+          </Button>
         </form>
    
   
