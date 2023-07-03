@@ -9,7 +9,7 @@ export default function Dashboard() {
         <Link to="/profile">User Profile page</Link>
       </div>
       <div>
-        <Link to="/home">Event Creation page</Link>
+        <Link to="/createEvent">Event Creation page</Link>
       </div>
       <div>
         <Link to="/eventCard">Event card page</Link>

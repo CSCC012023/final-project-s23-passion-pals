@@ -1,46 +1,104 @@
-import React, {useState} from "react";
-import useStyles from './styles'
-import { TextField, Button, Typography, Paper } from '@material-ui/core';
-import FileBase from 'react-file-base64';
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {createPost} from '../../actions/posts';
+import axios from 'axios';
+import { createPost } from "../../actions/posts";
+import "./FormStyles.css"
+import { Link } from "react-router-dom";
+import {
+  Button,
+  Typography,
+  Paper,
+  Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@material-ui/core";
+import FileBase from "react-file-base64";
 
 const Form = () => {
-    const dispatch = useDispatch();
-    const [postData, setPostData] = useState({creator: '', title: '', message: '', selectedFile: ''});
-    const classes =  useStyles();
-    const handleSubmit =  (e) => {
-        e.preventDefault();
+  const dispatch = useDispatch();
+  const [postData, setPostData] = useState({
+    creator: "",
+    title: "",
+    message: "",
+    selectedFile: "",
+    theme: "",
+  });
 
-        dispatch(createPost(postData));
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createPost(postData));
+  };
 
+  return (
+    
+  
+        <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
+          <Typography variant="h3" className="heading">Create Event</Typography>
+          <input
+            name="creator"
+            type="text"
+            className="input"
+            placeholder="Enter your name"
+            value={postData.creator}
+            onChange={(e) =>
+              setPostData({ ...postData, creator: e.target.value })
+            }
+          />
+          <input
+            name="title"
+            type="text"
+            className="input"
+            placeholder="Enter event title"
+            value={postData.title}
+            onChange={(e) =>
+              setPostData({ ...postData, title: e.target.value })
+            }
+          />
+          <textarea
+            name="message"
+            className="textarea"
+            placeholder="Enter event description"
+            value={postData.message}
+            onChange={(e) =>
+              setPostData({ ...postData, message: e.target.value })
+            }
+          />
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel>Select Event Theme</InputLabel>
+            <Select
+              name="theme"
+              value={postData.theme}
+              onChange={(e) => setPostData({ ...postData, theme: e.target.value })}
+              className="select"
+            >
+              <MenuItem value="Music">Music</MenuItem>
+              <MenuItem value="Art">Art</MenuItem>
+              <MenuItem value="Sports">Sports</MenuItem>
+            </Select>
+          </FormControl>
+          <div className="file-input">
+            <FileBase
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) =>
+                setPostData({ ...postData, selectedFile: base64 })
+              }
+            />
+          </div>
+          <Link
+            to="/dash"
+            type="submit"
+            className="submit-button"
+          >
+            Submit Event
+          </Link>
+        </form>
+   
+  
 
+  );
+};
 
-    return (
-        <Paper className={classes.paper}>
-          <form autoComplete="off" noValidate className={classes.form} onSubmit={handleSubmit}>
-            <Typography variant="h6">Creating An Event</Typography>
-            <TextField name="creator" variant="outlined" label="Creator" fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })} />
-            <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-            <TextField name="message" variant="outlined" label="Message" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
-            
-            <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} /></div>
-            <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-            
-            </form>
-        </Paper>
-      );
-    }
 export default Form;
-
-/*
-           <TextField name = "title" variant = "outline" label="Title" fullWidth value= {postData.title}onChange={(e)=> setPostData({...postData, title:e.target.value})}/>
-            <TextField name = "message" variant = "outline" label="Message" fullWidth value= {postData.message}onChange={(e)=> setPostData({...postData, message:e.target.value})}/>
-            <TextField name = "tags" variant = "outline" label="Tags" fullWidth value= {postData.tags}onChange={(e)=> setPostData({...postData, tags:e.target.value})}/>
-            <div className={classes.fileInput}>
-                <FileBase type="file" multiple={false}onDone = {({base64})=>setPostData({ ...postData, selectedFile:base64})}/>
-            </div>
-            <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-            <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
-*/
