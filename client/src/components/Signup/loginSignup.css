@@ -1,10 +1,15 @@
 @import url("https://font.googleapis.com/css2?family=Poppins");
 
-* {
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.loginSignup * {
     box-sizing: border-box;
 }
 
-body {
+.loginSignup {
     display: flex;
     background-color: aliceblue;
     justify-content: center;
@@ -15,21 +20,21 @@ body {
     height: 100vh;
 }
 
-h1 {
+.loginSignup h1 {
     font-weight: 700;
     letter-spacing: -1.5px;
     margin: 0;
     margin-bottom: 15px;
 }
 
-h1.title {
+.loginSignup h1.title {
     font-size: 45px;
     line-height: 45px;
     margin: 0;
     text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
 }
 
-p {
+.loginSignup p {
     font-size: 14px;
     font-weight: 100;
     line-height: 20px;
@@ -38,13 +43,13 @@ p {
     text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
 }
 
-span {
+.loginSignup span {
     /*just like an inline text thing*/
     font-size: 14px;
     margin-top: 25px;
 }
 
-a {
+.loginSignup a {
     /*socials anchor. probably not used*/
     color: #333;
     font-size: 14px;
@@ -53,7 +58,7 @@ a {
     transition: 0.3s ease-in-out;
 }
 
-a:hover {
+.loginSignup a:hover {
     /*when you hover over soemthing with the anchor tag*/
     color: #4bb6b7;
 }
@@ -85,7 +90,7 @@ a:hover {
     padding-left: 5px;
 }
 
-button {
+.loginSignup button {
     position: relative;
     border-radius: 20px;
     border: 1px solid #ff8080;
@@ -103,20 +108,20 @@ button {
     /*transition effect for things that happen to the button*/
 }
 
-button:hover {
+.loginSignup button:hover {
     letter-spacing: 3px;
 }
 
-button:active {
+.loginSignup button:active {
     transform: scale(0.95);
     /*its hard to tell if you just click, so hold click. makes the thing smaller on click*/
 }
 
-button:focus {
+.loginSignup button:focus {
     outline: none;
 }
 
-button.ghost {
+.loginSignup button.ghost {
     background-color: rgba(225, 225, 225, 0.2);
     border: 2px solid #fff;
     color: #fff;
@@ -124,7 +129,7 @@ button.ghost {
 
 /*the next 5 things with the i are targetting a specific icon*/
 /*the arrow thing that pops up when you hover*/
-button.ghost i {
+.loginSignup button.ghost i {
     position: absolute;
     opacity: 0;
     /*its invisible normally*/
@@ -132,27 +137,27 @@ button.ghost i {
     /*transition effect on it*/
 }
 
-button.ghost i.register {
+.loginSignup button.ghost i.register {
     right: 70px;
     /*youve got 2 'ghost' buttons. this is just shifting the icon over a bit because in the html its positioned weird*/
 }
 
-button.ghost i.login {
+.loginSignup button.ghost i.login {
     left: 70px;
 }
 
-button.ghost:hover i.register {
+.loginSignup button.ghost:hover i.register {
     right: 40px;
     opacity: 1;
     /*hover effect on that icon. move it over and make it visible*/
 }
 
-button.ghost:hover i.login {
+.loginSignup button.ghost:hover i.login {
     left: 40px;
     opacity: 1;
 }
 
-form {
+.loginSignup form {
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -163,7 +168,7 @@ form {
     text-align: center;
 }
 
-input {
+.loginSignup input {
     background-color: #eee;
     border-radius: 10px;
     border: none;
@@ -186,7 +191,8 @@ input {
 .form-container {
     position: absolute;
     top: 0;
-    left: 0; /* Set the left position to 0 to align the form container to the left */
+    left: 0;
+    /* Set the left position to 0 to align the form container to the left */
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
@@ -267,12 +273,15 @@ register is made visible and then put on top of login*/
     0% {
         background-image: url('../../images/dancing-in-the-heights.gif');
     }
+
     33% {
         background-image: url('../../images/having-fun.gif');
     }
+
     66% {
         background-image: url('../../images/crowd-surfing.gif');
     }
+
     100% {
         background-image: url('../../images/dancing-in-the-heights.gif');
     }
@@ -282,12 +291,15 @@ register is made visible and then put on top of login*/
     0% {
         background-image: url('../../images/having-fun.gif');
     }
+
     33% {
         background-image: url('../../images/crowd-surfing.gif');
     }
+
     66% {
         background-image: url('../../images/dancing-in-the-heights.gif');
     }
+
     100% {
         background-image: url('../../images/having-fun.gif');
     }
@@ -297,12 +309,15 @@ register is made visible and then put on top of login*/
     0% {
         background-image: url('../../images/crowd-surfing.gif');
     }
+
     33% {
         background-image: url('../../images/dancing-in-the-heights.gif');
     }
+
     66% {
         background-image: url('../../images/having-fun.gif');
     }
+
     100% {
         background-image: url('../../images/crowd-surfing.gif');
     }
@@ -334,20 +349,24 @@ register is made visible and then put on top of login*/
     position: relative;
     left: -100%;
     height: 100%;
-    width: 200%; /* Adjust the width to accommodate three gifs */
+    width: 200%;
+    /* Adjust the width to accommodate three gifs */
     transform: translateX(0);
     transition: transform 0.6s ease-in-out;
-    animation: gif1 9s infinite; /* Adjust the duration based on the total animation time */
+    animation: gif1 9s infinite;
+    /* Adjust the duration based on the total animation time */
 }
 
 .container.right-panel-active .overlay {
     transform: translateX(50%);
-    animation: gif2 9s infinite; /* Adjust the duration based on the total animation time */
+    animation: gif2 9s infinite;
+    /* Adjust the duration based on the total animation time */
 }
 
 .container.right-panel-active .overlay-right {
     transform: translateX(20%);
-    animation: gif3 9s infinite; /* Adjust the duration based on the total animation time */
+    animation: gif3 9s infinite;
+    /* Adjust the duration based on the total animation time */
 }
 
 /*i think all this does is darken the image behind a bit but idk*/
