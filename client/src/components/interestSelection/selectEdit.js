@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './selectInterest.css';
 import './button.css';
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
 const SelectInterest = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -20,9 +20,10 @@ const SelectInterest = () => {
       );
     }
   };
+
   const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId");
-  
+    const userId = localStorage.getItem('userId');
+
     try {
       const response = await axios.post('http://localhost:5000/select', {
         userId: userId,
@@ -32,13 +33,28 @@ const SelectInterest = () => {
     } catch (error) {
       // Handle the error if needed
     }
-  
-    // Add a delay before navigating to "/dash"
+
+    // Add a delay before navigating to "/profile"
     setTimeout(() => {
-      history("/dash", { state: { id: userId } });
-    }, 600); 
+      history('/profile', { state: { id: userId } });
+    }, 600);
   };
 
+  useEffect(() => {
+    const fetchUserInterests = async () => {
+      const userId = localStorage.getItem('userId');
+
+      try {
+        const response = await axios.get(`http://localhost:5000/user/${userId}`);
+        const { interests } = response.data;
+        setSelectedInterests(interests);
+      } catch (error) {
+        // Handle the error if needed
+      }
+    };
+
+    fetchUserInterests();
+  }, []);
   useEffect(() => {
     const animateButton = function (e) {
       e.preventDefault();
@@ -59,15 +75,20 @@ const SelectInterest = () => {
     }
   }, []);
   return (
-<div className = 'Interest'>
-<fieldset class="checkbox-group">
-	<legend class="checkbox-group-legend">Choose your favorites</legend>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Video Game" onChange={handleInterestChange} />
-			<span class="checkbox-tile">
-           
-				<span class="checkbox-icon">
+    <div className="Interest">
+      <fieldset className="checkbox-group">
+        <legend className="checkbox-group-legend">Edit your themes</legend>
+        <div className="checkbox">
+          <label className="checkbox-wrapper">
+            <input
+              type="checkbox"
+              className="checkbox-input"
+              value="Video Game"
+              checked={selectedInterests.includes('Video Game')}
+              onChange={handleInterestChange}
+            />
+            <span className="checkbox-tile">
+              <span className="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="192" height="192" viewBox="160 50 550 550"
                     preserveAspectRatio="xMidYMid meet">
@@ -106,14 +127,14 @@ const SelectInterest = () => {
                     </g>
                     </svg>
 
-				</span>
-				<span class="checkbox-label">Video Game</span>
-			</span>
-		</label>
-	</div>
+                    </span>
+              <span className="checkbox-label">Video Game</span>
+            </span>
+          </label>
+        </div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Camping" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Camping" checked={selectedInterests.includes('Camping')}  onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +176,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Art" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Art" checked={selectedInterests.includes('Art')}  onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +251,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Photography" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Photography" checked={selectedInterests.includes('Photography')} onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -275,7 +296,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Sports" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Sports" checked={selectedInterests.includes('Sports')} onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
@@ -292,7 +313,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Music" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Music" checked={selectedInterests.includes('Music')} onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
@@ -311,7 +332,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Biking" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Biking" checked={selectedInterests.includes('Biking')} onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -422,7 +443,7 @@ const SelectInterest = () => {
 	</div>
 	<div class="checkbox">
 		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Movie" onChange={handleInterestChange}/>
+			<input type="checkbox" class="checkbox-input" value="Movie" checked={selectedInterests.includes('Movie')} onChange={handleInterestChange}/>
 			<span class="checkbox-tile">
 				<span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"

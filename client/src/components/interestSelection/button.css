@@ -22,8 +22,8 @@
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 550px; /* Adjust the top value to change the vertical position */
-    left: 47%; /* Adjust the left value to change the horizontal position */
+    top: 500px; /* Adjust the top value to change the vertical position */
+    left: 46%; /* Adjust the left value to change the horizontal position */
     transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
     box-shadow: 0 2px 25px rgba(7, 7, 7, 0.555);
   }
