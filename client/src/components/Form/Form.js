@@ -80,6 +80,7 @@ const Form = () => {
               <MenuItem value="Sports">Sports</MenuItem>
             </Select>
           </FormControl>
+          <input type="date" id="date"></input>
           <div className="file-input">
             <FileBase
               type="file"
