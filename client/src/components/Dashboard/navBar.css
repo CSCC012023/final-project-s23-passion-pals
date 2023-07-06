@@ -1,3 +1,5 @@
+@import url("https://font.googleapis.com/css2?family=Poppins");
+
 .nav {
     box-sizing: border-box;
     margin: 0;
@@ -6,6 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
+    font-family: "Poppins", sans-serif;
     gap: 2rem;
     padding: 0 1rem;
 }
