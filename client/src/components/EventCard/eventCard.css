@@ -10,7 +10,7 @@
     border-radius: 8px;
     background-color: #704214;
     overflow: hidden;
-    flex-basis: 33%;
+    flex-basis: 30%;
   }
   
   .event-image-container {
@@ -20,33 +20,45 @@
     overflow: auto;
   }
 
-  
   .event-image {
     object-fit: cover;
     width: 100%;
   }
   
   .event-content {
+    padding: 16px 2px 16px 16px;
+  }
+
+  .event-row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    padding: 16px;
+    gap: 10px;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
+
+  .name-row {
+    display: inline-flex;
+    flex-basis: 0 !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    justify-content: flex-start;
+    padding: 5px;
+  } 
 
   .event-col {
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
+    align-items: flex-start;
     flex: 1;
-    gap: 1px;
     margin-bottom: 10px;
   }
   
   .event-name {
-    font-size: 20px;
+    font-size: 36px;
     font-weight: bold;
     font-family: cursive;
     text-transform: capitalize;
