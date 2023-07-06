@@ -10,34 +10,89 @@
     border-radius: 8px;
     background-color: #704214;
     overflow: hidden;
+    flex-basis: 33%;
   }
   
   .event-image-container {
-    flex: 0 0 200px;
+    display: flex;
+    width: 50%;
+    height: 100%;
+    overflow: auto;
   }
+
   
   .event-image {
-    width: 100%;
-    max-height: 200px;
     object-fit: cover;
-    border-radius: 4px;
+    width: 100%;
   }
   
   .event-content {
-    flex: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
     padding: 16px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .event-col {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    gap: 1px;
+    margin-bottom: 10px;
   }
   
   .event-name {
     font-size: 20px;
-    margin-bottom: 8px;
+    font-weight: bold;
+    font-family: cursive;
+    text-transform: capitalize;
   }
   
-  .event-location,
-  .event-date,
-  .event-price,
+  .event-location, .event-date, .event-price {
+    font-size: 16px;
+    text-transform: capitalize;
+    margin:0;
+  }
+
   .event-description {
-    margin-bottom: 8px;
+    flex-grow: 3;
+  }
+
+  .enrollButton {
+    width: 50%;
+    background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+    border: 1px solid #000000;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "Segoe UI", "Roboto", Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 2.5;
+    outline: transparent;
+    padding: 0 1rem;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: all .3s ease-in-out;
+    user-select: none;
+    white-space: normal;
+  }
+
+  .enrollButton::after {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .enrollButton:hover::after {
+    opacity: 1;
+  }
+
+  .enrollButton:hover {
+    transform: scale(1.2, 1.2);
   }
   
   /* Add more CSS rules as needed */

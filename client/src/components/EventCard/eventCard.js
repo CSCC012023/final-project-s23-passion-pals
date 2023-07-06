@@ -65,18 +65,24 @@ export default function EventCard() {
       {events.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <img src={event.eventImage} alt="Event" className="event-image" />
+              <img src={event.eventImage} alt="Event" className="event-image" />
           </div>
           <div className="event-content">
-            <h2 className="event-name">{event.eventName}</h2>
-            <p className="event-location">Location: {event.eventLocation}</p>
-            <p className="event-date">Date: {event.eventDate}</p>
-            <p className="event-price">Price: {event.eventPrice}</p>
-            <p className="event-description">Description: {event.eventDescription}</p>
+            <div className="event-col">
+              <h2 className="event-name">{event.eventName}</h2>
+            </div>
+            <div className="event-col">
+              <p className="event-location">Location: {event.eventLocation}</p>
+              <p className="event-date">Date: {event.eventDate}</p>
+              <p className="event-price">Price: {event.eventPrice}</p>
+            </div>
+            <div className="event-col">
+              <p className="event-description">Description: {event.eventDescription}</p>
+            </div>
             {enrolledEvents.includes(event._id) ? (
-              <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
             )}
           </div>
         </div>
