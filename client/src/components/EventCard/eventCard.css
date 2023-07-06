@@ -8,6 +8,8 @@
     margin: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    background-color: #704214;
+    overflow: hidden;
   }
   
   .event-image-container {
