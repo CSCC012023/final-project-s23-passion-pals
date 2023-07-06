@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './selectInterest.css';
-
+import './button.css';
 import { useNavigate, Link } from "react-router-dom"
 
 const SelectInterest = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const history = useNavigate();
-
 
   const handleInterestChange = (event) => {
     const value = event.target.value;
@@ -21,7 +20,6 @@ const SelectInterest = () => {
       );
     }
   };
-
   const handleSubmit = async () => {
     const userId = localStorage.getItem("userId");
   
@@ -29,20 +27,39 @@ const SelectInterest = () => {
       const response = await axios.post('http://localhost:5000/select', {
         userId: userId,
         interests: selectedInterests,
-        
       });
       // Handle the response if needed
-    } 
-    
-    catch (error) {
+    } catch (error) {
       // Handle the error if needed
     }
-    history("/dash", { state: { id: userId } });
-  };
   
+    // Add a delay before navigating to "/dash"
+    setTimeout(() => {
+      history("/dash", { state: { id: userId } });
+    }, 600); 
+  };
 
+  useEffect(() => {
+    const animateButton = function (e) {
+      e.preventDefault();
+      // reset animation
+      e.target.classList.remove('animate');
+
+      e.target.classList.add('animate');
+      setTimeout(function () {
+        e.target.classList.remove('animate');
+      }, 10000);
+    };
+
+    const bubblyButtons = document.getElementsByClassName("bubbly-button");
+
+    for (let i = 0; i < bubblyButtons.length; i++) {
+      bubblyButtons[i].addEventListener('click', animateButton, false);
+      
+    }
+  }, []);
   return (
-<div>
+<div className = 'Interest'>
 <fieldset class="checkbox-group">
 	<legend class="checkbox-group-legend">Choose your favorites</legend>
 	<div class="checkbox">
@@ -425,7 +442,7 @@ m-35589 -2946 c793 -931 1365 -1974 1710 -3121 98 -326 218 -840 240 -1026 l7
 		</label>
 	</div>
 </fieldset>
-<button onClick={handleSubmit}>Submitit</button>
+<button class="bubbly-button" onClick={handleSubmit}>Submitit</button>
     </div>
   );
 };
