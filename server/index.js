@@ -136,7 +136,8 @@ app.put('/users/:userId', (req, res) => {
 
 
 app.get('/events', (req, res) => {
-  EventCardModel.find()
+  const currentDate = new Date();
+  EventCardModel.find({eventDate: {$gte: currentDate}})
     .then(events => {
       res.json(events);
     })

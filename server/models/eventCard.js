@@ -6,7 +6,7 @@ const eventCardSchema = new mongoose.Schema({
     eventPrice: String,
     eventImage: String,
     eventDescription: String,
-    eventDate: String,
+    eventDate: Date,
     theme: String,
     spots: Number
   }, {
