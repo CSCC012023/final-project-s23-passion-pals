@@ -15,18 +15,22 @@ import Dash from "./components/Dashboard/dashBoard";
 import Profile from "./components/Profile/Profile";
 import UpdateProfile from "./components/Profile/UpdateProfile";
 import EventCard from "./components/EventCard/eventCard";
+import Navbar from "./components/Dashboard/navBar";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Signup />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/home" element={<Post />} />
-      <Route path="/dash" element={<Dash />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/updateProfile" element={<UpdateProfile />} />
-      <Route path="/eventCard" element={<EventCard />} />
-    </Routes>
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/home" element={<Post />} />
+        <Route path="/dash" element={<Dash />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/updateProfile" element={<UpdateProfile />} />
+        <Route path="/eventCard" element={<EventCard />} />
+      </Routes>
+    </div>
   );
 };
 export default App;
