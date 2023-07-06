@@ -82,7 +82,34 @@ app.post("/signup", async (req, res) => {
 });
 
 
+//for interest
+// Assuming you have the necessary imports and setup for your backend
 
+// Route to update user interests
+app.post('/select', async (req, res) => {
+    const { interests, userId } = req.body;
+   
+
+  
+    try {
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Update the user's interests
+      user.interest = interests;
+      await user.save();
+  
+      res.json({ status: 'success', message: 'Interests updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  
 app.get('/getUsers', (req, res) => {
   const userId = req.query.userId;
 

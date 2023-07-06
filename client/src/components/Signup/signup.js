@@ -37,14 +37,15 @@ function Signup() {
       });
 
 
+
       if (response.data === "exist") {
         alert("User already exists");
       } else if (response.data.status === "notexist") {
         const userId = response.data.userId;
         localStorage.setItem("userId", userId);
-        signInHistory("/dash", { state: { id: userId } });
+        signInHistory("/select", { state: { id: userId } });
       } else if (response.data === "emptyPassword") {
-        alert("Fields cannot be empty");
+        alert("Email and password cannot be empty");
       } else if (response.data === "wrongFormat") {
         alert("Invalid email: Please enter a valid Gmail address.");
       }
