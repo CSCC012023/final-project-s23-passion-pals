@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-
-import Dropdown from "./Dropdown";
-import './eventCard.css'; // Import the CSS file for the component
-=======
 import CheckBox from '../checkbox';
 import './eventCard.css';
->>>>>>> 0e3944519d3af9897ee4c4c8ee04ec71c8cbbb2f
 
 export default function EventCard() {
   const [events, setEvents] = useState([]);
@@ -78,49 +72,6 @@ export default function EventCard() {
     }
   };
 
-<<<<<<< HEAD
-  const options = [
-    // events.theme.map(theme => (
-    //   { value: {theme}, label: {theme} }
-    // ))
-    { value: 'Sports', label: 'Sports' },
-    { value: 'Group Outing', label: 'Group Outing' }
-  ]
-
-  return (
-    <div>
-      <Dropdown
-        placeHolder="Select..."
-        options={options} 
-      />
-      <div className="event-card-container">
-        {events.map(event => (
-          <div key={event._id} className="event-card">
-            <div className="event-image-container">
-                <img src={event.eventImage} alt="Event" className="event-image" />
-            </div>
-            <div className="event-content">
-              <div className="event-col">
-                <h2 className="event-name">{event.eventName}</h2>
-              </div>
-              <div className="event-col">
-                <p className="event-location">Location: {event.eventLocation}</p>
-                <p className="event-date">Date: {event.eventDate}</p>
-                <p className="event-price">Price: {event.eventPrice}</p>
-              </div>
-              <div className="event-col">
-                <p className="event-description">Description: {event.eventDescription}</p>
-              </div>
-              {enrolledEvents.includes(event._id) ? (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-              ) : (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-=======
   const handleFilters = (selectedFilters, category) => {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
@@ -157,26 +108,25 @@ export default function EventCard() {
             <img src={event.eventImage} alt="Event" className="event-image" />
           </div>
           <div className="event-content">
-              <div className="event-col">
-                <h2 className="event-name">{event.eventName}</h2>
-              </div>
-              <div className="event-col">
-                <p className="event-location">Location: {event.eventLocation}</p>
-                <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <p className="event-price">Price: {event.eventPrice}</p>
-              </div>
-              <div className="event-col">
-                <p className="event-description">Description: {event.eventDescription}</p>
-              </div>
-              {enrolledEvents.includes(event._id) ? (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-              ) : (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
-              )}
+            <div className="event-col">
+              <h2 className="event-name">{event.eventName}</h2>
             </div>
+            <div className="event-col">
+              <p className="event-location">Location: {event.eventLocation}</p>
+              <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <p className="event-price">Price: {event.eventPrice}</p>
+            </div>
+            <div className="event-col">
+              <p className="event-description">Description: {event.eventDescription}</p>
+            </div>
+            {enrolledEvents.includes(event._id) ? (
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+            ) : (
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+            )}
           </div>
+        </div>
       ))}
->>>>>>> 0e3944519d3af9897ee4c4c8ee04ec71c8cbbb2f
     </div>
   );
 }
