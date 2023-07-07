@@ -73,7 +73,7 @@ export default function Dashboard() {
               <div className="event-content">
                 <p className="event-name">Name: {event.eventName}</p>
                 <p className="event-location">Location: {event.eventLocation}</p>
-                <p className="event-date">Date: {event.eventDate}</p>
+                <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <p className="event-price">Price: {event.eventPrice}</p>
               </div>
             </div>
