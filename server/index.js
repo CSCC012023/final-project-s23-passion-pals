@@ -136,14 +136,23 @@ app.put('/users/:userId', (req, res) => {
 
 
 app.get('/events', (req, res) => {
-  EventCardModel.find()
-    .then(events => {
+  const { categories, themes } = req.query;
+
+  let query = EventCardModel.find();
+
+  if (themes && themes.length > 0) {
+    query = query.where('themes').in(themes);
+  }
+
+  query
+    .then((events) => {
       res.json(events);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
+
 
 
 app.post('/enroll/:eventId', (req, res) => {
