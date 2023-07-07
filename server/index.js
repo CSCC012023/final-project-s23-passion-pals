@@ -112,8 +112,6 @@ app.post('/select', async (req, res) => {
   // Route to update user interests
 app.post('/select', async (req, res) => {
     const { interests, userId } = req.body;
-   
-
   
     try {
       // Find the user by ID
@@ -206,14 +204,14 @@ app.put('/users/:userId', (req, res) => {
 
 
 app.get('/events', (req, res) => {
+  const currentDate = new Date();
   const { categories, themes } = req.query;
 
-  let query = EventCardModel.find();
+  let query = EventCardModel.find({eventDate: {$gte: currentDate}});
 
   if (themes && themes.length > 0) {
     query = query.where('themes').in(themes);
   }
-
   query
     .then((events) => {
       res.json(events);

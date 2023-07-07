@@ -99,7 +99,7 @@ export default function EventCard() {
           <div className="event-content">
             <h2 className="event-name">{event.eventName}</h2>
             <p className="event-location">Location: {event.eventLocation}</p>
-            <p className="event-date">Date: {event.eventDate}</p>
+            <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             <p className="event-price">Price: {event.eventPrice}</p>
             <p className="event-description">Description: {event.eventDescription}</p>
             <p className="event-spots">Spots: {event.spots}</p>
