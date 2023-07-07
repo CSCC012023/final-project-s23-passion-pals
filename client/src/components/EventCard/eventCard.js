@@ -121,9 +121,9 @@ export default function EventCard() {
               <p className="event-spots">Spots: {event.spots}</p>
             </div>
             {enrolledEvents.includes(event._id) ? (
-              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+              <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+              <button onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
             )}
           </div>
         </div>
