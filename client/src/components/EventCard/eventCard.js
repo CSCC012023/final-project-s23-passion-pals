@@ -71,7 +71,7 @@ export default function EventCard() {
   };
 
   const showFilterResults = (filters) => {
-    const { categories, themes } = filters;
+    const { themes } = filters;
     const params = {
       themes
     };
