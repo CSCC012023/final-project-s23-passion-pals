@@ -108,24 +108,24 @@ export default function EventCard() {
             <img src={event.eventImage} alt="Event" className="event-image" />
           </div>
           <div className="event-content">
-              <div className="event-col">
-                <h2 className="event-name">{event.eventName}</h2>
-              </div>
-              <div className="event-col">
-                <p className="event-location">Location: {event.eventLocation}</p>
-                <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <p className="event-price">Price: {event.eventPrice}</p>
-              </div>
-              <div className="event-col">
-                <p className="event-description">Description: {event.eventDescription}</p>
-              </div>
-              {enrolledEvents.includes(event._id) ? (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-              ) : (
-                <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
-              )}
+            <div className="event-col">
+              <h2 className="event-name">{event.eventName}</h2>
             </div>
+            <div className="event-col">
+              <p className="event-location">Location: {event.eventLocation}</p>
+              <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <p className="event-price">Price: {event.eventPrice}</p>
+            </div>
+            <div className="event-col">
+              <p className="event-description">Description: {event.eventDescription}</p>
+            </div>
+            {enrolledEvents.includes(event._id) ? (
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+            ) : (
+              <button className="enrollButton" onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+            )}
           </div>
+        </div>
       ))}
     </div>
   );
