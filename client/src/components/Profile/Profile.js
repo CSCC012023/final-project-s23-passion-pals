@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
 
+
 export default function Profile() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
@@ -36,6 +37,10 @@ export default function Profile() {
 
         <Link to="/updateProfile" className="edit-button">
           Edit Profile
+        </Link>
+        <br />
+        <Link to="/selectEdit" className="edit-button">
+          Manage Subscriptions
         </Link>
       </div>
     </div>
