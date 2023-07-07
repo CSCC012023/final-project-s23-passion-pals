@@ -45,7 +45,13 @@ export default function Dashboard() {
   }, [eventIds]);
 
   return (
-    <div className='dashboard'>
+    <div className='dashboard'
+      style={{
+        backgroundImage: `url('https://wallpaperaccess.com/full/918401.jpg')`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        minHeight: '100vh',
+      }}>
       <div className='dash-head'>
         <h1 className='welcome-text'>
           Hello {user && user.fname}!
