@@ -204,15 +204,18 @@ app.put('/users/:userId', (req, res) => {
 
 
 app.get('/events', (req, res) => {
+  const { themes } = req.query;
   const currentDate = new Date();
-  const { categories, themes } = req.query;
 
-  let query = EventCardModel.find({eventDate: {$gte: currentDate}});
+  let query = EventCardModel.find();
 
   if (themes && themes.length > 0) {
     query = query.where('themes').in(themes);
   }
+
   query
+    .where('eventDate').gte(currentDate) 
+    .sort({ eventDate: 1 }) 
     .then((events) => {
       res.json(events);
     })
@@ -220,6 +223,9 @@ app.get('/events', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
+
+
+
 
 
 app.post('/enroll/:eventId', async (req, res) => {

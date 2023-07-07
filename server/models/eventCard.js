@@ -7,7 +7,7 @@ const eventCardSchema = new mongoose.Schema({
     eventImage: String,
     eventDescription: String,
     eventDate: Date,
-    theme: String,
+    themes: [String],
     spots: Number
   }, {
       collection: 'Events'

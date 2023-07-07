@@ -37,6 +37,13 @@ export default function EventCard() {
       });
   }, []);
 
+  useEffect(() => {
+    const storedFilters = localStorage.getItem('filters');
+    if (storedFilters) {
+      setFilters(JSON.parse(storedFilters));
+    }
+  }, []);
+
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -46,18 +53,16 @@ export default function EventCard() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
         });
-    } else{
+    } else {
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -69,8 +74,12 @@ export default function EventCard() {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
     setFilters(newFilters);
-    showFilterResults(newFilters);
+    localStorage.setItem('filters', JSON.stringify(newFilters));
   };
+
+  useEffect(() => {
+    showFilterResults(filters);
+  }, [filters]);
 
   const showFilterResults = (filters) => {
     const { themes } = filters;
