@@ -14,12 +14,12 @@ Manage Jira and user stories better since we lost a lot of marks for it. Our suc
 More effective and disciplined branching and pull requests so that we be more organized in who is doing what as the project gets more complex. The success metric will again be based on our mark for it as we also lost a bit on it for sprint 1.
 
 #### Roles & responsibilities
-Amitoz: Finishing Create event 
-Roger: Navigation bar and Homepage
-Nic: Event page
-Nishu: Event page category filter
-Mustafa: Event Categories
-Event enrolment and availability for users - Darren
+* Amitoz: Finishing Create event 
+* Roger: Navigation bar and Homepage
+* Nic: Event page
+* Nishu: Event page category filter
+* Mustafa: Event Categories
+* Event enrolment and availability for users - Darren
 
 #### Events
 
