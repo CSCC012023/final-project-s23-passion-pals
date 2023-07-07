@@ -82,7 +82,77 @@ app.post("/signup", async (req, res) => {
 });
 
 
+//for interest
+// Assuming you have the necessary imports and setup for your backend
 
+// Route to update user interests
+app.post('/select', async (req, res) => {
+    const { interests, userId } = req.body;
+   
+
+  
+    try {
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Update the user's interests
+      user.interest = interests;
+      await user.save();
+  
+      res.json({ status: 'success', message: 'Interests updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Route to update user interests
+app.post('/select', async (req, res) => {
+    const { interests, userId } = req.body;
+   
+
+  
+    try {
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Update the user's interests
+      user.interest = interests;
+      await user.save();
+  
+      res.json({ status: 'success', message: 'Interests updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Route to get user interests
+app.get('/user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+  
+    try {
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Respond with user's interests
+      res.json({ interests: user.interest });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  
 app.get('/getUsers', (req, res) => {
   const userId = req.query.userId;
 
@@ -154,10 +224,9 @@ app.get('/events', (req, res) => {
 });
 
 
+app.post('/enroll/:eventId', async (req, res) => {
 
-app.post('/enroll/:eventId', (req, res) => {
   const eventId = req.params.eventId;
-
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
@@ -167,12 +236,26 @@ app.post('/enroll/:eventId', (req, res) => {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  EventCardModel.findById(eventId)
-    .then(event => {
-      if (!event) {
-        return res.status(404).json({ error: 'Event not found' });
-      }
+  /* Update spots in event */
+  try {
+    const event = await EventCardModel.findByIdAndUpdate(
+      req.params.eventId,
+      { $inc: { spots: -1 } },
+      { new: true }
+    ).exec();
+    await UserModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { enrolledEvents: event._id } },
+      { new: true }
+    ).exec();
+    res.json(event);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
+      /* Update user enrolledEvents */
+      /*
       UserModel.findByIdAndUpdate(
         userId,
         { $addToSet: { enrolledEvents: event._id } },
@@ -191,9 +274,9 @@ app.post('/enroll/:eventId', (req, res) => {
     .catch(err => {
       res.status(500).json({ error: 'Internal server error' });
     });
-});
+    */
 
-app.post('/unenroll/:eventId', (req, res) => {
+app.post('/unenroll/:eventId', async (req, res) => {
   const eventId = req.params.eventId;
 
   if (!eventId) {
@@ -204,21 +287,22 @@ app.post('/unenroll/:eventId', (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
-
-  UserModel.findByIdAndUpdate(
-    userId,
-    { $pull: { enrolledEvents: eventId } },
-    { new: true }
-  )
-    .then(updatedUser => {
-      if (!updatedUser) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-      res.json(updatedUser);
-    })
-    .catch(err => {
-      res.status(500).json({ error: 'Internal server error' });
-    });
+  /* Update spots in event */
+  try {
+    const event = await EventCardModel.findByIdAndUpdate(
+      req.params.eventId,
+      { $inc: { spots: 1 } },
+      { new: true }
+    ).exec();
+    await UserModel.findByIdAndUpdate(
+      userId,
+      { $pull: { enrolledEvents: eventId } },
+      { new: true }
+    ).exec();
+    res.json(event);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.get('/getUserId', (req, res) => {

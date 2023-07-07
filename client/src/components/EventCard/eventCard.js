@@ -46,16 +46,18 @@ export default function EventCard() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
+          window.location.reload();
         })
         .catch(error => {
           console.log(error);
         });
-    } else {
+    } else{
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -100,10 +102,11 @@ export default function EventCard() {
             <p className="event-date">Date: {event.eventDate}</p>
             <p className="event-price">Price: {event.eventPrice}</p>
             <p className="event-description">Description: {event.eventDescription}</p>
+            <p className="event-spots">Spots: {event.spots}</p>
             {enrolledEvents.includes(event._id) ? (
               <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+              <button onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
             )}
           </div>
         </div>
