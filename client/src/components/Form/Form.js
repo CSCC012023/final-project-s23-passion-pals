@@ -11,12 +11,11 @@ import {
   Paper,
   Container,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
 import FileBase from "react-file-base64";
-
+import Alert from "@material-ui/lab/Alert";
 const Form = () => {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
@@ -24,17 +23,51 @@ const Form = () => {
     eventName: "",
     eventDescription: "",
     eventImage: "",
-    theme: "",
+    themes: [],
     eventDate: "",
     eventPrice: "",
     eventLocation: "",
-    spots: 0,
+    spots: null,
   });
+  const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const classes = useStyles();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createPost(postData));
+    await dispatch(createPost(postData));
+    setIsEventCreated(true); // Set the state to show the success message
+    setPostData({
+      creator: "",
+      eventName: "",
+      eventDescription: "",
+      eventImage: "",
+      themes: [],
+      eventDate: "",
+      eventPrice: "",
+      eventLocation: "",
+      spots: 0,
+    }); // Reset the form fields
+
+
+    setTimeout(() => {
+      setIsEventCreated(false); // Remove the success message after 2 seconds
+    }, 2000);
+  };
+
+  const handleThemeChange = (e, theme) => {
+    if (e.target.checked) {
+      setPostData((prevPostData) => ({
+        ...prevPostData,
+        themes: [...prevPostData.themes, theme],
+      }));
+    } else {
+      setPostData((prevPostData) => ({
+        ...prevPostData,
+        themes: prevPostData.themes.filter(
+          (selectedTheme) => selectedTheme !== theme
+        ),
+      }));
+    }
   };
 
   return (
@@ -49,9 +82,7 @@ const Form = () => {
           className="input"
           placeholder="Enter your name"
           value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
         />
         <input
           name="eventName"
@@ -59,48 +90,104 @@ const Form = () => {
           className="input"
           placeholder="Enter event title"
           value={postData.eventName}
-          onChange={(e) =>
-            setPostData({ ...postData, eventName: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, eventName: e.target.value })}
         />
         <input
           name="eventDescription"
           className="textarea"
           placeholder="Enter event description"
           value={postData.eventDescription}
-          onChange={(e) =>
-            setPostData({ ...postData, eventDescription: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, eventDescription: e.target.value })}
         />
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel>Select Event Theme</InputLabel>
-          <Select
-            name="theme"
-            value={postData.theme}
-            onChange={(e) => setPostData({ ...postData, theme: e.target.value })}
-            className="select"
-          >
-            <MenuItem value="Music">Music</MenuItem>
-            <MenuItem value="Art">Art</MenuItem>
-            <MenuItem value="Sports">Sports</MenuItem>
-          </Select>
+        <FormControl component="fieldset" fullWidth>
+          <Typography>Select Event Themes</Typography>
+          <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-music"
+                value="Music"
+                checked={postData.themes.includes("Music")}
+                onChange={(e) => handleThemeChange(e, "Music")}
+              />
+            }
+            label="Music"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-groupoutings"
+                value="Group Outings"
+                checked={postData.themes.includes("Group Outings")}
+                onChange={(e) => handleThemeChange(e, "Group Outings")}
+              />
+            }
+            label="Group Outings"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-sports"
+                value="Sports"
+                checked={postData.themes.includes("Sports")}
+                onChange={(e) => handleThemeChange(e, "Sports")}
+              />
+            }
+            label="Sports"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-education"
+                value="Education"
+                checked={postData.themes.includes("Education")}
+                onChange={(e) => handleThemeChange(e, "Education")}
+              />
+            }
+            label="Education"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-culture"
+                value="Culture"
+                checked={postData.themes.includes("Culture")}
+                onChange={(e) => handleThemeChange(e, "Culture")}
+              />
+            }
+            label="Culture"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-adventure"
+                value="Adventure"
+                checked={postData.themes.includes("Adventure")}
+                onChange={(e) => handleThemeChange(e, "Adventure")}
+              />
+            }
+            label="Adventure"
+          />
+          
+
+          </div>
         </FormControl>
         <input
           type="date"
           id="eventDate"
           value={postData.eventDate}
-          onChange={(e) =>
-            setPostData({ ...postData, eventDate: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
         />
-        <input
+       <input
           name="eventPrice"
           type="text"
           className="input"
           placeholder="Enter event price"
-          value={postData.eventPrice}
+          value={postData.eventPrice ? `$${postData.eventPrice}` : ""}
           onChange={(e) =>
-            setPostData({ ...postData, eventPrice: e.target.value })
+            setPostData({ ...postData, eventPrice: e.target.value.replace("$", "") })
           }
         />
         <input
@@ -109,9 +196,7 @@ const Form = () => {
           className="input"
           placeholder="Enter event location"
           value={postData.eventLocation}
-          onChange={(e) =>
-            setPostData({ ...postData, eventLocation: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, eventLocation: e.target.value })}
         />
         <input
           name="spots"
@@ -119,19 +204,20 @@ const Form = () => {
           className="input"
           placeholder="Enter available spots"
           value={postData.spots}
-          onChange={(e) =>
-            setPostData({ ...postData, spots: e.target.value })
-          }
+          onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
           <FileBase
             type="file"
             multiple={false}
-            onDone={({ base64 }) =>
-              setPostData({ ...postData, eventImage: base64 })
-            }
+            onDone={({ base64 }) => setPostData({ ...postData, eventImage: base64 })}
           />
         </div>
+        {isEventCreated && (
+          <Alert severity="success" className="alert">
+            Event created successfully!
+          </Alert>
+        )}
         <Button
           className="submit-button"
           variant="contained"
@@ -153,5 +239,4 @@ const Form = () => {
     </Container>
   );
 };
-
 export default Form;
