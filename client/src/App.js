@@ -22,15 +22,15 @@ import SelectEdition from './components/interestSelection/selectEdit'
 const App = () => {
 
   const location = useLocation();
-  const isSignup = location.pathname === '/signup' || location.pathname === '/'
+  const exclude = location.pathname === '/signup' || location.pathname === '/' || location.pathname === '/select' || location.pathname === '/selectEdit'
 
   return (
     <div>
-      {!isSignup && <Navbar />}
+      {!exclude && <Navbar />}
       <Routes>
         <Route path="/" element={<Signup />} />
-        <Route path="/select" element={<Select/>}/>
-        <Route path="/selectEdit" element={<SelectEdition/>}/>
+        <Route path="/select" element={<Select />} />
+        <Route path="/selectEdit" element={<SelectEdition />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/createEvent" element={<Form />} />
         <Route path="/dash" element={<Dash />} />

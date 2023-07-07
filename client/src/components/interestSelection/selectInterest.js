@@ -22,7 +22,7 @@ const SelectInterest = () => {
   };
   const handleSubmit = async () => {
     const userId = localStorage.getItem("userId");
-  
+
     try {
       const response = await axios.post('http://localhost:5000/select', {
         userId: userId,
@@ -32,11 +32,11 @@ const SelectInterest = () => {
     } catch (error) {
       // Handle the error if needed
     }
-  
+
     // Add a delay before navigating to "/dash"
     setTimeout(() => {
       history("/dash", { state: { id: userId } });
-    }, 600); 
+    }, 600);
   };
 
   useEffect(() => {
@@ -55,24 +55,24 @@ const SelectInterest = () => {
 
     for (let i = 0; i < bubblyButtons.length; i++) {
       bubblyButtons[i].addEventListener('click', animateButton, false);
-      
+
     }
   }, []);
   return (
-<div className = 'Interest'>
-<fieldset class="checkbox-group">
-	<legend class="checkbox-group-legend">Choose your favorites</legend>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Video Game" onChange={handleInterestChange} />
-			<span class="checkbox-tile">
-           
-				<span class="checkbox-icon">
-                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="192" height="192" viewBox="160 50 550 550"
-                    preserveAspectRatio="xMidYMid meet">
+    <div className='Interest'>
+      <fieldset class="checkbox-group">
+        <legend class="checkbox-group-legend">Choose your favorites</legend>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Video Game" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
 
-                    <g transform="translate(0.000000,650.000000) scale(0.100000,-0.100000)"
+              <span class="checkbox-icon">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="192" height="192" viewBox="160 50 550 550"
+                  preserveAspectRatio="xMidYMid meet">
+
+                  <g transform="translate(0.000000,650.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M3000 5200 c-25 -4 -92 -15 -150 -24 -249 -38 -435 -113 -540 -217
                     -50 -50 -64 -73 -95 -154 -28 -70 -49 -107 -80 -139 -51 -53 -107 -143 -130
@@ -103,26 +103,26 @@ const SelectInterest = () => {
                     118 -12z m1600 -118 c106 -53 162 -138 170 -257 8 -130 -57 -242 -175 -299
                     -63 -31 -157 -38 -231 -16 -64 19 -142 88 -177 157 -26 51 -30 69 -29 139 0
                     97 23 151 90 219 58 59 126 86 220 86 60 1 80 -4 132 -29z"/>
-                    </g>
-                    </svg>
+                  </g>
+                </svg>
 
-				</span>
-				<span class="checkbox-label">Video Game</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Camping" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
+              </span>
+              <span class="checkbox-label">Video Game</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Camping" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                width="980.000000pt" height="760.000000pt" viewBox="0 0 980.000000 760.000000"
-                preserveAspectRatio="xMidYMid meet">
+                  width="980.000000pt" height="760.000000pt" viewBox="0 0 980.000000 760.000000"
+                  preserveAspectRatio="xMidYMid meet">
 
-                <g transform="translate(0.000000,760.000000) scale(0.100000,-0.100000)"
-                fill="currentcolor" stroke="none">
-                <path d="M1841 7503 c-185 -747 -580 -1592 -1019 -2178 -91 -121 -147 -188
+                  <g transform="translate(0.000000,760.000000) scale(0.100000,-0.100000)"
+                    fill="currentcolor" stroke="none">
+                    <path d="M1841 7503 c-185 -747 -580 -1592 -1019 -2178 -91 -121 -147 -188
                 -271 -323 -55 -61 -90 -107 -85 -112 5 -5 126 -74 269 -153 190 -106 261 -150
                 263 -165 7 -42 -168 -341 -343 -587 -94 -131 -167 -221 -327 -399 -49 -54 -88
                 -106 -88 -116 0 -19 8 -24 346 -210 83 -46 161 -90 174 -100 l22 -17 -22 -44
@@ -133,36 +133,36 @@ const SelectInterest = () => {
                 -49 87 -52 94 -34 105 10 6 128 73 262 148 133 75 249 142 257 148 22 18 2 48
                 -120 180 -503 545 -981 1455 -1230 2341 -26 90 -50 168 -54 172 -5 5 -18 -31
                 -30 -80z"/>
-                <path d="M8044 6550 c-154 -77 -241 -138 -355 -250 -166 -165 -291 -379 -350
+                    <path d="M8044 6550 c-154 -77 -241 -138 -355 -250 -166 -165 -291 -379 -350
                 -600 -44 -169 -46 -442 -3 -634 53 -238 207 -491 403 -663 181 -159 434 -285
                 627 -313 89 -13 379 -12 468 0 151 22 386 120 516 215 127 93 316 296 389 418
                 37 62 29 61 -137 -8 -207 -86 -503 -106 -731 -49 -341 86 -637 330 -796 658
                 -66 136 -92 226 -106 376 -31 312 20 538 181 806 47 77 61 114 42 114 -5 0
                 -71 -31 -148 -70z"/>
-                <path d="M5297 5767 c-105 -130 -1283 -1745 -3027 -4149 l-694 -958 -491 0
+                    <path d="M5297 5767 c-105 -130 -1283 -1745 -3027 -4149 l-694 -958 -491 0
                 c-271 0 -614 -3 -763 -7 l-272 -6 0 -324 0 -323 4877 0 4876 0 -7 317 c-4 175
                 -9 320 -12 323 -3 3 -162 7 -354 10 -192 3 -350 7 -353 10 -2 3 -440 606 -972
                 1340 -2030 2800 -2702 3724 -2751 3782 l-23 28 -34 -43z m146 -1672 c339
                 -1048 1010 -2212 1676 -2908 170 -178 405 -377 611 -519 24 -16 -44 -17 -1189
                 -17 l-1214 -1 5 1843 c3 1013 9 1851 14 1861 6 17 9 14 20 -20 7 -21 41 -129
                 77 -239z"/>
-                </g>
+                  </g>
                 </svg>
-				</span>
-				<span class="checkbox-label">Camping</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Art" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
+              </span>
+              <span class="checkbox-label">Camping</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Art" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="7677.000000pt" height="7677.000000pt" viewBox="700 600 6500 6500"
-                    preserveAspectRatio="xMidYMid meet">
+                  width="7677.000000pt" height="7677.000000pt" viewBox="700 600 6500 6500"
+                  preserveAspectRatio="xMidYMid meet">
 
-                    <g transform="translate(0.000000,7677.000000) scale(0.100000,-0.100000)"
+                  <g transform="translate(0.000000,7677.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M40350 66205 c-159 -36 -282 -106 -392 -223 -155 -165 -252 -409
                     -305 -767 -22 -151 -26 -766 -5 -965 106 -1033 385 -2191 892 -3710 2278
@@ -221,28 +221,28 @@ const SelectInterest = () => {
                     1110 -294 1655 -330 994 -898 1874 -1752 2716 -993 979 -1966 1507 -2866 1557
                     l-122 7 5 100 c7 143 2 355 -10 465 -29 247 -109 520 -215 738 -48 100 -1085
                     1871 -1114 1904 -4 4 -929 -538 -2056 -1206z"/>
-                    </g>
-                    </svg>
-				</span>
-				<span class="checkbox-label">Art</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Photography" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
+                  </g>
+                </svg>
+              </span>
+              <span class="checkbox-label">Art</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Photography" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="580.000000pt" height="577.000000pt" viewBox="100 50 400 400"
-                    preserveAspectRatio="xMidYMid meet">
+                  width="580.000000pt" height="577.000000pt" viewBox="100 50 400 400"
+                  preserveAspectRatio="xMidYMid meet">
 
-                    <g transform="translate(0.000000,577.000000) scale(0.100000,-0.100000)"
+                  <g transform="translate(0.000000,577.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M2016 4263 c-3 -10 -30 -112 -61 -228 -31 -115 -58 -218 -61 -227 -5
                     -17 47 -18 991 -18 944 0 996 1 991 18 -10 31 -126 463 -126 468 0 2 -389 4
                     -864 4 -815 0 -865 -1 -870 -17z"/>
-                    <path d="M1220 3910 l0 -120 155 0 155 0 0 120 0 120 -155 0 -155 0 0 -120z"/>
+                    <path d="M1220 3910 l0 -120 155 0 155 0 0 120 0 120 -155 0 -155 0 0 -120z" />
                     <path d="M980 3235 l0 -425 474 0 473 0 23 69 c47 146 131 280 249 396 125
                     123 271 205 449 252 82 22 119 26 237 26 118 0 155 -4 236 -26 178 -47 309
                     -120 443 -247 122 -117 203 -244 255 -402 l23 -68 474 0 474 0 0 425 0 425
@@ -260,64 +260,64 @@ const SelectInterest = () => {
                     <path d="M2785 3115 c-364 -68 -558 -463 -393 -797 40 -80 151 -192 233 -235
                     162 -84 358 -84 520 0 83 43 191 154 233 239 87 178 77 386 -26 544 -92 140
                     -212 221 -372 250 -90 16 -105 16 -195 -1z"/>
-                    <path d="M980 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z"/>
-                    <path d="M3865 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z"/>
+                    <path d="M980 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z" />
+                    <path d="M3865 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z" />
                     <path d="M980 1910 l0 -430 1905 0 1905 0 0 429 0 428 -473 2 -473 2 -18 -58
                     c-99 -317 -346 -560 -672 -659 -83 -26 -102 -28 -269 -28 -169 0 -186 2 -269
                     27 -324 100 -568 336 -667 645 l-23 72 -473 0 -473 0 0 -430z"/>
-                    </g>
-                    </svg>
+                  </g>
+                </svg>
 
-				</span>
-				<span class="checkbox-label">Photography</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Sports" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
-						<rect width="256" height="256" fill="none"></rect>
-						<circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle>
-						<path d="M71.0247,205.27116a159.91145,159.91145,0,0,1,136.98116-77.27311q8.09514,0,15.99054.78906" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-						<path d="M188.0294,53.09083A159.68573,159.68573,0,0,1,64.00586,111.99805a160.8502,160.8502,0,0,1-30.15138-2.83671" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-						<path d="M85.93041,41.68508a159.92755,159.92755,0,0,1,78.99267,138.00723,160.35189,160.35189,0,0,1-4.73107,38.77687" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-					</svg>
-				</span>
-				<span class="checkbox-label">Sports</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Music" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
-						<rect width="256" height="256" fill="none"></rect>
-						<circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle>
-						<g>
-							<path d="M179.1333,108.32931a112.19069,112.19069,0,0,0-102.3584.04859" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-							<path d="M164.29541,136.71457a79.94058,79.94058,0,0,0-72.68359.04736" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-							<path d="M149.47217,165.07248a47.97816,47.97816,0,0,0-43.03662.04736" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
-						</g>
-					</svg>
-				</span>
-				<span class="checkbox-label">Music</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Biking" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
+              </span>
+              <span class="checkbox-label">Photography</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Sports" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                  <rect width="256" height="256" fill="none"></rect>
+                  <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle>
+                  <path d="M71.0247,205.27116a159.91145,159.91145,0,0,1,136.98116-77.27311q8.09514,0,15.99054.78906" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                  <path d="M188.0294,53.09083A159.68573,159.68573,0,0,1,64.00586,111.99805a160.8502,160.8502,0,0,1-30.15138-2.83671" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                  <path d="M85.93041,41.68508a159.92755,159.92755,0,0,1,78.99267,138.00723,160.35189,160.35189,0,0,1-4.73107,38.77687" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                </svg>
+              </span>
+              <span class="checkbox-label">Sports</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Music" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                  <rect width="256" height="256" fill="none"></rect>
+                  <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle>
+                  <g>
+                    <path d="M179.1333,108.32931a112.19069,112.19069,0,0,0-102.3584.04859" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                    <path d="M164.29541,136.71457a79.94058,79.94058,0,0,0-72.68359.04736" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                    <path d="M149.47217,165.07248a47.97816,47.97816,0,0,0-43.03662.04736" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="checkbox-label">Music</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Biking" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="7972.000000pt" height="7972.000000pt" viewBox="700 500 6572.000000 6572.000000"
-                    preserveAspectRatio="xMidYMid meet">
-                    <g transform="translate(0.000000,7972.000000) scale(0.100000,-0.100000)"
+                  width="7972.000000pt" height="7972.000000pt" viewBox="700 500 6572.000000 6572.000000"
+                  preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,7972.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M40393 68870 c-1115 -57 -2146 -463 -3023 -1190 -162 -134 -489 -461
                     -620 -620 -892 -1079 -1299 -2377 -1174 -3750 86 -951 436 -1845 1025 -2620
@@ -413,23 +413,23 @@ const SelectInterest = () => {
                     118 -14 10592 -14 10710 0 128 16 224 45 345 105 210 103 367 260 470 470 93
                     189 128 375 106 571 -51 453 -350 794 -802 916 l-84 23 -5355 1 c-2945 1
                     -5362 0 -5370 -1z"/>
-                    </g>
-                    </svg>
-				</span>
-				<span class="checkbox-label">Biking</span>
-			</span>
-		</label>
-	</div>
-	<div class="checkbox">
-		<label class="checkbox-wrapper">
-			<input type="checkbox" class="checkbox-input" value="Movie" onChange={handleInterestChange}/>
-			<span class="checkbox-tile">
-				<span class="checkbox-icon">
+                  </g>
+                </svg>
+              </span>
+              <span class="checkbox-label">Biking</span>
+            </span>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" value="Movie" onChange={handleInterestChange} />
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="960.000000pt" height="960.000000pt" viewBox="30 0 860.000000 860.000000"
-                    preserveAspectRatio="xMidYMid meet">
+                  width="960.000000pt" height="960.000000pt" viewBox="30 0 860.000000 860.000000"
+                  preserveAspectRatio="xMidYMid meet">
 
-                    <g transform="translate(0.000000,960.000000) scale(0.100000,-0.100000)"
+                  <g transform="translate(0.000000,960.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M5765 8026 c-1105 -282 -2574 -656 -3262 -831 -861 -219 -1253 -323
                     -1253 -332 0 -7 65 -269 145 -582 l145 -569 0 -1698 c0 -1050 4 -1735 10
@@ -462,15 +462,15 @@ const SelectInterest = () => {
                     <path d="M4338 3859 c-17 -9 -18 -64 -18 -917 0 -693 3 -911 12 -920 7 -7 23
                     -12 37 -12 14 0 350 188 798 447 l774 447 -3 35 -3 35 -775 448 c-426 246
                     -782 448 -790 448 -8 -1 -23 -5 -32 -11z"/>
-                    </g>
-                    </svg>
-				</span>
-				<span class="checkbox-label">Movie</span>
-			</span>
-		</label>
-	</div>
-</fieldset>
-<button class="bubbly-button" onClick={handleSubmit}>Submitit</button>
+                  </g>
+                </svg>
+              </span>
+              <span class="checkbox-label">Movie</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <button class="bubbly-button" onClick={handleSubmit}>Submit</button>
     </div>
   );
 };
