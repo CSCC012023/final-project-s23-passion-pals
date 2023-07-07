@@ -31,11 +31,15 @@ Also possible one on one calls for code reviews, coding sessions, and syncing fr
 
 #### Artifacts
 
+Jira:
+* Jira allows you to create user stories, assign tasks, set priorities, and track the status of each task, which ensures clarity and transparency within the team
+* It also allows you to break down larger project goals into manageable tasks, assign them to team members, and monitor their completion.
+* This artifact facilitates efficient task allocation, collaboration, and progress monitoring, ultimately helping the team stay organized and meet project milestones.
 
-List/describe the artifacts you will produce in order to organize your team.       
-
-
-We will be keeping track of tasks using Jira for user stories and discord messages/standups for what tasks have been and need to be done. Task prioritization is based on what we as a group agree to complete first. The team together will decide who will do which tasks based on what is needed and how comfortable each member is with each task.
+Discord:
+* Discord allows instant messaging and voice chats which makes a great environment for standup meetings, as it enables effective communication within the team.
+* It can be used for quick discussions, clarifications, and for sharing important updates or announcements.
+* This artifact fosters a collaborative environment, promotes transparency, and ensures everyone is aware of the current state of tasks and the project as a whole.
 
 
 ## Product
