@@ -20,6 +20,11 @@ export default function Navbar() {
                 <li>
                     <Link to="/eventCard" className='link-style'>Find Events</Link>
                 </li>
+                <li>
+                    <Link to="/signup" className='link-style'>
+                        <i className='bx bx-log-out'></i>
+                    </Link>
+                </li>
             </ul>
         </nav>
     );
