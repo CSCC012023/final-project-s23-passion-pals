@@ -37,6 +37,13 @@ export default function EventCard() {
       });
   }, []);
 
+  useEffect(() => {
+    const storedFilters = localStorage.getItem('filters');
+    if (storedFilters) {
+      setFilters(JSON.parse(storedFilters));
+    }
+  }, []);
+
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -51,7 +58,7 @@ export default function EventCard() {
         .catch(error => {
           console.log(error);
         });
-    } else{
+    } else {
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
@@ -69,8 +76,12 @@ export default function EventCard() {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
     setFilters(newFilters);
-    showFilterResults(newFilters);
+    localStorage.setItem('filters', JSON.stringify(newFilters));
   };
+
+  useEffect(() => {
+    showFilterResults(filters);
+  }, [filters]);
 
   const showFilterResults = (filters) => {
     const { themes } = filters;
