@@ -67,12 +67,12 @@ The main priority for this sprint is getting the dashboard and event pages all s
 
 The main priority for this sprint is finishing creating events, getting all the main pages set up and navigation between them, and getting started on the functionality and frontend for those pages.
 The tasks and associated user stories/task number on Jira are as follows:
-Finishing Create event (30) - Amitoz
-Navigation bar (36) - Roger
-Event Page (14/40) - Nishu & Nic
-Event categories (9/12) - Mustafa
-Event enrolment and availability for users (20/22) - Darren
-Dashboard/Homepage (13) - Roger
+* Finishing Create event (30) - Amitoz
+* Navigation bar (36) - Roger
+* Event Page (14/40) - Nishu & Nic
+* Event categories (9/12) - Mustafa
+* Event enrolment and availability for users (20/22) - Darren
+* Dashboard/Homepage (13) - Roger
 
 We are prioritizing functionality over pretty UI so that we can work on other user stories going forward. We will likely update the UI in later sprints.
 
