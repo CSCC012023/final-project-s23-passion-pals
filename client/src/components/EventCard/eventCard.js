@@ -53,6 +53,7 @@ export default function EventCard() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
+          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -63,6 +64,7 @@ export default function EventCard() {
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+          window.location.reload();
         })
         .catch(error => {
           console.log(error);
