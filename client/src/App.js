@@ -16,6 +16,8 @@ import Profile from "./components/Profile/Profile";
 import UpdateProfile from "./components/Profile/UpdateProfile";
 import EventCard from "./components/EventCard/eventCard";
 import Navbar from "./components/Dashboard/navBar";
+import Select from './components/interestSelection/selectInterest'
+import SelectEdition from './components/interestSelection/selectEdit'
 
 const App = () => {
 
@@ -27,15 +29,16 @@ const App = () => {
       {!isSignup && <Navbar />}
       <Routes>
         <Route path="/" element={<Signup />} />
+        <Route path="/select" element={<Select/>}/>
+        <Route path="/selectEdit" element={<SelectEdition/>}/>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Post />} />
+        <Route path="/createEvent" element={<Form />} />
         <Route path="/dash" element={<Dash />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/updateProfile" element={<UpdateProfile />} />
         <Route path="/eventCard" element={<EventCard />} />
       </Routes>
     </div>
-
   );
 };
 export default App;

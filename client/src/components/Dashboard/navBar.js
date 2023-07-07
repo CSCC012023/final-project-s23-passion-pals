@@ -15,7 +15,7 @@ export default function Navbar() {
                     <Link to="/profile" className='link-style'>Profile</Link>
                 </li>
                 <li>
-                    <Link to="/home" className='link-style'>Create Event</Link>
+                    <Link to="/createEvent" className='link-style'>Create Event</Link>
                 </li>
                 <li>
                     <Link to="/eventCard" className='link-style'>Find Events</Link>
