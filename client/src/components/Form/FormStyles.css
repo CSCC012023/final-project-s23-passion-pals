@@ -1,4 +1,4 @@
-.container {
+.form_container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,6 +6,7 @@
     background: url('/client/src/images/uoft.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
   }
   
   .paper {
@@ -14,13 +15,17 @@
     background-color: #f81010;
     border-radius: 10px;
   }
+
+  .form * {
+    box-sizing: border-box;
+}
   
   .form {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 75vh;
-    width: 75vh;
     background: linear-gradient(to bottom, #ffffff, #ECEFF1);
     font-family: Arial, sans-serif;
   }
