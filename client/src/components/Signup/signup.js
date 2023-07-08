@@ -30,11 +30,12 @@ function Signup() {
 
     try {
       const response = await axios.post("http://localhost:5000/signup", {
-     email: emailSignup,
-     password: passwordSignup,
-     fname,
-     lname,
-    });
+        email: emailSignup,
+        password: passwordSignup,
+        fname,
+        lname,
+      });
+
 
 
       if (response.data === "exist") {
@@ -42,9 +43,9 @@ function Signup() {
       } else if (response.data.status === "notexist") {
         const userId = response.data.userId;
         localStorage.setItem("userId", userId);
-        signInHistory("/dash", { state: { id: userId } });
+        signInHistory("/select", { state: { id: userId } });
       } else if (response.data === "emptyPassword") {
-        alert("Fields cannot be empty");
+        alert("Email and password cannot be empty");
       } else if (response.data === "wrongFormat") {
         alert("Invalid email: Please enter a valid Gmail address.");
       }
@@ -56,13 +57,13 @@ function Signup() {
 
   async function submitLogin(e) {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post("http://localhost:5000/", {
         email: emailLogin,
         password: passwordLogin,
       });
-  
+
       if (response.data.status === "exist") {
         const userId = response.data.userId;
         localStorage.setItem("userId", userId);
@@ -76,102 +77,103 @@ function Signup() {
       console.log(error);
     }
   }
-  
+
 
   return (
-    <div
-      className={`container ${
-        isRegistrationActive ? "" : "right-panel-active"
-      }`}
-      id="container"
-    >
-      <div className="form-container register-container">
-        <form action="#">
-          <h1>Register Here!</h1>
-          <input
-            type="fname"
-            placeholder="First Name"
-            onChange={(e) => {
-              setFname(e.target.value);
-            }}
-          />
-          <input
-            type="lname"
-            placeholder="Last Name"
-            onChange={(e) => {
-              setLname(e.target.value);
-            }}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => {
-              setSignupEmail(e.target.value);
-            }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => {
-              setSignupPassword(e.target.value);
-            }}
-          />
-          <button onClick={submitSignup}>Register</button>
-          {}
-        </form>
-      </div>
+    <div className="loginSignup">
+      <div
+        className={`container ${isRegistrationActive ? "" : "right-panel-active"
+          }`}
+        id="container"
+      >
+        <div className="form-container register-container">
+          <form action="#">
+            <h1>Register Here!</h1>
+            <input
+              type="fname"
+              placeholder="First Name"
+              onChange={(e) => {
+                setFname(e.target.value);
+              }}
+            />
+            <input
+              type="lname"
+              placeholder="Last Name"
+              onChange={(e) => {
+                setLname(e.target.value);
+              }}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={(e) => {
+                setSignupEmail(e.target.value);
+              }}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => {
+                setSignupPassword(e.target.value);
+              }}
+            />
+            <button onClick={submitSignup}>Register</button>
+            { }
+          </form>
+        </div>
 
-      <div className="form-container login-container">
-        <form action="#">
-          <h1>
-            Welcome! <br /> Login
-          </h1>
-          <input
-            type="email"
-            onChange={(e) => {
-              setLoginEmail(e.target.value);
-            }}
-            placeholder="Email"
-          />
-          <input
-            type="password"
-            onChange={(e) => {
-              setLoginPassword(e.target.value);
-            }}
-            placeholder="Password"
-          />
-          {}
-          <button onClick={submitLogin}>Login</button>
-          {}
-        </form>
-      </div>
+        <div className="form-container login-container">
+          <form action="#">
+            <h1>
+              Welcome! <br /> Login
+            </h1>
+            <input
+              type="email"
+              onChange={(e) => {
+                setLoginEmail(e.target.value);
+              }}
+              placeholder="Email"
+            />
+            <input
+              type="password"
+              onChange={(e) => {
+                setLoginPassword(e.target.value);
+              }}
+              placeholder="Password"
+            />
+            { }
+            <button onClick={submitLogin}>Login</button>
+            { }
+          </form>
+        </div>
 
-      <div className="overlay-container">
-        <div className="overlay">
-          <div className="overlay-panel overlay-left">
-            <h1 className="title">
-              insert cheesy
-              <br />
-              text
-            </h1>
-            <p>something about the power of friendship</p>
-            <button className="ghost" id="login" onClick={handleSignClick}>
-              Login
-              {}
-              <i className="left arrow login">&larr;</i>
-            </button>
-          </div>
-          <div className="overlay-panel overlay-right">
-            <h1 className="title">
-              Take chances
-              <br />
-              make mistakes
-            </h1>
-            <p>get messy</p>
-            <button className="ghost" id="register" onClick={handleRegClick}>
-              Register
-              <i className="right arrow register">&rarr;</i>
-            </button>
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1 className="title">
+                insert cheesy
+                <br />
+                text
+              </h1>
+              <p>something about the power of friendship</p>
+              <button className="ghost" id="login" onClick={handleSignClick}>
+                Login
+                { }
+                <i className="left arrow login">&larr;</i>
+              </button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1 className="title">
+                Take chances
+                <br />
+                make mistakes
+              </h1>
+              <p>get messy</p>
+              <button className="ghost" id="register" onClick={handleRegClick}>
+                Register
+                <i className="right arrow register">&rarr;</i>
+              </button>
+            </div>
           </div>
         </div>
       </div>

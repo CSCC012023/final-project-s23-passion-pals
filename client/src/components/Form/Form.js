@@ -1,46 +1,242 @@
-import React, {useState} from "react";
-import useStyles from './styles'
-import { TextField, Button, Typography, Paper } from '@material-ui/core';
-import FileBase from 'react-file-base64';
+import React, { useState } from "react";
+import useStyles from "./styles";
 import { useDispatch } from "react-redux";
-import {createPost} from '../../actions/posts';
-
+import axios from "axios";
+import { createPost } from "../../actions/posts";
+import "./FormStyles.css";
+import { Link } from "react-router-dom";
+import {
+  Button,
+  Typography,
+  Paper,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
+import FileBase from "react-file-base64";
+import Alert from "@material-ui/lab/Alert";
 const Form = () => {
-    const dispatch = useDispatch();
-    const [postData, setPostData] = useState({creator: '', title: '', message: '', selectedFile: ''});
-    const classes =  useStyles();
-    const handleSubmit =  (e) => {
-        e.preventDefault();
+  const dispatch = useDispatch();
+  const [postData, setPostData] = useState({
+    creator: "",
+    eventName: "",
+    eventDescription: "",
+    eventImage: "",
+    themes: [],
+    eventDate: "",
+    eventPrice: "",
+    eventLocation: "",
+    spots: null,
+  });
+  const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
+  const classes = useStyles();
 
-        dispatch(createPost(postData));
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await dispatch(createPost(postData));
+    setIsEventCreated(true); // Set the state to show the success message
+    setPostData({
+      creator: "",
+      eventName: "",
+      eventDescription: "",
+      eventImage: "",
+      themes: [],
+      eventDate: "",
+      eventPrice: "",
+      eventLocation: "",
+      spots: 0,
+    }); // Reset the form fields
 
 
+    setTimeout(() => {
+      setIsEventCreated(false); // Remove the success message after 2 seconds
+    }, 2000);
+  };
 
-    return (
-        <Paper className={classes.paper}>
-          <form autoComplete="off" noValidate className={classes.form} onSubmit={handleSubmit}>
-            <Typography variant="h6">Creating An Event</Typography>
-            <TextField name="creator" variant="outlined" label="Creator" fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })} />
-            <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-            <TextField name="message" variant="outlined" label="Message" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
-            
-            <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} /></div>
-            <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-            
-            </form>
-        </Paper>
-      );
+  const handleThemeChange = (e, theme) => {
+    if (e.target.checked) {
+      setPostData((prevPostData) => ({
+        ...prevPostData,
+        themes: [...prevPostData.themes, theme],
+      }));
+    } else {
+      setPostData((prevPostData) => ({
+        ...prevPostData,
+        themes: prevPostData.themes.filter(
+          (selectedTheme) => selectedTheme !== theme
+        ),
+      }));
     }
-export default Form;
+  };
 
-/*
-           <TextField name = "title" variant = "outline" label="Title" fullWidth value= {postData.title}onChange={(e)=> setPostData({...postData, title:e.target.value})}/>
-            <TextField name = "message" variant = "outline" label="Message" fullWidth value= {postData.message}onChange={(e)=> setPostData({...postData, message:e.target.value})}/>
-            <TextField name = "tags" variant = "outline" label="Tags" fullWidth value= {postData.tags}onChange={(e)=> setPostData({...postData, tags:e.target.value})}/>
-            <div className={classes.fileInput}>
-                <FileBase type="file" multiple={false}onDone = {({base64})=>setPostData({ ...postData, selectedFile:base64})}/>
-            </div>
-            <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-            <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
-*/
+  return (
+    <Container component="main">
+      <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
+        <Typography variant="h3" className="heading">
+          Create Event
+        </Typography>
+        <input
+          name="creator"
+          type="text"
+          className="input"
+          placeholder="Enter your name"
+          value={postData.creator}
+          onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
+        />
+        <input
+          name="eventName"
+          type="text"
+          className="input"
+          placeholder="Enter event title"
+          value={postData.eventName}
+          onChange={(e) => setPostData({ ...postData, eventName: e.target.value })}
+        />
+        <input
+          name="eventDescription"
+          className="textarea"
+          placeholder="Enter event description"
+          value={postData.eventDescription}
+          onChange={(e) => setPostData({ ...postData, eventDescription: e.target.value })}
+        />
+        <FormControl component="fieldset" fullWidth>
+          <Typography>Select Event Themes</Typography>
+          <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-music"
+                value="Music"
+                checked={postData.themes.includes("Music")}
+                onChange={(e) => handleThemeChange(e, "Music")}
+              />
+            }
+            label="Music"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-groupoutings"
+                value="Group Outings"
+                checked={postData.themes.includes("Group Outings")}
+                onChange={(e) => handleThemeChange(e, "Group Outings")}
+              />
+            }
+            label="Group Outings"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-sports"
+                value="Sports"
+                checked={postData.themes.includes("Sports")}
+                onChange={(e) => handleThemeChange(e, "Sports")}
+              />
+            }
+            label="Sports"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-education"
+                value="Education"
+                checked={postData.themes.includes("Education")}
+                onChange={(e) => handleThemeChange(e, "Education")}
+              />
+            }
+            label="Education"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-culture"
+                value="Culture"
+                checked={postData.themes.includes("Culture")}
+                onChange={(e) => handleThemeChange(e, "Culture")}
+              />
+            }
+            label="Culture"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="theme-adventure"
+                value="Adventure"
+                checked={postData.themes.includes("Adventure")}
+                onChange={(e) => handleThemeChange(e, "Adventure")}
+              />
+            }
+            label="Adventure"
+          />
+          
+
+          </div>
+        </FormControl>
+        <input
+          type="date"
+          id="eventDate"
+          value={postData.eventDate}
+          onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
+        />
+       <input
+          name="eventPrice"
+          type="text"
+          className="input"
+          placeholder="Enter event price"
+          value={postData.eventPrice ? `$${postData.eventPrice}` : ""}
+          onChange={(e) =>
+            setPostData({ ...postData, eventPrice: e.target.value.replace("$", "") })
+          }
+        />
+        <input
+          name="eventLocation"
+          type="text"
+          className="input"
+          placeholder="Enter event location"
+          value={postData.eventLocation}
+          onChange={(e) => setPostData({ ...postData, eventLocation: e.target.value })}
+        />
+        <input
+          name="spots"
+          type="number"
+          className="input"
+          placeholder="Enter available spots"
+          value={postData.spots}
+          onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
+        />
+        <div className="file-input">
+          <FileBase
+            type="file"
+            multiple={false}
+            onDone={({ base64 }) => setPostData({ ...postData, eventImage: base64 })}
+          />
+        </div>
+        {isEventCreated && (
+          <Alert severity="success" className="alert">
+            Event created successfully!
+          </Alert>
+        )}
+        <Button
+          className="submit-button"
+          variant="contained"
+          color="secondary"
+          type="submit"
+          style={{
+            borderRadius: "40px",
+            padding: "1px 1px",
+            minWidth: "10px",
+            display: "flex",
+            alignItems: "center",
+            width: "450px",
+            height: "50px",
+          }}
+        >
+          Submit
+        </Button>
+      </form>
+    </Container>
+  );
+};
+export default Form;
