@@ -10,6 +10,7 @@ export default function EventCard() {
     themes: []
   });
 
+  // Get all events
   useEffect(() => {
     axios
       .get('http://localhost:5000/events')
@@ -22,7 +23,7 @@ export default function EventCard() {
   }, []);
 
   const userId = localStorage.getItem('userId');
-
+  // Get all events that the user is enrolled in
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getUsers?userId=${userId}`)
@@ -44,6 +45,7 @@ export default function EventCard() {
     }
   }, []);
 
+  // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -72,6 +74,7 @@ export default function EventCard() {
     }
   };
 
+  // Handle filters
   const handleFilters = (selectedFilters, category) => {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
@@ -79,6 +82,7 @@ export default function EventCard() {
     localStorage.setItem('filters', JSON.stringify(newFilters));
   };
 
+  // Show filter results
   useEffect(() => {
     showFilterResults(filters);
   }, [filters]);
@@ -99,6 +103,8 @@ export default function EventCard() {
       });
   };
 
+  // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
+  // Cards generated from data in the database
   return (
     <div className="event-card-container">
       <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
