@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
+//intilizing the filds for the databse
 const Form = () => {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
@@ -32,10 +33,17 @@ const Form = () => {
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const classes = useStyles();
 
+  /**
+   * Handles the form submission.
+   * Dispatches the createPost action with the postData.
+   * Sets the isEventCreated state to true to display the success message.
+   * Resets the form fields.
+   * Removes the success message after 2 seconds.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(createPost(postData));
-    setIsEventCreated(true); // Set the state to show the success message
+    setIsEventCreated(true);
     setPostData({
       creator: "",
       eventName: "",
@@ -46,14 +54,17 @@ const Form = () => {
       eventPrice: "",
       eventLocation: "",
       spots: 0,
-    }); // Reset the form fields
-
+    });
 
     setTimeout(() => {
-      setIsEventCreated(false); // Remove the success message after 2 seconds
+      setIsEventCreated(false);
     }, 2000);
   };
 
+  /**
+   * Handles the change event for theme checkboxes.
+   * Updates the postData state based on the checked or unchecked theme.
+   */
   const handleThemeChange = (e, theme) => {
     if (e.target.checked) {
       setPostData((prevPostData) => ({
@@ -71,6 +82,14 @@ const Form = () => {
   };
 
   return (
+    
+// The provided code snippet represents a form component for creating events. The form includes vario
+// us input fields such as creator name, event name, event description, event date, event price, event location, 
+// and available spots. The user can enter the required information, and upon form submission, the handleSubmit function
+//  is triggered. The function dispatches a createPost action and resets the form fields. Additionally, there are checkboxes for 
+//  selecting event themes, which update the postData state based on the selected themes using the handleThemeChange function. The form is 
+//  styled using Material-UI components and custom CSS classes. The component also includes the necessary imports and utilizes React hooks such as 
+//  useState and useDispatch. Overall, this form provides a user-friendly interface for creating events and handles the necessary data submission.
     <Container component="main">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">

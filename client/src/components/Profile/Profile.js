@@ -3,7 +3,11 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
 
-
+/**
+ * Profile component to display user profile details.
+ * Fetches user data from the server and renders the profile information.
+ * Allows users to edit their profile and manage subscriptions.
+ */
 export default function Profile() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');

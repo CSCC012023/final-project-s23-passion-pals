@@ -1,36 +1,43 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Import the Inter font from Google Fonts */
+
 *,
 *:after,
 *:before {
   box-sizing: border-box;
 }
 
+/* Apply box-sizing border-box to all elements for consistent box model calculations */
+
 .Interest {
-  font-family: "Inter", sans-serif;
-  line-height: 1.5;
-  min-height: 100vh;
-  display: flex;
+  font-family: "Inter", sans-serif; /* Use the Inter font for the .Interest class */
+  line-height: 1.5; /* Set the line height for better readability */
+  min-height: 100vh; /* Set a minimum height of 100 viewport height units */
+  display: flex; /* Use flexbox to center the content vertically and horizontally */
   align-items: center;
   justify-content: center;
-  background-color: #f9f8f800;
+  background-color: #f9f8f800; /* Set the background color of the .Interest class */
   /* background-image: url('https://images.unsplash.com/photo-1638184984605-af1f05249a56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTN8fHxlbnwwfHx8fHw%3D&w=1000&q=80'); */
-  background-repeat: no-repeat;
-  background-size: cover;
+  /* Uncomment and provide a valid image URL to set a background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  background-size: cover; /* Scale the background image to cover the container */
 }
 
 .checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 600px;
-  -webkit-user-select: none;
+  display: flex; /* Use flexbox to create a flexible container for the checkboxes */
+  flex-wrap: wrap; /* Allow the checkboxes to wrap to the next line if necessary */
+  justify-content: center; /* Center the checkboxes horizontally within the container */
+  width: 90%; /* Set the width of the checkbox group to 90% of its parent container */
+  margin-left: auto; /* Automatically calculate the left margin for centering the group */
+  margin-right: auto; /* Automatically calculate the right margin for centering the group */
+  max-width: 600px; /* Set a maximum width for the checkbox group */
+  -webkit-user-select: none; /* Disable text selection on the checkbox group */
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
+
 .checkbox-group > * {
   margin: 0.5rem 0.5rem;
 }

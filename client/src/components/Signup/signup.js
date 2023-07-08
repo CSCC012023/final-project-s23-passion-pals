@@ -3,80 +3,83 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 import "./loginSignup.css";
-
+//In the above code, we have defined the Signup component which is responsible for handling user registration and login functionality. It consists of a form with input fields for first name, 
+//last name, email, and password. The form submission is handled by the 
 function Signup() {
-  const signInHistory = useNavigate();
-  const loginHistory = useNavigate();
-
-  const [emailSignup, setSignupEmail] = useState("");
-  const [passwordSignup, setSignupPassword] = useState("");
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [isRegistrationActive, setIsRegistrationActive] = useState(true);
-
-  const [emailLogin, setLoginEmail] = useState("");
-  const [passwordLogin, setLoginPassword] = useState("");
-
-  const handleRegClick = (event) => {
-    setIsRegistrationActive(false);
-  };
-
-  const handleSignClick = (event) => {
-    setIsRegistrationActive(true);
-  };
-
-  async function submitSignup(e) {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post("http://localhost:5000/signup", {
-        email: emailSignup,
-        password: passwordSignup,
-        fname,
-        lname,
-      });
-
-
-
-      if (response.data === "exist") {
-        alert("User already exists");
-      } else if (response.data.status === "notexist") {
-        const userId = response.data.userId;
-        localStorage.setItem("userId", userId);
-        signInHistory("/select", { state: { id: userId } });
-      } else if (response.data === "emptyPassword") {
-        alert("Email and password cannot be empty");
-      } else if (response.data === "wrongFormat") {
-        alert("Invalid email: Please enter a valid Gmail address.");
+    const signInHistory = useNavigate();
+    const loginHistory = useNavigate();
+  
+    const [emailSignup, setSignupEmail] = useState("");
+    const [passwordSignup, setSignupPassword] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [isRegistrationActive, setIsRegistrationActive] = useState(true);
+  
+    const [emailLogin, setLoginEmail] = useState("");
+    const [passwordLogin, setLoginPassword] = useState("");
+  
+    const handleRegClick = (event) => {
+      setIsRegistrationActive(false);
+    };
+  
+    const handleSignClick = (event) => {
+      setIsRegistrationActive(true);
+    };
+  
+    // Function to handle the form submission for user signup
+    async function submitSignup(e) {
+      e.preventDefault();
+  
+      try {
+        const response = await axios.post("http://localhost:5000/signup", {
+          email: emailSignup,
+          password: passwordSignup,
+          fname,
+          lname,
+        });
+  
+        // Handle different response scenarios
+        if (response.data === "exist") {
+          alert("User already exists");
+        } else if (response.data.status === "notexist") {
+          const userId = response.data.userId;
+          localStorage.setItem("userId", userId);
+          signInHistory("/select", { state: { id: userId } });
+        } else if (response.data === "emptyPassword") {
+          alert("Email and password cannot be empty");
+        } else if (response.data === "wrongFormat") {
+          alert("Invalid email: Please enter a valid Gmail address.");
+        }
+      } catch (error) {
+        alert("Wrong details");
+        console.log(error);
       }
-    } catch (error) {
-      alert("Wrong details");
-      console.log(error);
     }
-  }
-
-  async function submitLogin(e) {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post("http://localhost:5000/", {
-        email: emailLogin,
-        password: passwordLogin,
-      });
-
-      if (response.data.status === "exist") {
-        const userId = response.data.userId;
-        localStorage.setItem("userId", userId);
-        console.log(localStorage);
-        loginHistory("/dash", { state: { id: userId } });
-      } else if (response.data === "notexist") {
-        alert("Please check your email or password");
+  
+    // Function to handle the form submission for user login
+    async function submitLogin(e) {
+      e.preventDefault();
+  
+      try {
+        const response = await axios.post("http://localhost:5000/", {
+          email: emailLogin,
+          password: passwordLogin,
+        });
+  
+        // Handle different response scenarios
+        if (response.data.status === "exist") {
+          const userId = response.data.userId;
+          localStorage.setItem("userId", userId);
+          console.log(localStorage);
+          loginHistory("/dash", { state: { id: userId } });
+        } else if (response.data === "notexist") {
+          alert("Please check your email or password");
+        }
+      } catch (error) {
+        alert("An error occurred while logging in");
+        console.log(error);
       }
-    } catch (error) {
-      alert("An error occurred while logging in");
-      console.log(error);
     }
-  }
 
 
   return (

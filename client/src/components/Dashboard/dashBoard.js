@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./dashBoard.css";
 
+/**
+ * Dashboard component displays user information and events.
+ */
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
   const [eventIds, setEventIds] = useState([]);
   const [events, setEvents] = useState([]);
 
+  /**
+   * Fetches user data from the server based on the user ID.
+   */
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getUsers?userId=${userId}`)
@@ -19,6 +25,9 @@ export default function Dashboard() {
       });
   }, [userId]);
 
+  /**
+   * Fetches the enrolled event IDs of the user.
+   */
   useEffect(() => {
     axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
       .then(response => {
@@ -30,8 +39,11 @@ export default function Dashboard() {
       .catch(error => {
         console.log(error);
       });
-  }, [userId]); //is there a way to merge these useEffect
+  }, [userId]);
 
+  /**
+   * Fetches the events based on the enrolled event IDs.
+   */
   useEffect(() => {
     axios
       .get('http://localhost:5000/events')

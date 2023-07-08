@@ -1,12 +1,12 @@
 :root {
-  --fuschia: #5d7377c9;
-  --button-bg: var(--fuschia);
-  --button-text-color: #fff;
-  --baby-blue: #d4dcee;
+  --fuschia: #5d7377c9; /* Define a custom variable for fuschia color */
+  --button-bg: var(--fuschia); /* Set the button background color using the custom variable */
+  --button-text-color: #fff; /* Set the button text color */
+  --baby-blue: #d4dcee; /* Define a custom variable for baby blue color */
 }
 
 
-
+/* Set the position and size for the button */
 .bubbly-button {
   font-family: 'Helvetica', 'Arial', sans-serif;
   display: inline-block;
@@ -29,47 +29,47 @@
   transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
   box-shadow: 0 2px 25px rgba(7, 7, 7, 0.555);
 }
-
 .bubbly-button:focus {
-  outline: 0;
-}
-
-.bubbly-button:before,
-.bubbly-button:after {
-  position: absolute;
-  content: '';
-  display: block;
-  width: 140%;
-  height: 100%;
-  left: -20%;
-  z-index: -1000;
-  transition: all ease-in-out 0.5s;
-  background-repeat: no-repeat;
-}
-
-.bubbly-button:before {
-  display: none;
-  top: -75%;
-  background-image: radial-gradient(circle,
-      var(--button-bg) 20%,
-      transparent 20%),
-    radial-gradient(circle,
-      transparent 20%,
-      var(--button-bg) 20%,
-      transparent 30%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
-    radial-gradient(circle,
-      transparent 10%,
-      var(--button-bg) 15%,
-      transparent 20%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
-    radial-gradient(circle, var(--button-bg) 20%, transparent 20%);
-  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
-    10% 10%, 18% 18%;
-}
+    outline: 0; /* Remove the default focus outline on button focus */
+  }
+  
+  .bubbly-button:before,
+  .bubbly-button:after {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 140%; /* Set the width of the pseudo-elements */
+    height: 100%; /* Set the height of the pseudo-elements */
+    left: -20%; /* Position the pseudo-elements to the left of the button */
+    z-index: -1000; /* Set a low z-index value to position the pseudo-elements behind the button */
+    transition: all ease-in-out 0.5s; /* Apply a smooth transition to all properties */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+  }
+  
+  .bubbly-button:before {
+    display: none; /* Hide the pseudo-element */
+    top: -75%; /* Position the pseudo-element 75% above the button */
+    background-image: radial-gradient(circle,
+        var(--button-bg) 20%,
+        transparent 20%),
+      radial-gradient(circle,
+        transparent 20%,
+        var(--button-bg) 20%,
+        transparent 30%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
+      radial-gradient(circle,
+        transparent 10%,
+        var(--button-bg) 15%,
+        transparent 20%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%),
+      radial-gradient(circle, var(--button-bg) 20%, transparent 20%); /* Set the background image using multiple radial gradients */
+    background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+      10% 10%, 18% 18%; /* Set the size of each background image */
+  }
+  
 
 .bubbly-button:after {
   display: none;

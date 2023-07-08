@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Container, Typography, Grow, Grid } from "@material-ui/core";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-
+// It imports necessary dependencies from React and React Router. The component uses the useLocation hook to get the current location 
 import { useDispatch } from "react-redux";
 import { getPosts } from "./actions/posts";
 import Posts from "./components/Posts/Posts";
@@ -19,11 +19,16 @@ import Navbar from "./components/Dashboard/navBar";
 import Select from './components/interestSelection/selectInterest'
 import SelectEdition from './components/interestSelection/selectEdit'
 
-const App = () => {
 
+
+
+
+const App = () => {
+//Determines whether to exclude the Navbar component from rendering based on the current path. The component sets up the routes using the
   const location = useLocation();
   const exclude = location.pathname === '/signup' || location.pathname === '/' || location.pathname === '/select' || location.pathname === '/selectEdit'
-
+//  Routes and Route components from React Router. Each Route is mapped to a specific path and corresponding component. The component renders the 
+//  Navbar component if it is not excluded, and the appropriate component based on the current route.
   return (
     <div>
       {!exclude && <Navbar />}

@@ -3,23 +3,28 @@ import axios from 'axios';
 import './selectInterest.css';
 import './button.css';
 import { useNavigate } from 'react-router-dom';
-
 const SelectInterest = () => {
-  const [selectedInterests, setSelectedInterests] = useState([]);
-  const history = useNavigate();
-
-  const handleInterestChange = (event) => {
-    const value = event.target.value;
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-      setSelectedInterests((prevInterests) => [...prevInterests, value]);
-    } else {
-      setSelectedInterests((prevInterests) =>
-        prevInterests.filter((interest) => interest !== value)
-      );
-    }
-  };
+    const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
+    const history = useNavigate(); // Navigation hook for handling history
+  
+    const handleInterestChange = (event) => {
+      const value = event.target.value; // Get the value of the selected interest
+      const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
+  
+      if (isChecked) {
+        // If the checkbox is checked, add the interest to the selectedInterests state
+        setSelectedInterests((prevInterests) => [...prevInterests, value]);
+      } else {
+        // If the checkbox is unchecked, remove the interest from the selectedInterests state
+        setSelectedInterests((prevInterests) =>
+          prevInterests.filter((interest) => interest !== value)
+        );
+      }
+    };
+  
+    // Rest of the component code...
+  
+  
 
   const handleSubmit = async () => {
     const userId = localStorage.getItem('userId');
@@ -75,10 +80,17 @@ const SelectInterest = () => {
     }
   }, []);
   return (
+//     In the provided code snippet, the comments describe the purpose and functionality of the different parts of the JSX code.
+// The className="Interest" assigns the "Interest" CSS class to the wrapping <div>, allowing for styling and customization.
+// The <fieldset> element represents a group of checkboxes, and the <legend> element provides a title or description for the group. In this case, it indicates that the checkboxes are for editing themes.
+// The wrapping <div> with the class "checkbox" is used to group each checkbox element.
+// The <label> element is used to associate the checkbox with its label text. It contains the checkbox input and the text "Video Game" as the label for that checkbox.
+
     <div className="Interest">
       <fieldset className="checkbox-group">
         <legend className="checkbox-group-legend">Edit your themes</legend>
         <div className="checkbox">
+            
           <label className="checkbox-wrapper">
             <input
               type="checkbox"

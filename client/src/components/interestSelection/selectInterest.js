@@ -5,39 +5,43 @@ import './button.css';
 import { useNavigate, Link } from "react-router-dom"
 
 const SelectInterest = () => {
-  const [selectedInterests, setSelectedInterests] = useState([]);
-  const history = useNavigate();
-
-  const handleInterestChange = (event) => {
-    const value = event.target.value;
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-      setSelectedInterests((prevInterests) => [...prevInterests, value]);
-    } else {
-      setSelectedInterests((prevInterests) =>
-        prevInterests.filter((interest) => interest !== value)
-      );
-    }
-  };
-  const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId");
-
-    try {
-      const response = await axios.post('http://localhost:5000/select', {
-        userId: userId,
-        interests: selectedInterests,
-      });
-      // Handle the response if needed
-    } catch (error) {
-      // Handle the error if needed
-    }
-
-    // Add a delay before navigating to "/dash"
-    setTimeout(() => {
-      history("/dash", { state: { id: userId } });
-    }, 600);
-  };
+    const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
+    const history = useNavigate(); // Navigation hook for handling history
+  
+    const handleInterestChange = (event) => {
+      const value = event.target.value; // Get the value of the selected interest
+      const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
+  
+      if (isChecked) {
+        // If the checkbox is checked, add the interest to the selectedInterests state
+        setSelectedInterests((prevInterests) => [...prevInterests, value]);
+      } else {
+        // If the checkbox is unchecked, remove the interest from the selectedInterests state
+        setSelectedInterests((prevInterests) =>
+          prevInterests.filter((interest) => interest !== value)
+        );
+      }
+    };
+  
+    const handleSubmit = async () => {
+      const userId = localStorage.getItem("userId"); // Retrieve the userId from local storage
+  
+      try {
+        // Send a POST request to the server with the userId and selectedInterests
+        const response = await axios.post('http://localhost:5000/select', {
+          userId: userId,
+          interests: selectedInterests,
+        });
+        // Handle the response if needed
+      } catch (error) {
+        // Handle the error if needed
+      }
+  
+      // Add a delay of 600ms before navigating to "/dash"
+      setTimeout(() => {
+        history("/dash", { state: { id: userId } });
+      }, 600);
+    };
 
   useEffect(() => {
     const animateButton = function (e) {
@@ -58,6 +62,11 @@ const SelectInterest = () => {
 
     }
   }, []);
+  /*he code represents a component called SelectInterest, which renders a group of checkboxes for selecting interests. The component has a state variable selectedInterests an
+  d a function handleInterestChange that updates the state when a checkbox is checked or unchecked. The component also has a handleSubmit function that handles form submis
+  sion by sending a POST request to a server with the selected interests. The JSX code renders a <div> element with the class "Interest" as the container. Inside, there is a 
+  <fieldset> element with a legend for labeling the group of checkboxes. Each checkbox is represented by an <input> element with the type "checkbox" and an onChange event hand
+  ler. The SVG code within the checkbox renders a custom icon. Overall, this code provides a user interface for selecting and submitting interests.*/
   return (
     <div className='Interest'>
       <fieldset class="checkbox-group">

@@ -1,7 +1,9 @@
+/* Set box-sizing for all elements within the dashboard */
 .dashboard * {
     box-sizing: border-box;
 }
 
+/* Styling for the dashboard container */
 .dashboard {
     font-family: "Poppins", sans-serif;
     overflow: hidden;
@@ -9,6 +11,7 @@
     color: white;
 }
 
+/* Styling for the header section of the dashboard */
 .dash-head {
     display: flex;
     flex-direction: column;
@@ -16,6 +19,7 @@
     align-items: center;
 }
 
+/* Styling for the body section of the dashboard */
 .dash-body {
     margin-left: 1vw;
     display: flex;

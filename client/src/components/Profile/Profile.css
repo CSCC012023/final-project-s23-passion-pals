@@ -1,72 +1,78 @@
+/* Styling for the profile container */
 .profile-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  background-color: #f6f6f6;
-}
-
-.profile {
-  width: 400px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-picture {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #ff8080;
-  margin: 0 auto 20px;
-}
-
-.profile-picture img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-
-.profile-details {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.profile-details h2 {
-  font-size: 24px;
-  color: #333333;
-  margin-bottom: 5px;
-}
-
-.profile-details p {
-  font-size: 14px;
-  color: #777777;
-}
-
-.profile-details p strong {
-  font-weight: bold;
-}
-
-.profile-details p.email {
-  font-size: 12px;
-}
-
-.edit-button {
-  display: block;
-  width: 95%;
-  text-align: center;
-  padding: 10px;
-  background-color: #ff8080;
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
-}
-
-.edit-button:hover {
-  background-color: #ff6666;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    background-color: #f6f6f6;
+  }
+  
+  /* Styling for the profile section */
+  .profile {
+    width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Styling for the profile picture */
+  .profile-picture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #ff8080;
+    margin: 0 auto 20px;
+  }
+  
+  .profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  
+  /* Styling for the profile details */
+  .profile-details {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-details h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 5px;
+  }
+  
+  .profile-details p {
+    font-size: 14px;
+    color: #777777;
+  }
+  
+  .profile-details p strong {
+    font-weight: bold;
+  }
+  
+  .profile-details p.email {
+    font-size: 12px;
+  }
+  
+  /* Styling for the edit button */
+  .edit-button {
+    display: block;
+    width: 95%;
+    text-align: center;
+    padding: 10px;
+    background-color: #ff8080;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .edit-button:hover {
+    background-color: #ff6666;
+  }
+  

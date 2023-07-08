@@ -3,7 +3,7 @@ import { Checkbox, Collapse } from 'antd';
 import './checkbox.css'; 
 
 const { Panel } = Collapse;
-
+// Define an array of categories
 const categories = [
     { _id: 'Sports', name: 'Sports' },
     { _id: 'Music', name: 'Music' },
@@ -12,7 +12,7 @@ const categories = [
     { _id: 'Culture', name: 'Culture' },
     { _id: 'Adventure', name: 'Adventure' }
 ];
-
+  // Handle toggle function to add/remove checked category
 export default function CheckboxComponent(props) {
   const [checked, setChecked] = useState([]);
 
@@ -29,7 +29,7 @@ export default function CheckboxComponent(props) {
     setChecked(newChecked);
     props.handleFilters(newChecked);
   };
-
+ // Render checkbox lists based on categories
   const renderCheckboxLists = () =>
     categories.map((value, index) => (
       <label key={index} className="checkbox-label">
@@ -42,6 +42,7 @@ export default function CheckboxComponent(props) {
         <span>{value.name}</span>
       </label>
     ));
+  // Render the checkbox component
 
   return (
     <div className="checkbox-container">

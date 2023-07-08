@@ -1,3 +1,4 @@
+/* Styles for the form container */
 .form_container {
     display: flex;
     justify-content: center;
@@ -9,17 +10,20 @@
     box-sizing: border-box;
   }
   
+  /* Styles for the paper container */
   .paper {
     width: 500px;
     padding: 20px;
     background-color: #f81010;
     border-radius: 10px;
   }
-
+  
+  /* Box-sizing rule applied to all form elements */
   .form * {
     box-sizing: border-box;
-}
+  }
   
+  /* Styles for the main form */
   .form {
     display: flex;
     flex-direction: column;
@@ -30,6 +34,7 @@
     font-family: Arial, sans-serif;
   }
   
+  /* Styles for the heading */
   .heading {
     font-size: 24px;
     font-weight: bold;
@@ -37,6 +42,7 @@
     text-align: center;
   }
   
+  /* Styles for input, textarea, and select elements */
   .input,
   .textarea,
   .select {
@@ -49,10 +55,12 @@
     margin-bottom: 20px;
   }
   
+  /* Additional styles for the textarea element */
   .textarea {
     height: 100px;
   }
   
+  /* Additional styles for the select element */
   .select {
     appearance: none;
     background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23808080'><path d='M7 10l5 5 5-5z'/></svg>");
@@ -62,14 +70,17 @@
     padding-right: 30px;
   }
   
+  /* Hide the default arrow icon for the select element in Microsoft browsers */
   .select::-ms-expand {
     display: none;
   }
   
+  /* Additional styles for the file input */
   .file-input {
     margin-bottom: 20px;
   }
   
+  /* Styles for the submit button */
   .submit-button {
     display: block;
     width: 100%;
@@ -81,4 +92,3 @@
     border-radius: 4px;
     font-weight: bold;
   }
-  
