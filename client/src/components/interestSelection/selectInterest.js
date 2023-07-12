@@ -73,7 +73,7 @@ const SelectInterest = () => {
         <legend class="checkbox-group-legend">Choose your favorites</legend>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Video Game" onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Gaming" onChange={handleInterestChange} />
             <span class="checkbox-tile">
 
               <span class="checkbox-icon">
@@ -116,13 +116,13 @@ const SelectInterest = () => {
                 </svg>
 
               </span>
-              <span class="checkbox-label">Video Game</span>
+              <span class="checkbox-label" style={{ marginLeft: '13px' }}>Gaming</span>
             </span>
           </label>
         </div>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Camping" onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Nature" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -158,13 +158,13 @@ const SelectInterest = () => {
                   </g>
                 </svg>
               </span>
-              <span class="checkbox-label">Camping</span>
+              <span class="checkbox-label" style={{ marginLeft: '15px' }}>Nature</span>
             </span>
           </label>
         </div>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Art" onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Creativity" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -233,52 +233,57 @@ const SelectInterest = () => {
                   </g>
                 </svg>
               </span>
-              <span class="checkbox-label">Art</span>
+              <span className="checkbox-label" style={{ marginLeft: '15px' }}>Creativity</span>
             </span>
           </label>
         </div>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Photography" onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Festivals " onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
-                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                  width="580.000000pt" height="577.000000pt" viewBox="100 50 400 400"
-                  preserveAspectRatio="xMidYMid meet">
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                    width="298.000000pt" height="297.000000pt" viewBox="15 0 258.000000 258.000000"
+                    preserveAspectRatio="xMidYMid meet">
 
-                  <g transform="translate(0.000000,577.000000) scale(0.100000,-0.100000)"
+                    <g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
-                    <path d="M2016 4263 c-3 -10 -30 -112 -61 -228 -31 -115 -58 -218 -61 -227 -5
-                    -17 47 -18 991 -18 944 0 996 1 991 18 -10 31 -126 463 -126 468 0 2 -389 4
-                    -864 4 -815 0 -865 -1 -870 -17z"/>
-                    <path d="M1220 3910 l0 -120 155 0 155 0 0 120 0 120 -155 0 -155 0 0 -120z" />
-                    <path d="M980 3235 l0 -425 474 0 473 0 23 69 c47 146 131 280 249 396 125
-                    123 271 205 449 252 82 22 119 26 237 26 118 0 155 -4 236 -26 178 -47 309
-                    -120 443 -247 122 -117 203 -244 255 -402 l23 -68 474 0 474 0 0 425 0 425
-                    -1905 0 -1905 0 0 -425z m3532 189 c49 -34 85 -91 94 -150 18 -122 -92 -244
-                    -222 -244 -49 0 -135 50 -168 98 -40 57 -48 149 -18 208 44 86 113 126 209
-                    121 50 -2 71 -9 105 -33z"/>
-                    <path d="M4329 3311 c-60 -60 -22 -150 64 -151 83 0 120 100 56 154 -41 35
-                    -83 34 -120 -3z"/>
-                    <path d="M2702 3414 c-211 -46 -415 -186 -535 -367 -109 -165 -161 -380 -137
-                    -572 68 -550 607 -892 1133 -718 86 29 205 95 281 158 120 99 234 284 277 450
-                    40 152 27 355 -32 515 -98 266 -344 475 -629 535 -88 18 -272 18 -358 -1z
-                    m368 -190 c404 -120 606 -575 421 -949 -252 -509 -970 -503 -1217 9 -49 102
-                    -68 198 -61 320 12 252 147 460 372 572 50 24 122 51 160 59 86 18 248 13 325
-                    -11z"/>
-                    <path d="M2785 3115 c-364 -68 -558 -463 -393 -797 40 -80 151 -192 233 -235
-                    162 -84 358 -84 520 0 83 43 191 154 233 239 87 178 77 386 -26 544 -92 140
-                    -212 221 -372 250 -90 16 -105 16 -195 -1z"/>
-                    <path d="M980 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z" />
-                    <path d="M3865 2570 l0 -110 463 0 462 0 0 110 0 110 -462 0 -463 0 0 -110z" />
-                    <path d="M980 1910 l0 -430 1905 0 1905 0 0 429 0 428 -473 2 -473 2 -18 -58
-                    c-99 -317 -346 -560 -672 -659 -83 -26 -102 -28 -269 -28 -169 0 -186 2 -269
-                    27 -324 100 -568 336 -667 645 l-23 72 -473 0 -473 0 0 -430z"/>
-                  </g>
-                </svg>
+                    <path d="M1635 2759 c-228 -196 -587 -369 -917 -443 -163 -36 -235 -46 -402
+                    -56 -131 -7 -151 -10 -169 -29 -17 -17 -19 -26 -11 -48 7 -22 18 -30 49 -37
+                    33 -7 47 -19 78 -62 21 -30 44 -54 51 -54 8 0 24 25 36 56 24 58 45 74 100 74
+                    22 0 37 -11 70 -52 23 -29 47 -53 53 -53 5 0 22 29 36 65 26 64 26 65 75 74
+                    l48 8 54 -52 53 -53 11 27 c5 15 15 48 21 73 9 32 18 47 36 54 39 15 49 11
+                    104 -36 29 -25 58 -45 65 -45 8 0 17 29 25 75 7 41 18 75 23 75 6 0 29 -10 51
+                    -23 36 -21 41 -28 55 -89 8 -37 18 -70 22 -74 4 -3 32 16 63 43 l56 50 51 -12
+                    52 -11 21 -64 c12 -35 26 -65 32 -67 6 -2 30 19 54 47 36 43 47 50 78 50 47 0
+                    51 -4 85 -77 16 -35 34 -63 40 -63 6 0 31 28 55 61 42 58 44 59 80 53 20 -4
+                    37 -10 39 -13 14 -33 65 -111 72 -111 5 0 26 26 47 57 21 31 41 56 46 55 4 -1
+                    26 -2 50 -2 41 0 43 -2 75 -60 18 -33 38 -60 45 -60 7 0 28 27 46 60 28 49 40
+                    60 60 60 15 0 35 3 47 6 17 4 27 -6 58 -56 21 -34 43 -59 49 -57 7 1 26 29 42
+                    60 26 49 34 57 58 57 61 0 99 45 73 85 l-15 23 -358 -1 c-353 0 -493 7 -712
+                    39 -119 17 -315 65 -356 86 l-28 15 89 47 c122 65 296 183 372 251 49 44 62
+                    63 62 85 0 31 -23 50 -57 49 -10 0 -49 -27 -88 -60z"/>
+                    <path d="M1518 1654 c-27 -25 -48 -52 -48 -59 0 -7 -33 -46 -74 -87 -101 -101
+                    -106 -119 -106 -389 l0 -207 -27 -6 c-16 -3 -47 -8 -71 -11 -34 -5 -46 -13
+                    -58 -36 l-15 -29 -257 2 -257 3 -5 372 c-5 356 -6 373 -26 399 -36 49 -70 68
+                    -122 68 -65 0 -111 -28 -139 -84 -23 -43 -23 -51 -23 -402 l0 -358 -80 0 -81
+                    0 3 -67 3 -68 1303 -3 1302 -2 0 70 0 69 -77 3 -78 3 -5 372 c-6 421 -2 405
+                    -91 451 -67 35 -144 15 -191 -50 -23 -33 -23 -34 -26 -405 l-3 -373 -369 0
+                    -369 0 -13 27 c-13 27 -27 33 -120 48 l-38 6 0 202 c0 116 5 219 11 242 14 49
+                    127 165 162 165 30 0 117 85 117 114 0 27 -39 66 -66 66 -10 0 -40 -21 -66
+                    -46z m-1013 -109 c51 -50 14 -139 -58 -139 -66 0 -103 63 -73 122 18 34 28 40
+                    74 41 22 1 41 -7 57 -24z m1980 0 c52 -51 14 -139 -59 -139 -51 0 -81 31 -81
+                    85 0 31 6 46 24 60 33 27 86 25 116 -6z m-2002 -447 c78 -41 52 -159 -35 -158
+                    -37 1 -59 14 -76 47 -19 35 -14 63 17 94 31 31 59 36 94 17z m1996 -14 c76
+                    -64 1 -174 -94 -138 -19 8 -45 55 -45 84 0 30 53 80 83 80 14 0 39 -12 56 -26z"/>
+                    <path d="M134 587 c-2 -7 -3 -91 -2 -187 l3 -175 1303 -3 1302 -2 0 190 0 190
+                    -1300 0 c-1050 0 -1302 -2 -1306 -13z"/>
+                    </g>
+                    </svg>
+
 
               </span>
-              <span class="checkbox-label">Photography</span>
+              <span class="checkbox-label" style={{ marginLeft: '14px' }} >Festivals </span>
             </span>
           </label>
         </div>
