@@ -111,25 +111,27 @@ export default function EventCard() {
       {events.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <img src={event.eventImage} alt="Event" className="event-image" />
+            <div class="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
           </div>
-          <div className="event-content">
-            <div className="event-col">
+          <div className="event-body">
+            <div className="event-body-top">
+              <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
               <h2 className="event-name">{event.eventName}</h2>
             </div>
-            <div className="event-col">
-              <p className="event-location">Location: {event.eventLocation}</p>
-              <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-              <p className="event-price">Price: {event.eventPrice}</p>
+            <span className="event-body-heading event-name">{event.eventName}</span>
+            <p className="event-description">{event.eventDescription}</p>
+            <div className="event-body-bottom">
+              <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
+              <span className="event-price event-body-bottom-text subtle-styled-text float-right">${event.eventPrice}</span>
             </div>
-            <div className="event-col">
-              <p className="event-description">Description: {event.eventDescription}</p>
-              <p className="event-spots">Spots: {event.spots}</p>
+            <div className="event-body-bottom event-body-bottom-reveal">
+              <span className="event-theme event-body-bottom-text subtle-styled-text">{event.eventTheme}</span>
             </div>
             {enrolledEvents.includes(event._id) ? (
-              <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
+              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
             )}
           </div>
         </div>
