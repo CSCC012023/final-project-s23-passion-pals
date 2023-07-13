@@ -120,7 +120,7 @@ export default function EventCard() {
               <h2 className="event-name">{event.eventName}</h2>
             </div>
             <span className="event-body-heading event-name">{event.eventName}</span>
-            <p className="event-description">{event.eventDescription}</p>
+            <p className="event-body-content event-description">{event.eventDescription}</p>
             <div className="event-body-bottom">
               <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
               <span className="event-price event-body-bottom-text subtle-styled-text float-right">${event.eventPrice}</span>
