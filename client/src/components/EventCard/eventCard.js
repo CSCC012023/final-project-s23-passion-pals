@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CheckBox from '../checkbox';
 import './eventCard.css';
+import io from 'socket.io-client';
+
 
 export default function EventCard() {
   const [events, setEvents] = useState([]);
@@ -9,6 +11,8 @@ export default function EventCard() {
   const [filters, setFilters] = useState({
     themes: []
   });
+
+  const socket = io('http://localhost:5000');
 
   // Get all events
   useEffect(() => {
@@ -55,7 +59,6 @@ export default function EventCard() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -66,7 +69,6 @@ export default function EventCard() {
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -102,6 +104,25 @@ export default function EventCard() {
         console.log(error);
       });
   };
+
+// Listen for spotUpdate event
+useEffect(() => {
+  socket.on('spotUpdate', ({ eventId, spots }) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) => {
+        if (event._id === eventId) {
+          return { ...event, spots };
+        }
+        return event;
+      })
+    );
+  });
+
+  // Clean up the socket connection
+  return () => {
+    socket.off('spotUpdate');
+  };
+}, []);
 
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database
