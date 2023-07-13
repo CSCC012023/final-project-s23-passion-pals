@@ -18,10 +18,12 @@
   align-items: center;
   justify-content: center;
   background-color: #f9f8f800; /* Set the background color of the .Interest class */
-  /* background-image: url('https://images.unsplash.com/photo-1638184984605-af1f05249a56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTN8fHxlbnwwfHx8fHw%3D&w=1000&q=80'); */
+  /* background-image: url('https://wallpaperaccess.com/full/1812936.jpg'); */
   /* Uncomment and provide a valid image URL to set a background image */
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
-  background-size: cover; /* Scale the background image to cover the container */
+  /* background-repeat: repeat;
+  background-size: contain;
+  background-position: relative; */
+  
 }
 
 .checkbox-group {
