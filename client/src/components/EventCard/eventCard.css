@@ -68,6 +68,7 @@
 .event-body-middle {
   display: block;
   margin-top: 10px;
+  color: black !important;
 }
 
 .event-name {
