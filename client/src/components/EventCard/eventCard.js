@@ -117,22 +117,26 @@ export default function EventCard() {
             <div className="event-body-top">
               <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
-              <h2 className="event-name">{event.eventName}</h2>
             </div>
-            <span className="event-body-heading event-name">{event.eventName}</span>
-            <p className="event-body-content event-description">{event.eventDescription}</p>
+            <div className="event-body-middle"> 
+              <span className="event-name">{event.eventName}</span>
+              <br></br>
+              <span className="event-description">{event.eventDescription}</span>
+            </div>
             <div className="event-body-bottom">
               <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
-              <span className="event-price event-body-bottom-text subtle-styled-text float-right">${event.eventPrice}</span>
+              <span className="event-price event-body-bottom-text subtle-styled-text float-right">
+                {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
+              </span>
             </div>
             <div className="event-body-bottom event-body-bottom-reveal">
               <span className="event-theme event-body-bottom-text subtle-styled-text">{event.eventTheme}</span>
+              {enrolledEvents.includes(event._id) ? (
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+              ) : (
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+              )}
             </div>
-            {enrolledEvents.includes(event._id) ? (
-              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-            ) : (
-              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
-            )}
           </div>
         </div>
       ))}

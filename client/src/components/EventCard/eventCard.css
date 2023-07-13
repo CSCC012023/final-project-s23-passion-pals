@@ -1,102 +1,131 @@
 .event-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  /* position: relative;
-  top: 100px; */
+  margin: 50px auto 0;
+  width: 700px;
+}
+
+.float-right {
+  float: right;
+}
+
+.subtle-styled-text {
+  color: #888;
+  font-size: 12px;
 }
 
 .event-card {
-  display: flex;
-  margin: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #704214;
-  overflow: hidden;
-  flex-basis: 30%;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+  height: 125px;
+  margin-bottom: 25px;
+  transition: all 300ms ease-out;
+  width: 100%;
+}
+
+.event-card:hover {
+  box-shadow: 0 5px 14px rgba(0, 0, 0, .2);
 }
 
 .event-image-container {
-  display: flex;
-  width: 50%;
+  background: none;
+  float: left;
   height: 100%;
-  overflow: auto;
+  width: 35%;
+  position: relative;
 }
-
 
 .event-image {
-  object-fit: cover;
-  width: 100%;
+  background-position: center center;
+  background-size: cover;
+  height: 100%;
 }
 
-.event-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 16px;
-  justify-content: center;
-  align-items: center;
+.event-image:after {
+  content: " ";
+  display: block;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: all 300ms ease-out;
+  z-index: 10;
 }
 
-.event-col {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
-  gap: 1px;
-  margin-bottom: 10px;
+.event-body {
+  background-color: #fff;
+  float: left;
+  height: 100%;
+  padding: 12px 15px;
+  position: relative;
+  width: 65%;
+}
+
+.event-body-top {
+  display: block;
+}
+
+.event-body-middle {
+  display: block;
+  margin-top: 10px;
 }
 
 .event-name {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
-  font-family: cursive;
+  margin-bottom: 5px;
+  text-decoration: none;
   text-transform: capitalize;
-}
 
-.event-location,
-.event-date,
-.event-price {
-  font-size: 16px;
-  text-transform: capitalize;
-  margin: 0;
 }
 
 .event-description {
-  flex-grow: 3;
-}
-
-.enrollButton {
-  width: 50%;
-  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
-  border: 1px solid #000000;
-  border-radius: 5px;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family: "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 2.5;
-  outline: transparent;
-  padding: 0 1rem;
-  text-align: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-  transition: all .3s ease-in-out;
-  user-select: none;
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-decoration: none;
   white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 40px;
 }
 
-.enrollButton::after {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transition: opacity 0.3s ease-in-out;
-}
-
-.enrollButton:hover::after {
+.event-body-bottom {
+  position: absolute; /* should be ok because it anchors to nearest positioned ancestor */
+  bottom: 10px;
+  left: 0;
   opacity: 1;
+  padding: 0 15px;
+  transition: all 300ms ease-out;
+  width: 100%;
 }
 
-.enrollButton:hover {
-  transform: scale(1.2, 1.2);
+.event-location {
+  text-transform: capitalize;
 }
 
-/* Add more CSS rules as needed */
+.event-card:hover .event-body-bottom {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.event-body-bottom-text {
+  display: inline-block;
+}
+
+.event-body-bottom-reveal {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: all 300ms ease-out;
+}
+
+.event-card:hover .event-body-bottom-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.event-button {
+  color: #41C1F2;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+}
