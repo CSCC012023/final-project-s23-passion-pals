@@ -139,7 +139,7 @@ const Form = () => {
           value={postData.eventName}
           onChange={(e) => setPostData({ ...postData, eventName: e.target.value })}
         />
-        <input
+        <textarea
           name="eventDescription"
           className="textarea"
           placeholder="Enter event description"
