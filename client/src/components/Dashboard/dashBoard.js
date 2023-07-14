@@ -100,7 +100,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="event-body-bottom event-body-bottom-reveal">
-                    <span className="event-theme event-body-bottom-text subtle-styled-text">{event.eventTheme}</span>
+                    <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
                   </div>
                 </div>
               </div>

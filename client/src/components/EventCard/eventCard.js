@@ -5,8 +5,8 @@ import CheckBox from '../checkbox';
 import './eventCard.css';
 
 export default function EventCard() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 3; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
   const [enrolledEvents, setEnrolledEvents] = useState([]);
@@ -125,7 +125,7 @@ export default function EventCard() {
       {currentEvents.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <div class="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
+            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
           </div>
           <div className="event-body">
             <div className="event-body-top">
@@ -144,7 +144,7 @@ export default function EventCard() {
               </span>
             </div>
             <div className="event-body-bottom event-body-bottom-reveal">
-              <span className="event-theme event-body-bottom-text subtle-styled-text">{event.eventTheme}</span>
+              <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
               {enrolledEvents.includes(event._id) ? (
                 <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
               ) : (
