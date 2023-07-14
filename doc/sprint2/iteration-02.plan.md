@@ -59,12 +59,6 @@ We have decided to differentiate between the previous sprint’s work and the de
 
 #### Goals and tasks
 
-The main priority for this sprint is getting the dashboard and event pages all setup.
-
- * Describe your goals for this iteration and the tasks that you will have to complete in order to achieve these goals.
- * Order the items from most to least important.
- * Feel free (but not obligated) to specify some/all tasks as user stories.
-
 The main priority for this sprint is finishing creating events, getting all the main pages set up and navigation between them, and getting started on the functionality and frontend for those pages.
 The tasks and associated user stories/task number on Jira are as follows:
 * Finishing Create event (30) - Amitoz
