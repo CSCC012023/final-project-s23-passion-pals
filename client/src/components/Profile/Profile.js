@@ -46,6 +46,10 @@ export default function Profile() {
         <Link to="/selectEdit" className="edit-button">
           Manage Subscriptions
         </Link>
+        <br />
+        <Link to="/myEvents" className="edit-button">
+          My Created Events
+        </Link>
       </div>
     </div>
   );

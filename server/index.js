@@ -224,7 +224,20 @@ app.get('/events', (req, res) => {
     });
 });
 
+// Assuming you have a route to get events in your backend
+app.get('/getEvents', (req, res) => {
+  const { eventCreator } = req.query;
 
+  // Fetch events from the database where eventCreator matches the provided email
+  EventCardModel.find({ eventCreator })
+    .then((events) => {
+      res.json(events);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    });
+});
 
 
 
