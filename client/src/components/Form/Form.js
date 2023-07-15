@@ -5,6 +5,7 @@ import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Button,
   Typography,
@@ -22,6 +23,7 @@ const Form = () => {
   const [postData, setPostData] = useState({
     creator: "",
     eventName: "",
+    eventLink: "",
     eventDescription: "",
     eventImage: "",
     themes: [],
@@ -32,6 +34,7 @@ const Form = () => {
   });
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const [isError, setIsError] = useState(false); // State for error handling
+  
   const classes = useStyles();
 
   /**
@@ -63,6 +66,7 @@ const Form = () => {
     setPostData({
       creator: "",
       eventName: "",
+      eventLink: "",
       eventDescription: "",
       eventImage: "",
       themes: [],
@@ -138,6 +142,14 @@ const Form = () => {
           placeholder="Enter event title"
           value={postData.eventName}
           onChange={(e) => setPostData({ ...postData, eventName: e.target.value })}
+        />
+        <input
+          name="eventLink"
+          type="text"
+          className="input"
+          placeholder="Enter event link (optional)"
+          value={postData.eventLink}
+          onChange={(e) => setPostData({ ...postData, eventLink: e.target.value })}
         />
         <textarea
           name="eventDescription"
