@@ -21,7 +21,7 @@ import Alert from "@material-ui/lab/Alert";
 const Form = () => {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
-    creator: "",
+    name: "",
     eventName: "",
     eventLink: "",
     eventDescription: "",
@@ -34,6 +34,20 @@ const Form = () => {
   });
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const [isError, setIsError] = useState(false); // State for error handling
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   
   const classes = useStyles();
 
@@ -49,7 +63,7 @@ const Form = () => {
 
     // Validation checks
     if (
-      postData.creator === "" ||
+      postData.name === "" ||
       postData.eventName === "" ||
       postData.eventDescription === "" ||
       postData.eventDate === "" ||
@@ -60,25 +74,38 @@ const Form = () => {
       setIsError(true);
       return;
     }
+    // Check if user state is available (user data is fetched)
+    if (user) {
+      // Use user.email as the eventCreator in postData
+      const eventPostData = {
+        ...postData,
+        eventCreator: user.email,
+      };
 
-    await dispatch(createPost(postData));
-    setIsEventCreated(true);
-    setPostData({
-      creator: "",
-      eventName: "",
-      eventLink: "",
-      eventDescription: "",
-      eventImage: "",
-      themes: [],
-      eventDate: "",
-      eventPrice: "",
-      eventLocation: "",
-      spots: 0,
-    });
+      // Dispatch the createPost action with the updated postData
+      await dispatch(createPost(eventPostData));
 
-    setTimeout(() => {
-      setIsEventCreated(false);
-    }, 2000);
+      setIsEventCreated(true);
+      setPostData({
+        name: "",
+        eventName: "",
+        eventLink: "",
+        eventDescription: "",
+        eventImage: "",
+        themes: [],
+        eventDate: "",
+        eventPrice: "",
+        eventLocation: "",
+        spots: 0,
+      });
+
+      setTimeout(() => {
+        setIsEventCreated(false);
+      }, 2000);
+    } else {
+      // If user state is not available, show an error or handle accordingly
+      console.log("User data not available");
+    }
   };
 
   useEffect(() => {
@@ -128,12 +155,12 @@ const Form = () => {
           Create Event
         </Typography>
         <input
-          name="creator"
+          name="name"
           type="text"
           className="input"
           placeholder="Enter your name"
-          value={postData.creator}
-          onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
+          value={postData.name}
+          onChange={(e) => setPostData({ ...postData, name: e.target.value })}
         />
         <input
           name="eventName"

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const eventCardSchema = new mongoose.Schema({
-    creator: String,
+    name: String,
+    eventCreator: String,
     eventName: String,
     eventLink: String,
     eventLocation: String,
