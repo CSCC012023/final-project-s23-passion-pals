@@ -66,6 +66,7 @@
 }
 
 .event-body-middle {
+  flex-grow: 1;
   display: block;
   margin-top: 10px;
   color: black !important;
@@ -114,6 +115,9 @@
 }
 
 .event-body-bottom-reveal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   opacity: 0;
   transform: translateY(-8px);
   transition: all 300ms ease-out;
