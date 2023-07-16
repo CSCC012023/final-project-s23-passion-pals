@@ -56,6 +56,23 @@ export default function Dashboard() {
       });
   }, [eventIds]);
 
+  const handleEnroll = (eventId) => {
+    if (eventIds.includes(eventId)) { // likely redundant but just in case
+      // Unenroll from the event
+      axios
+        .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
+        .then(() => {
+          setEventIds(prevEnrolledEvents =>
+            prevEnrolledEvents.filter(id => id !== eventId)
+          );
+          window.location.reload();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } 
+  };
+
   return (
     <div className='dashboard'
       style={{
@@ -101,6 +118,7 @@ export default function Dashboard() {
                   </div>
                   <div className="event-body-bottom event-body-bottom-reveal">
                     <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
+                    <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
                   </div>
                 </div>
               </div>
