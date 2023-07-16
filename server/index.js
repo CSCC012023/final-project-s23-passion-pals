@@ -239,6 +239,24 @@ app.get('/getEvents', (req, res) => {
     });
 });
 
+// DELETE route to delete an event by ID
+app.delete('/deleteEvent/:eventId', async (req, res) => {
+  const eventId = req.params.eventId;
+
+  try {
+    // Find the event in the database and delete it
+    const deletedEvent = await EventCardModel.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 app.post('/enroll/:eventId', async (req, res) => {
