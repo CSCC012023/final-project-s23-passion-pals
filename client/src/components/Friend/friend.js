@@ -38,6 +38,7 @@ const Friend = () => {
   const handleButtonClick = async (userIdToAdd) => {
     if (userId === userIdToAdd) {
       console.log("Cannot add yourself as a friend");
+      alert("Cannot add yourself as a friend");
       return;
     }
   
@@ -46,6 +47,7 @@ const Friend = () => {
         friendId: userIdToAdd,
       });
       console.log('Friend added:', response.data);
+      alert("Friend added successfully :)");
     } catch (error) {
       console.log(error);
     }
@@ -60,6 +62,8 @@ const Friend = () => {
   
       if (response.data.success) {
         console.log('Friend removed:', friendIdToDelete);
+        alert("Friend removed successfully :)");
+        
         
       } else if (response.data.needToAdd) {
         
@@ -76,33 +80,35 @@ const Friend = () => {
   
 
   return (
-    <div className="friend-container">
-      <input
-        type="text"
-        placeholder="Search..."
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      />
-      <div className="search"></div>
-      <div id="users">
-        <ul id="users_ul">
-          {filteredData.map((item, index) => {
-            const { fname, lname, email, _id } = item;
-            const fullName = `${fname} ${lname}`;
+    <div className="background-container">
+      <div className="friend-container">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        <div className="search"></div>
+        <div id="users">
+          <ul id="users_ul">
+            {filteredData.map((item, index) => {
+              const { fname, lname, email, _id } = item;
+              const fullName = `${fname} ${lname}`;
 
-            return (
-              <li key={index}>
-                <div className="name">{fullName}</div>
-                <div className="email">{email}</div>
-                <div className="button-container">
-                  <button onClick={() => handleButtonClick(_id)}>Add</button>
-                  <button onClick={() => handleDeleteClick(_id)}>Remove</button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-        <span>Number of users: {filteredData.length}</span>
+              return (
+                <li key={index}>
+                  <div className="name">{fullName}</div>
+                  <div className="email">{email}</div>
+                  <div className="button-container">
+                    <button onClick={() => handleButtonClick(_id)}>Add</button>
+                    <button onClick={() => handleDeleteClick(_id)}>Remove</button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <span>Number of users: {filteredData.length}</span>
+        </div>
       </div>
     </div>
   );

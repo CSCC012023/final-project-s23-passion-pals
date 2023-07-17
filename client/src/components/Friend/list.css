@@ -10,7 +10,7 @@
 }
 
 #users {
-  background: whitesmoke;
+  background: rgb(255, 255, 255);
   position: absolute;
   left: 50%;
   margin-left: -175px;
@@ -40,7 +40,7 @@
   background-image: 
     linear-gradient(
       90deg,
-    rgb(12, 226, 66),
+    rgb(109, 7, 139),
       #EEE 10px,
       #EEE 11px,
       transparent 11px);
@@ -72,7 +72,7 @@
   background: rgb(73, 162, 225);
   bottom: -35px;
   left: -1px;
-  width: 360px;
+  width: 350px;
   border-radius: 0 0 5px 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 10px;

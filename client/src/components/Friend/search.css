@@ -5,7 +5,13 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+.background-container {
+    background-image: url('https://4kwallpapers.com/images/wallpapers/outrun-neon-dark-background-purple-3840x2160-4523.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh; /* Adjust the height as needed */
+  }
+  
 .friend-container {
   position: absolute;
   margin: auto;
@@ -15,6 +21,7 @@
   right: 0;
   width: 1500px;
   height: 500px;
+
 }
 
 .friend-container .search {
