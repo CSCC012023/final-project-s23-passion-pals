@@ -19,7 +19,7 @@ import Navbar from "./components/Dashboard/navBar";
 import Select from './components/interestSelection/selectInterest';
 import SelectEdition from './components/interestSelection/selectEdit';
 import Friend from './components/Friend/friend';
-
+import MyFriend from './components/Friend/myFriend';
 
 
 
@@ -35,6 +35,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Signup />} />
         <Route path="/friend" element={<Friend />} />
+        <Route path="/myFriend" element={<MyFriend />} />
         <Route path="/select" element={<Select />} />
         <Route path="/selectEdit" element={<SelectEdition />} />
         <Route path="/signup" element={<Signup />} />

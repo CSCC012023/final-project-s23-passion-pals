@@ -93,9 +93,69 @@ app.get('/users', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+//remoce friend 
+app.delete('/removeFriend/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend's ID exists in the friend list
+      if (!user.friend.includes(friendId)) {
+        return res.json({ error: 'Friend not found', needToAdd: true });
+      }
+  
+      // Remove the friend's ID from the friend list
+      user.friend.pull(friendId);
+      await user.save();
+  
+      res.json({ success: true, message: 'Friend removed successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  
+//add friend 
+// ...
 
-
-
+app.post('/addFriend/:userId', async (req, res) => {
+    const { friendId } = req.body;
+    const userId = req.params.userId;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend's ID already exists in the friend list
+      if (user.friend.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend already exists' });
+      }
+  
+      // Add the friend's ID to the friend list
+      user.friend.push(friendId);
+      await user.save();
+  
+      res.json({ status: 'success', message: 'Friend added successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  // ...
+  
+  
+  
+  
+  
 
 //for interest
 // Assuming you have the necessary imports and setup for your backend
