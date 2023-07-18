@@ -77,20 +77,36 @@ export default function Dashboard() {
         {events.length === 0 ? (
           <p>No events found. Click Find Events to :&#41;</p>
         ) : (
-          events.map(event => (
-            <div key={event._id} className="event-card">
-              <div className="event-image-container">
-                <img src={event.eventImage} alt="Event" className="event-image" />
+          <div className="event-card-container">
+            {events.map(event => (
+              <div key={event._id} className="event-card">
+                <div className="event-image-container">
+                  <div class="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
+                </div>
+                <div className="event-body">
+                  <div className="event-body-top">
+                    <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
+                  </div>
+                  <div className="event-body-middle"> 
+                    <span className="event-name">{event.eventName}</span>
+                    <br></br>
+                    <span className="event-description">{event.eventDescription}</span>
+                  </div>
+                  <div className="event-body-bottom">
+                    <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
+                    <span className="event-price event-body-bottom-text subtle-styled-text float-right">
+                      {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
+                    </span>
+                  </div>
+                  <div className="event-body-bottom event-body-bottom-reveal">
+                    <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
+                  </div>
+                </div>
               </div>
-              <div className="event-content">
-                <p className="event-name">Name: {event.eventName}</p>
-                <p className="event-location">Location: {event.eventLocation}</p>
-                <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <p className="event-price">Price: {event.eventPrice}</p>
-              </div>
-            </div>
-          ))
-        )}
+            ))}
+          </div>
+        )}   
       </div>
     </div>
   );

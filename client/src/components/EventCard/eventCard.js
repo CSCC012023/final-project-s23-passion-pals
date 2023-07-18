@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 import CheckBox from '../checkbox';
 import './eventCard.css';
 
 export default function EventCard() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 3; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
   const [enrolledEvents, setEnrolledEvents] = useState([]);
   const [filters, setFilters] = useState({
@@ -16,6 +20,7 @@ export default function EventCard() {
       .get('http://localhost:5000/events')
       .then(response => {
         setEvents(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
       })
       .catch(error => {
         console.log(error);
@@ -103,37 +108,62 @@ export default function EventCard() {
       });
   };
 
+  // Pagination
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentEvents = events.slice(startIndex, endIndex);
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage);
+  };
+
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database
   return (
     <div className="event-card-container">
       <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
-      {events.map(event => (
+      {currentEvents.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <img src={event.eventImage} alt="Event" className="event-image" />
+            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
           </div>
-          <div className="event-content">
-            <div className="event-col">
-              <h2 className="event-name">{event.eventName}</h2>
+          <div className="event-body">
+            <div className="event-body-top">
+              <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
             </div>
-            <div className="event-col">
-              <p className="event-location">Location: {event.eventLocation}</p>
-              <p className="event-date">Date: {new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-              <p className="event-price">Price: {event.eventPrice}</p>
+            <div className="event-body-middle"> 
+              <span className="event-name">{event.eventName}</span>
+              <br></br>
+              <span className="event-description">{event.eventDescription}</span>
             </div>
-            <div className="event-col">
-              <p className="event-description">Description: {event.eventDescription}</p>
-              <p className="event-spots">Spots: {event.spots}</p>
+            <div className="event-body-bottom">
+              <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
+              <span className="event-price event-body-bottom-text subtle-styled-text float-right">
+                {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
+              </span>
             </div>
-            {enrolledEvents.includes(event._id) ? (
-              <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
-            ) : (
-              <button onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
-            )}
+            <div className="event-body-bottom event-body-bottom-reveal">
+              <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
+              {enrolledEvents.includes(event._id) ? (
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+              ) : (
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+              )}
+            </div>
           </div>
         </div>
       ))}
+      <ReactPaginate 
+        pageCount={totalPages} 
+        onPageChange={({ selected }) => handlePageChange(selected)} 
+        forcePage={currentPage}
+        previousLabel={'<'}
+        nextLabel={'>'}
+        breakLabel={'...'}
+        containerClassName={'pagination-container'}
+        activeClassName={'active-page'}
+      />
     </div>
   );
 }

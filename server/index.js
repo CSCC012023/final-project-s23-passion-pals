@@ -299,8 +299,39 @@ app.get('/events', (req, res) => {
     });
 });
 
+// Assuming you have a route to get events in your backend
+app.get('/getEvents', (req, res) => {
+  const { eventCreator } = req.query;
 
+  // Fetch events from the database where eventCreator matches the provided email
+  EventCardModel.find({ eventCreator })
+    .then((events) => {
+      res.json(events);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    });
+});
 
+// DELETE route to delete an event by ID
+app.delete('/deleteEvent/:eventId', async (req, res) => {
+  const eventId = req.params.eventId;
+
+  try {
+    // Find the event in the database and delete it
+    const deletedEvent = await EventCardModel.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 app.post('/enroll/:eventId', async (req, res) => {

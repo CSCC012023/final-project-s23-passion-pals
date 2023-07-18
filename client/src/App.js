@@ -19,6 +19,9 @@ import Navbar from "./components/Dashboard/navBar";
 import Select from './components/interestSelection/selectInterest';
 import SelectEdition from './components/interestSelection/selectEdit';
 import Friend from './components/Friend/friend';
+import MyEvents from "./components/UserEvents/myEvents";
+
+
 
 
 
@@ -43,6 +46,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/updateProfile" element={<UpdateProfile />} />
         <Route path="/eventCard" element={<EventCard />} />
+        <Route path="/myEvents" element={<MyEvents />} />
       </Routes>
     </div>
   );
