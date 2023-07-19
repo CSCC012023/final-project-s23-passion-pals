@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import { Checkbox, Collapse } from 'antd';
+import { Checkbox } from 'antd';
+import { Button } from 'antd';
+import { FilterOutlined } from '@ant-design/icons'; // Import the FilterOutlined icon
 import './checkbox.css'; 
 
-const { Panel } = Collapse;
-// Define an array of categories
 const categories = [
-    { _id: 'Sports', name: 'Sports' },
-    { _id: 'Music', name: 'Music' },
-    { _id: 'Group Outings', name: 'Group Outings' },
-    { _id: 'Education', name: 'Education' },
-    { _id: 'Culture', name: 'Culture' },
-    { _id: 'Adventure', name: 'Adventure' }
+  { _id: 'Sports', name: 'Sports' },
+  { _id: 'Music', name: 'Music' },
+  { _id: 'Group Outings', name: 'Group Outings' },
+  { _id: 'Education', name: 'Education' },
+  { _id: 'Culture', name: 'Culture' },
+  { _id: 'Adventure', name: 'Adventure' }
 ];
-  // Handle toggle function to add/remove checked category
-export default function CheckboxComponent(props) {
+
+export default function CheckBoxComponent(props) {
   const [checked, setChecked] = useState([]);
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
 
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
@@ -29,8 +30,12 @@ export default function CheckboxComponent(props) {
     setChecked(newChecked);
     props.handleFilters(newChecked);
   };
- // Render checkbox lists based on categories
-  const renderCheckboxLists = () =>
+
+  const toggleCheckboxes = () => {
+    setShowCheckboxes((prevValue) => !prevValue);
+  };
+
+  const renderCheckboxes = () =>
     categories.map((value, index) => (
       <label key={index} className="checkbox-label">
         <Checkbox
@@ -42,17 +47,17 @@ export default function CheckboxComponent(props) {
         <span>{value.name}</span>
       </label>
     ));
-  // Render the checkbox component
 
   return (
     <div className="checkbox-container">
-      <Collapse defaultActiveKey={['0']}>
-        <Panel header="Categories" key="1" className="collapse-header">
-          <div className="collapse-content">
-            <div className="checkbox-list">{renderCheckboxLists()}</div>
-          </div>
-        </Panel>
-      </Collapse>
+      <Button onClick={toggleCheckboxes} icon={<FilterOutlined />} className="filter-button">
+        Filter
+      </Button>
+      {showCheckboxes && (
+        <div className="checkbox-list-container">
+          {renderCheckboxes()}
+        </div>
+      )}
     </div>
   );
 }
