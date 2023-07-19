@@ -3,16 +3,19 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import CheckBox from '../checkbox';
 import './eventCard.css';
+import './searchEvent.css';
 
 export default function EventCard() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 3; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
+  const [query, setQuery] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
   const [filters, setFilters] = useState({
     themes: []
   });
+  const [filteredData, setFilteredData] = useState([]);
 
   // Get all events
   useEffect(() => {
@@ -27,7 +30,25 @@ export default function EventCard() {
       });
   }, []);
 
+    // Function to filter events based on the search query
+    const filterEvents = (eventsArray, searchQuery) => {
+      return eventsArray.filter(
+        (item) =>
+          item.eventName && item.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    };
+  
+    // Filter events based on the search query and update the filteredData state
+    useEffect(() => {
+      const filteredData = filterEvents(events, query);
+      setFilteredData(filteredData);
+      setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+      // Update the 'filteredData' state based on the search query
+      setCurrentPage(0); // Reset the current page to the first page when the search query changes
+    }, [events, query]);
+
   const userId = localStorage.getItem('userId');
+  
   // Get all events that the user is enrolled in
   useEffect(() => {
     axios
@@ -107,11 +128,13 @@ export default function EventCard() {
         console.log(error);
       });
   };
+  
+  
 
   // Pagination
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentEvents = events.slice(startIndex, endIndex);
+  const currentEvents = filteredData.slice(startIndex, endIndex);
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
@@ -121,7 +144,15 @@ export default function EventCard() {
   // Cards generated from data in the database
   return (
     <div className="event-card-container">
+    <div className="filter-and-search-container">
+      <input
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
       <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+    </div>
       {currentEvents.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">

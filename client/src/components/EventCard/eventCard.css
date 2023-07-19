@@ -152,3 +152,9 @@
   color           : #41C1F2;
   font-weight     : bold;
 }
+
+.filter-and-search-container {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 10px; /* Optional margin for spacing */
+}
