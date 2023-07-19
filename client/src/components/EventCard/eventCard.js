@@ -3,7 +3,6 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import CheckBox from '../checkbox';
 import './eventCard.css';
-import './searchEvent.css';
 
 export default function EventCard() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -147,6 +146,7 @@ export default function EventCard() {
     <div className="filter-and-search-container">
       <input
           type="text"
+          className="search_input"
           placeholder="Search..."
           value={query}
           onChange={(event) => setQuery(event.target.value)}
