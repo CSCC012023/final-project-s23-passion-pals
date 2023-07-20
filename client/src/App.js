@@ -20,6 +20,7 @@ import Select from './components/interestSelection/selectInterest';
 import SelectEdition from './components/interestSelection/selectEdit';
 import Friend from './components/Friend/friend';
 import MyEvents from "./components/UserEvents/myEvents";
+import ProfilePic from "./components/ProfilePicture/pfp";
 
 
 
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/updateProfile" element={<UpdateProfile />} />
         <Route path="/eventCard" element={<EventCard />} />
         <Route path="/myEvents" element={<MyEvents />} />
+        <Route path="/pfp" element={<ProfilePic />} />
       </Routes>
     </div>
   );

@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   lname: String,
   email: String,
   password: String,
+  profilePic: String,
   interest:[String],
   friend:[String],
   enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }]

@@ -14,7 +14,7 @@ export default function Profile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .get(`http://localhost:5000/getUsers/${userId}`) // Use the updated route with the user ID
       .then((response) => {
         setUser(response.data);
       })
@@ -27,13 +27,16 @@ export default function Profile() {
     <div className="profile-container">
       <div className="profile">
         <div className="profile-picture">
-          <img src="profile-picture.jpg" alt="Profile" />
+          {/* Use the profile picture data from the server */}
+          {user && user.profilePic && (
+            <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
+          )}
         </div>
 
         <div className="profile-details">
           {user && (
             <>
-              <h2>{user.fname} {user.lname}</h2> 
+              <h2>{user.fname} {user.lname}</h2>
               <p className="email">{user.email}</p>
             </>
           )}
