@@ -1,70 +1,3 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate, Link } from 'react-router-dom';
-// import './Profile.css';
-
-// function UpdateProfile() {
-//   const [firstName, setFirstName] = useState('');
-//   const [lastName, setLastName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const navigate = useNavigate();
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     const userId = localStorage.getItem('userId');
-
-//     axios
-//       .put(`http://localhost:5000/users/${userId}`, {
-//         fname: firstName,
-//         lname: lastName,
-//         email: email,
-//       })
-//       .then((response) => {
-//         console.log('Profile updated successfully');
-//         navigate('/profile'); // Navigate to the /profile route
-//       })
-//       .catch((error) => {
-//         console.error('Error updating profile:', error);
-//       });
-//   };
-
-//   return (
-//     <div className="container">
-//       <h2>Update Profile</h2>
-//       <form className="profile" onSubmit={handleSubmit}>
-//         <div>
-//           <label>First Name:</label>
-//           <input
-//             type="text"
-//             value={firstName}
-//             onChange={(e) => setFirstName(e.target.value)}
-//           />
-//         </div>
-//         <div>
-//           <label>Last Name:</label>
-//           <input
-//             type="text"
-//             value={lastName}
-//             onChange={(e) => setLastName(e.target.value)}
-//           />
-//         </div>
-//         <div>
-//           <label>Email:</label>
-//           <input
-//             type="text"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//           />
-//         </div>
-//         <button type="submit" className="edit-button">Update</button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default UpdateProfile;
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -74,13 +7,14 @@ function UpdateProfile() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [selectedProfilePic, setSelectedProfilePic] = useState(null);
     const navigate = useNavigate();
   
     const userId = localStorage.getItem('userId');
   
     useEffect(() => {
       axios
-        .get(`http://localhost:5000/getUsers?userId=${userId}`)
+        .get(`http://localhost:5000/getUsers/${userId}`)
         .then((response) => {
           const user = response.data;
           setFirstName(user.fname); // Set the initial first name value
@@ -92,22 +26,31 @@ function UpdateProfile() {
         });
     }, [userId]);
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
   
-      axios
-        .put(`http://localhost:5000/users/${userId}`, {
-          fname: firstName, // Pass the updated first name
-          lname: lastName, // Pass the updated last name
-          email: email, // Pass the updated email
-        })
-        .then((response) => {
-          console.log('Profile updated successfully');
-          navigate('/profile'); // Navigate to the /profile route after successful update
-        })
-        .catch((error) => {
-          console.error('Error updating profile:', error);
+      try {
+        // Create a new FormData object and append the selected profile picture to it
+        if(selectedProfilePic) {
+          const formData = new FormData();
+          formData.append("profilePic", selectedProfilePic);
+    
+          // Send a POST request to the server to upload the profile picture
+          await axios.post(`http://localhost:5000/upload-profile-pic/${userId}`, formData);
+        }
+  
+        // Update the user's profile details (first name, last name, and email)
+        await axios.put(`http://localhost:5000/users/${userId}`, {
+          fname: firstName,
+          lname: lastName,
+          email: email,
         });
+  
+        console.log('Profile updated successfully');
+        navigate('/profile'); // Navigate to the /profile route after successful update
+      } catch (error) {
+        console.error('Error updating profile:', error);
+      }
     };
     // In the above code, we define the JSX structure for the profile update form. It consists of a div container with the class name 
     //"update-container". Inside the container, we have a form element with the class name "update-form". The form contains multiple div elements with the class name 
@@ -148,6 +91,13 @@ function UpdateProfile() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Update Profile Picture:</label>
+          <input
+            type="file"
+            onChange={(e) => setSelectedProfilePic(e.target.files[0])}
           />
         </div>
         <button type="submit" className="update-button">Update Profile</button>
