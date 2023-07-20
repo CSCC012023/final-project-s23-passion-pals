@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
+import CountrySelector from './countrySelector';
 import { Link } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -17,6 +18,7 @@ import {
 } from "@material-ui/core";
 import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
+import { State } from "country-state-city";
 //intilizing the filds for the databse
 const Form = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ const Form = () => {
     eventPrice: "",
     eventCity: "",
     eventCountry: "",
+    eventRegion: "",
     eventAddress: "",
     spots: null,
   });
@@ -70,12 +73,16 @@ const Form = () => {
       postData.eventDescription === "" ||
       postData.eventDate === "" ||
       postData.eventPrice === "" ||
-      postData.eventCity === "" ||
       postData.eventCountry === "" ||
-      postData.eventAddress === "" ||
+      (postData.eventRegion === "" && State.getStatesOfCountry(postData.eventRegion).length > 0) ||
+      (postData.eventCity === "" && postData.eventRegion != "") ||
       postData.spots <= 0
     ) {
       setIsError(true);
+      console.log(postData.eventCity)
+      console.log(postData.eventCountry)
+      console.log(postData.eventRegion)
+      console.log(State.getStatesOfCountry(postData.eventRegion).length)
       return;
     }
     // Check if user state is available (user data is fetched)
@@ -101,6 +108,7 @@ const Form = () => {
         eventPrice: "",
         eventCity: "",
         eventCountry: "",
+        eventRegion: "",
         eventAddress: "",
         spots: 0,
       });
@@ -303,31 +311,17 @@ const Form = () => {
         />
 
         <div>
-          <input
-            name="eventCity"
-            type="text"
-            className="input"
-            placeholder="Enter event location"
-            value={postData.eventCity}
-            onChange={(e) => setPostData({ ...postData, eventCity: e.target.value })}
-          />
-          <input
-            name="eventCountry"
-            type="text"
-            className="input location"
-            placeholder="Enter event location"
-            value={postData.eventCountry}
-            onChange={(e) => setPostData({ ...postData, eventCountry: e.target.value })}
-          />
-          <input
-            name="eventAddress"
-            type="text"
-            className="input location"
-            placeholder="Enter event location"
-            value={postData.eventAddress}
-            onChange={(e) => setPostData({ ...postData, eventAddress: e.target.value })}
-          />
+          <CountrySelector postData={postData} setPostData={setPostData} />
         </div>
+
+        <input
+          name="eventAddress"
+          type="text"
+          className="input"
+          placeholder="Enter event address (optional)"
+          value={postData.eventAddress}
+          onChange={(e) => setPostData({ ...postData, eventAddress: e.target.value })}
+        />
 
         <input
           name="spots"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import { State } from "country-state-city";
 import CheckBox from '../checkbox';
 import './eventCard.css';
 
@@ -29,25 +30,25 @@ export default function EventCard() {
       });
   }, []);
 
-    // Function to filter events based on the search query
-    const filterEvents = (eventsArray, searchQuery) => {
-      return eventsArray.filter(
-        (item) =>
-          item.eventName && item.eventName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    };
-  
-    // Filter events based on the search query and update the filteredData state
-    useEffect(() => {
-      const filteredData = filterEvents(events, query);
-      setFilteredData(filteredData);
-      setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-      // Update the 'filteredData' state based on the search query
-      setCurrentPage(0); // Reset the current page to the first page when the search query changes
-    }, [events, query]);
+  // Function to filter events based on the search query
+  const filterEvents = (eventsArray, searchQuery) => {
+    return eventsArray.filter(
+      (item) =>
+        item.eventName && item.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  // Filter events based on the search query and update the filteredData state
+  useEffect(() => {
+    const filteredData = filterEvents(events, query);
+    setFilteredData(filteredData);
+    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+    // Update the 'filteredData' state based on the search query
+    setCurrentPage(0); // Reset the current page to the first page when the search query changes
+  }, [events, query]);
 
   const userId = localStorage.getItem('userId');
-  
+
   // Get all events that the user is enrolled in
   useEffect(() => {
     axios
@@ -127,8 +128,8 @@ export default function EventCard() {
         console.log(error);
       });
   };
-  
-  
+
+
 
   // Pagination
   const startIndex = currentPage * itemsPerPage;
@@ -143,33 +144,35 @@ export default function EventCard() {
   // Cards generated from data in the database
   return (
     <div className="event-card-container">
-    <div className="filter-and-search-container">
-      <input
+      <div className="filter-and-search-container">
+        <input
           type="text"
           className="search_input"
           placeholder="Search..."
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
-      <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
-    </div>
+        <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+      </div>
       {currentEvents.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
+            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
           </div>
           <div className="event-body">
             <div className="event-body-top">
               <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
             </div>
-            <div className="event-body-middle"> 
+            <div className="event-body-middle">
               <span className="event-name">{event.eventName}</span>
               <br></br>
               <span className="event-description">{event.eventDescription}</span>
             </div>
             <div className="event-body-bottom">
-              <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
+              <span className="event-location event-body-bottom-text subtle-styled-text">
+                {event.eventCity + ", " + event.eventRegion + " " + event.eventCountry}
+              </span>
               <span className="event-price event-body-bottom-text subtle-styled-text float-right">
                 {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
               </span>
@@ -185,9 +188,9 @@ export default function EventCard() {
           </div>
         </div>
       ))}
-      <ReactPaginate 
-        pageCount={totalPages} 
-        onPageChange={({ selected }) => handlePageChange(selected)} 
+      <ReactPaginate
+        pageCount={totalPages}
+        onPageChange={({ selected }) => handlePageChange(selected)}
         forcePage={currentPage}
         previousLabel={'<'}
         nextLabel={'>'}
