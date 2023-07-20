@@ -16,7 +16,7 @@ export default function Dashboard() {
    */
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .get(`http://localhost:5000/getUsers/${userId}`)
       .then((response) => {
         setUser(response.data);
       })
@@ -29,7 +29,7 @@ export default function Dashboard() {
    * Fetches the enrolled event IDs of the user.
    */
   useEffect(() => {
-    axios.get(`http://localhost:5000/getUsers?userId=${userId}`)
+    axios.get(`http://localhost:5000/getUsers/${userId}`)
       .then(response => {
         const user = response.data;
         if (user) {

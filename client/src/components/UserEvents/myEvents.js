@@ -11,7 +11,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .get(`http://localhost:5000/getUsers/${userId}`)
       .then((response) => {
         setUser(response.data);
         fetchUserEvents(response.data.email); // Fetch events using the user's email

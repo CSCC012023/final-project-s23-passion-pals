@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import multer from 'multer'; // Import multer
 import postRoutes from './routes/posts.js';
 import UserModel from './models/Users.js';
 import EventCardModel from './models/eventCard.js';
@@ -10,11 +11,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use('/posts', postRoutes);
+
+// Set up multer storage
+const storage = multer.memoryStorage(); // This will store the uploaded file in memory as a buffer
+const upload = multer({ storage }); // Create the multer middleware
+
 const CONNECTION_URL = 'mongodb+srv://Mustafa:mustafa0503@cluster0.seqdo7a.mongodb.net/'
 const PORT = process.env.PORT || 5000;
 
@@ -152,7 +157,39 @@ app.post('/addFriend/:userId', async (req, res) => {
   
   // ...
   
-  
+// Route to upload a profile picture for a user
+app.post('/upload-profile-pic/:userId', upload.single('profilePic'), async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    // Get the profile picture file from the request
+    const profilePic = req.file;
+
+    // If there is no profile picture file, respond with an error
+    if (!profilePic) {
+      return res.status(400).json({ error: 'Profile picture not provided' });
+    }
+
+    // Encode the profile picture file to Base64
+    const profilePicData = profilePic.buffer.toString('base64');
+
+    // Find the user by ID
+    const user = await UserModel.findById(userId);
+
+    // If the user is not found, respond with an error
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the user's profilePic field with the Base64-encoded data
+    user.profilePic = profilePicData;
+    await user.save();
+
+    res.json({ status: 'success', message: 'Profile picture uploaded successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
   
   
   
@@ -226,26 +263,23 @@ app.get('/user/:userId', async (req, res) => {
   });
 
   
-app.get('/getUsers', (req, res) => {
-  const userId = req.query.userId;
-
-
-  if (!userId) {
-    return res.status(400).json({ error: 'User ID is required' });
-  }
-
-
-  UserModel.findById(userId)
-    .then(user => {
+  app.get('/getUsers/:userId', async (req, res) => {
+    const userId = req.params.userId;
+  
+    try {
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+  
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
+  
+      // Respond with user's details, including the profile picture data
       res.json(user);
-    })
-    .catch(err => {
+    } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
-    });
-});
+    }
+  });
 
 
 // Route to update a specific user

@@ -44,7 +44,7 @@ function Signup() {
         } else if (response.data.status === "notexist") {
           const userId = response.data.userId;
           localStorage.setItem("userId", userId);
-          signInHistory("/select", { state: { id: userId } });
+          signInHistory("/pfp", { state: { id: userId } });
         } else if (response.data === "emptyPassword") {
           alert("Email and password cannot be empty");
         } else if (response.data === "wrongFormat") {

@@ -41,7 +41,7 @@ const Form = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .get(`http://localhost:5000/getUsers/${userId}`)
       .then((response) => {
         setUser(response.data);
       })
