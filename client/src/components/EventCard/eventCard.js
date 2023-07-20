@@ -51,7 +51,7 @@ export default function EventCard() {
   // Get all events that the user is enrolled in
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getUsers?userId=${userId}`)
+      .get(`http://localhost:5000/getUsers/${userId}`)
       .then(response => {
         const user = response.data;
         if (user) {
