@@ -49,7 +49,6 @@ export default function EventCard() {
     }
   }, []);
 
-  // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -124,6 +123,25 @@ useEffect(() => {
   };
 }, []);
 
+  // Listen for waitlistUpdate event
+  useEffect(() => {
+    socket.on('waitlistUpdate', ({ eventId, waitlist }) => {
+      setEvents((prevEvents) =>
+        prevEvents.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, waitlist };
+          }
+          return event;
+        })
+      );
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('waitlistUpdate');
+    };
+  }, []);
+
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database
   return (
@@ -150,7 +168,14 @@ useEffect(() => {
             {enrolledEvents.includes(event._id) ? (
               <button onClick={() => handleEnroll(event._id)}>Unenroll</button>
             ) : (
-              <button onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+              event.waitlist.includes(userId) ? (<button onClick={() => handleEnroll(event._id)}>Leave Waitlist</button>
+              ) : (
+                event.spots > 0 ? (
+                  <button onClick={() => handleEnroll(event._id)}>Enroll Now</button>
+                ) : (
+                  <button onClick={() => handleEnroll(event._id)}>Join Waitlist</button>
+                )
+              )
             )}
           </div>
         </div>

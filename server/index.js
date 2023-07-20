@@ -244,7 +244,6 @@ app.get('/events', (req, res) => {
 
 
 app.post('/enroll/:eventId', async (req, res) => {
-
   const eventId = req.params.eventId;
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
@@ -255,80 +254,110 @@ app.post('/enroll/:eventId', async (req, res) => {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  /* Update spots in event */
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: -1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $addToSet: { enrolledEvents: event._id } },
-      { new: true }
-    ).exec();
-    
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
 
-    res.json(event);
+    if (event.spots > 0) {
+      // Enroll the user if spots are available
+      event.spots--;
+      await event.save();
+      await UserModel.findByIdAndUpdate(userId, { $addToSet: { enrolledEvents: event._id } });
+
+      // Emit socket event to update all other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+
+      return res.json(event);
+    } else if (!event.waitlist.includes(userId)){
+      // Add user to the waitlist if event is full
+      event.waitlist.push(userId);
+      await event.save();
+      io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+      return res.json({ message: 'Added to waitlist.' });
+    } else {
+      // Remove user from waitlist if user is already in waitlist
+      event.waitlist = event.waitlist.filter((id) => id !== userId);
+      await event.save();
+      io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+      return res.json({ message: 'Removed from waitlist.' });
+    }
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-      /* Update user enrolledEvents */
-      /*
-      UserModel.findByIdAndUpdate(
-        userId,
-        { $addToSet: { enrolledEvents: event._id } },
-        { new: true }
-      )
-        .then(updatedUser => {
-          if (!updatedUser) {
-            return res.status(404).json({ error: 'User not found' });
-          }
-          res.json(event);
-        })
-        .catch(err => {
-          res.status(500).json({ error: 'Internal server error' });
-        });
-    })
-    .catch(err => {
-      res.status(500).json({ error: 'Internal server error' });
-    });
-    */
+
+/* Update user enrolledEvents */
+/*
+UserModel.findByIdAndUpdate(
+  userId,
+  { $addToSet: { enrolledEvents: event._id } },
+  { new: true }
+)
+  .then(updatedUser => {
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(event);
+  })
+  .catch(err => {
+    res.status(500).json({ error: 'Internal server error' });
+  });
+})
+.catch(err => {
+res.status(500).json({ error: 'Internal server error' });
+});
+*/
 
 app.post('/unenroll/:eventId', async (req, res) => {
-  const eventId = req.params.eventId;
+      const eventId = req.params.eventId;
+      if (!eventId) {
+        return res.status(400).json({ error: 'Event ID is required' });
+      }
+    
+      const userId = req.body.userId;
+      if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+      }
+    
+      try {
+        const event = await EventCardModel.findById(eventId);
+        if (!event) {
+          return res.status(404).json({ error: 'Event not found' });
+        }
+        // Remove user from event
+        await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
+    
+        // Check if there are users in the waitlist
+        if (event.waitlist.length > 0) {
+          const nextUser = event.waitlist.shift();
+          
+          await UserModel.findByIdAndUpdate(nextUser, { $addToSet: { enrolledEvents: event._id } });
+          
+          event.waitlist = event.waitlist.filter((id) => id !== userId);
+          await event.save();
 
-  if (!eventId) {
-    return res.status(400).json({ error: 'Event ID is required' });
-  }
+          io.emit('spotUpdate', { eventId, spots: event.spots });
+          io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+    
+          return res.json({ message: 'Unenrolled. Next person from waitlist enrolled' });
+        } else {
+          // Remove the user from enrolledEvents and update spots
+          event.spots++;
+          await event.save();
 
-  const userId = req.body.userId;
-  if (!userId) {
-    return res.status(400).json({ error: 'User ID is required' });
-  }
-  /* Update spots in event */
-  try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: 1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $pull: { enrolledEvents: eventId } },
-      { new: true }
-    ).exec();
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
-    res.json(event);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+          // Use socket to update other clients
+          io.emit('spotUpdate', { eventId, spots: event.spots });
+          io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+          return res.json(event);
+        }
+    
+      } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
 
 app.get('/getUserId', (req, res) => {
     // Retrieve the user ID from the logged-in user's session or token
@@ -341,7 +370,3 @@ app.get('/getUserId', (req, res) => {
   
     res.json({ userId });
   });
-  
-app.listen(5500, () => {
-  console.log("Server is running");
-});
