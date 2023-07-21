@@ -32,9 +32,12 @@ function CountrySelector({ postData, setPostData }) {
         setSelectedRegion(null);
         setSelectedCity(null);
         setCityOptions([]);
-        setPostData((prevData) => ({ ...prevData, eventCountry: selectedCountry?.value || "" }));
-        setPostData((prevData) => ({ ...prevData, eventRegion: "" }));
-        setPostData((prevData) => ({ ...prevData, eventCity: "" }));
+        setPostData((prevData) => ({
+            ...prevData,
+            eventCountry: selectedCountry?.value || "",
+            eventRegion: "",
+            eventCity: "",
+        }));
         if (selectedCountry) {
             const states = State.getStatesOfCountry(selectedCountry.value);
             const stateOptions = states.map((state) => ({
@@ -43,16 +46,16 @@ function CountrySelector({ postData, setPostData }) {
             }));
             setStateOptions(stateOptions);
         }
-        console.log(selectedCountry)
-        console.log(selectedRegion)
-        console.log(selectedCity)
     };
 
     const handleStateChange = (selectedRegion) => {
         setSelectedRegion(selectedRegion);
         setSelectedCity(null);
-        setPostData((prevData) => ({ ...prevData, eventRegion: selectedRegion ? selectedRegion.label : "" }));
-        setPostData((prevData) => ({ ...prevData, eventCity: "" }));
+        setPostData((prevData) => ({
+            ...prevData,
+            eventRegion: selectedRegion ? selectedRegion.label : "",
+            eventCity: "",
+        }));
         if (selectedRegion) {
             const cities = City.getCitiesOfState(postData.eventCountry, selectedRegion.value);
             const cityOptions = cities.map((city) => ({
@@ -61,17 +64,12 @@ function CountrySelector({ postData, setPostData }) {
             }));
             setCityOptions(cityOptions);
         }
-        console.log(selectedCountry)
-        console.log(selectedRegion)
-        console.log(selectedCity)
     };
 
     const handleCityChange = (selectedCity) => {
         setSelectedCity(selectedCity);
         setPostData((prevData) => ({ ...prevData, eventCity: selectedCity.value }));
-        console.log(selectedCountry)
-        console.log(selectedRegion)
-        console.log(selectedCity)
+        console.log(postData)
     };
 
     return (

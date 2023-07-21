@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
+import Modal from './locationModal'
 
 /**
  * Profile component to display user profile details.
@@ -11,6 +12,10 @@ import './Profile.css';
 export default function Profile() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  const [isError, setIsError] = useState(false); // State for error handling
 
   useEffect(() => {
     axios
@@ -21,7 +26,62 @@ export default function Profile() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [selectedLocation]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Update the user's locations array
+      if (selectedLocation && !user.locations.includes(selectedLocation)) {
+        await axios.post(`http://localhost:5000/addLocation/${userId}`, {
+          location: selectedLocation,
+        });
+        console.log('Location added successfully');
+        setSelectedLocation('');
+      } else {
+        setIsError(true);
+        console.log('error')
+      }
+
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isError) {
+      const timer = setTimeout(() => {
+        setIsError(false);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isError]);
+
+  const handleDeleteLocation = async (locationIndex) => {
+    try {
+      // Make a DELETE request to the server to remove the location from the user's profile
+      const response = await axios.delete(`http://localhost:5000/removeLocation/${userId}`, {
+        data: {
+          locationIndex: locationIndex
+        }
+      });
+
+      // Check the response status and update the user's locations if successful
+      if (response.status === 200) {
+        setUser((prevUser) => {
+          const updatedUser = { ...prevUser };
+          updatedUser.locations.splice(locationIndex, 1);
+          return updatedUser;
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="profile-container">
@@ -53,6 +113,23 @@ export default function Profile() {
         <Link to="/myEvents" className="edit-button">
           My Created Events
         </Link>
+
+        <br />
+        {/* Button to open the modal */}
+        <button onClick={() => setIsModalOpen(true)} className='edit-button'>Update Preferred Locations</button>
+
+        {/* Render the modal */}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={(location, e) => {
+            handleSubmit(e); // Call the handleSubmit function from the Modal's onSave and pass the event object (e)
+            setSelectedLocation(location);
+          }}
+          onDelete={handleDeleteLocation}
+          user={user}
+        />
+
       </div>
     </div>
   );
