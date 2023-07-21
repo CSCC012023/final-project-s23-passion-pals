@@ -43,7 +43,7 @@ npm start
 6. In the last one, navigate to the socket package and initialize the socket
 ```
 cd socket
-npm install
+npm install socket.io-client timeago.js
 npm start
 ```
 ## Interface
