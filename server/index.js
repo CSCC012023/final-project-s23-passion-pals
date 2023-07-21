@@ -6,6 +6,8 @@ import multer from 'multer'; // Import multer
 import postRoutes from './routes/posts.js';
 import UserModel from './models/Users.js';
 import EventCardModel from './models/eventCard.js';
+import conversationRoute from './routes/conversation.js';
+import messagesRoute from './routes/messages.js';
 
 const app = express();
 app.use(cors());
@@ -15,6 +17,9 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use('/posts', postRoutes);
+
+app.use('/conversations', conversationRoute);
+app.use('/messages', messagesRoute);
 
 // Set up multer storage
 const storage = multer.memoryStorage(); // This will store the uploaded file in memory as a buffer
@@ -461,6 +466,9 @@ app.get('/getUserId', (req, res) => {
     res.json({ userId });
   });
   
+
+
+
 app.listen(5500, () => {
   console.log("Server is running");
 });
