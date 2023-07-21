@@ -198,6 +198,9 @@ export default function EventCard() {
           </div>
         </div>
       ))}
+      {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
+        <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div>
+      ))}
       <ReactPaginate 
         pageCount={totalPages} 
         onPageChange={({ selected }) => handlePageChange(selected)} 

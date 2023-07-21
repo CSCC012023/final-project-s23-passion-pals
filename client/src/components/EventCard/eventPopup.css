@@ -16,6 +16,8 @@
     background-color: white;
     padding: 20px;
     z-index: 1000;
+    width: 50%;
+    height: auto;
   }
   
   .popup-close-button {
