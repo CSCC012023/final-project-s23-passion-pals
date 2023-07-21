@@ -38,7 +38,7 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
         onDelete(locationIndex);
     };
 
-    const isSaveButtonDisabled = !selectedLocation || !selectedLocation.eventCountry || !selectedLocation.eventRegion;
+    const isSaveButtonDisabled = !selectedLocation || !selectedLocation.eventCountry;
 
     return (
         <div className={`modal ${isOpen ? "open" : ""}`} onClick={onClose}>

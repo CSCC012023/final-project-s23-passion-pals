@@ -10,6 +10,8 @@ function CountrySelector({ postData, setPostData }) {
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
 
+    const [selectedCountryCode, setCode] = useState('');
+
     useEffect(() => {
         // Fetch all countries once on component mount
         const countries = Country.getAllCountries();
@@ -38,6 +40,7 @@ function CountrySelector({ postData, setPostData }) {
             eventRegion: "",
             eventCity: "",
         }));
+        setCode(selectedCountry?.value || "")
         if (selectedCountry) {
             const states = State.getStatesOfCountry(selectedCountry.value);
             const stateOptions = states.map((state) => ({
@@ -57,7 +60,7 @@ function CountrySelector({ postData, setPostData }) {
             eventCity: "",
         }));
         if (selectedRegion) {
-            const cities = City.getCitiesOfState(postData.eventCountry, selectedRegion.value);
+            const cities = City.getCitiesOfState(selectedCountryCode, selectedRegion.value);
             const cityOptions = cities.map((city) => ({
                 value: city.name,
                 label: city.name,
