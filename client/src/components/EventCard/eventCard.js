@@ -34,7 +34,11 @@ export default function EventCard() {
   const filterEvents = (eventsArray, searchQuery) => {
     return eventsArray.filter(
       (item) =>
-        item.eventName && item.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+      ((item.eventName && item.eventName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.eventCity && item.eventCity.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.eventCountry && item.eventCountry.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.eventRegion && item.eventRegion.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
     );
   };
 

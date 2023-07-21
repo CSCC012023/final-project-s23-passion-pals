@@ -34,7 +34,7 @@ function CountrySelector({ postData, setPostData }) {
         setCityOptions([]);
         setPostData((prevData) => ({
             ...prevData,
-            eventCountry: selectedCountry?.value || "",
+            eventCountry: selectedCountry?.label || "",
             eventRegion: "",
             eventCity: "",
         }));
