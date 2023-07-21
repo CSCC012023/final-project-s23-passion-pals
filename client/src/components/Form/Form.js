@@ -74,8 +74,6 @@ const Form = () => {
       postData.eventDate === "" ||
       postData.eventPrice === "" ||
       postData.eventCountry === "" ||
-      (postData.eventRegion === "" && State.getStatesOfCountry(postData.eventRegion).length > 0) ||
-      (postData.eventCity === "" && postData.eventRegion != "") ||
       postData.spots <= 0
     ) {
       setIsError(true);
