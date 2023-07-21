@@ -2,19 +2,37 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import CheckBox from '../checkbox';
+import Popup from './eventPopup';
 import './eventCard.css';
 
 export default function EventCard() {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const storedPage = localStorage.getItem('currentPage');
+    return storedPage ? parseInt(storedPage) : 0; // get stored page or default to 0
+  });
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 3; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
+  const [openPopups, setOpenPopups] = useState({});
   const [filters, setFilters] = useState({
     themes: []
   });
   const [filteredData, setFilteredData] = useState([]);
+
+  // Save current page to local storage
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      localStorage.setItem('currentPage', currentPage);
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [currentPage]);  
 
   // Get all events
   useEffect(() => {
@@ -80,6 +98,7 @@ export default function EventCard() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
+          localStorage.setItem('currentPage', currentPage);
           window.location.reload();
         })
         .catch(error => {
@@ -91,6 +110,7 @@ export default function EventCard() {
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+          localStorage.setItem('currentPage', currentPage);
           window.location.reload();
         })
         .catch(error => {
@@ -139,6 +159,25 @@ export default function EventCard() {
     setCurrentPage(selectedPage);
   };
 
+  const handleOpenPopup = (eventId) => {
+    setOpenPopups(prevOpenPopups => ({
+      ...prevOpenPopups,
+      [eventId]: true
+    }));
+  };
+
+  const handleClosePopup = (eventId) => { 
+    setOpenPopups(prevOpenPopups => ({
+      ...prevOpenPopups,
+      [eventId]: false
+    }));
+   };
+
+   useEffect(() => {
+    console.log(openPopups);
+  }, [openPopups]);
+  
+
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database
   return (
@@ -163,11 +202,14 @@ export default function EventCard() {
               <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
             </div>
-            <div className="event-body-middle"> 
+            <div className="event-body-middle" onClick={() => handleOpenPopup(event._id)}>
               <span className="event-name">{event.eventName}</span>
               <br></br>
               <span className="event-description">{event.eventDescription}</span>
             </div>
+            <Popup isOpen={openPopups[event._id]} onClose={() => handleClosePopup(event._id)}>
+                <p>{event.eventDescription}</p>
+              </Popup> 
             <div className="event-body-bottom">
               <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
               <span className="event-price event-body-bottom-text subtle-styled-text float-right">
@@ -176,14 +218,19 @@ export default function EventCard() {
             </div>
             <div className="event-body-bottom event-body-bottom-reveal">
               <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-              {enrolledEvents.includes(event._id) ? (
-                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-              ) : (
-                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
-              )}
+              { enrolledEvents.includes(event._id) ? 
+              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button> 
+              : ( event.spots > 0 ? (
+                  <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+                ) : ( <span className = "event-body-bottom-text float-right">No Spots Available</span>
+                ))
+              }
             </div>
           </div>
         </div>
+      ))}
+      {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
+        <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div>
       ))}
       <ReactPaginate 
         pageCount={totalPages} 
