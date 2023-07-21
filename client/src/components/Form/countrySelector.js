@@ -69,7 +69,6 @@ function CountrySelector({ postData, setPostData }) {
     const handleCityChange = (selectedCity) => {
         setSelectedCity(selectedCity);
         setPostData((prevData) => ({ ...prevData, eventCity: selectedCity.value }));
-        console.log(postData)
     };
 
     return (

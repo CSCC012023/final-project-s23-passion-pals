@@ -28,10 +28,8 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
             if (selectedLocation.eventCountry) {
                 locationString += selectedLocation.eventCountry;
             }
-
             onSave(locationString, e);
-            setSelectedLocation(null); // Clear the selectedLocation after saving
-            console.log(selectedLocation)
+
         }
     };
 

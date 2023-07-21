@@ -28,22 +28,21 @@ export default function Profile() {
       });
   }, [selectedLocation]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
 
     try {
       // Update the user's locations array
+      console.log(selectedLocation)
       if (selectedLocation && !user.locations.includes(selectedLocation)) {
         await axios.post(`http://localhost:5000/addLocation/${userId}`, {
           location: selectedLocation,
         });
         console.log('Location added successfully');
-        setSelectedLocation('');
+        setSelectedLocation('')
       } else {
         setIsError(true);
         console.log('error')
       }
-
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -60,6 +59,13 @@ export default function Profile() {
       };
     }
   }, [isError]);
+
+  useEffect(() => {
+    // Only call the handleSubmit function when selectedLocation is not empty
+    if (selectedLocation) {
+      handleSubmit();
+    }
+  }, [selectedLocation]);
 
   const handleDeleteLocation = async (locationIndex) => {
     try {
@@ -123,7 +129,8 @@ export default function Profile() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={(location, e) => {
-            handleSubmit(e); // Call the handleSubmit function from the Modal's onSave and pass the event object (e)
+            e.preventDefault();
+            console.log(location)
             setSelectedLocation(location);
           }}
           onDelete={handleDeleteLocation}
