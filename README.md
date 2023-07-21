@@ -27,16 +27,22 @@ git clone https://github.com/CSCC012023/final-project-s23-passion-pals.git
 ```
 cd final-project-s23-passion-pals
 ```
-3. Open two terminals. 
+3. Open three terminals. 
 4. Using one navigate to the server package and initialize the backend
 ```
 cd server
 npm install
 npm start
 ```
-5. In the other, navigate to the client package and initialize the frontend
+5. In the second, navigate to the client package and initialize the frontend
 ```
 cd client
+npm install
+npm start
+```
+6. In the last one, navigate to the socket package and initialize the socket
+```
+cd socket
 npm install
 npm start
 ```
