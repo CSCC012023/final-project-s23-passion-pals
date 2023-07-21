@@ -32,18 +32,20 @@ cd final-project-s23-passion-pals
 ```
 cd server
 npm install
+npm install socket.io
 npm start
 ```
 5. In the second, navigate to the client package and initialize the frontend
 ```
 cd client
 npm install
+npm install socket.io-client timeago.js react-paginate
 npm start
 ```
 6. In the last one, navigate to the socket package and initialize the socket
 ```
 cd socket
-npm install 
+npm install
 npm start
 ```
 ## Interface
