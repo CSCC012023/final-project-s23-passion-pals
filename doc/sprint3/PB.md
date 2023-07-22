@@ -3,4 +3,5 @@
 * [PP-15] As a user, I can change the location of the area I would like to see the events from so that I can view events from particular areas.
 * [PP-6] As a user, I would like to verify my email address so that I can ensure the security of my account.
 * [PP-11] As a user, I would like to see events I have registered for so that I can stay organized and keep track of important dates
-
+* [PP-38] As a user, I would like to edit the events I created so that I can update their information
+* [PP-41] As a user, I would like to see animations transitioning between pages when clicking on different pages
