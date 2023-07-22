@@ -5,12 +5,14 @@ import { FilterOutlined } from '@ant-design/icons'; // Import the FilterOutlined
 import './checkbox.css'; 
 
 const categories = [
+  { _id: 'Gaming', name: 'Gaming' },
+  { _id: 'Nature', name: 'Nature' },
+  { _id: 'Creativity', name: 'Creativity' },
+  { _id: 'Festivals', name: 'Festivals' },
   { _id: 'Sports', name: 'Sports' },
-  { _id: 'Music', name: 'Music' },
-  { _id: 'Group Outings', name: 'Group Outings' },
-  { _id: 'Education', name: 'Education' },
-  { _id: 'Culture', name: 'Culture' },
-  { _id: 'Adventure', name: 'Adventure' }
+  { _id: 'Culinary', name: 'Culinary' },
+  { _id: 'Adventure', name: 'Adventure' },
+  { _id: 'Health', name: 'Health' },
 ];
 
 export default function CheckBoxComponent(props) {

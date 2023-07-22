@@ -20,7 +20,7 @@ export default function Messenger() {
 
   const [profilePics, setProfilePics] = useState({});
 
-  useEffect(() => {
+ useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
@@ -46,6 +46,8 @@ export default function Messenger() {
     socket.current.on("getUsers", (users) => {
     });
   }, [user]);
+
+
 
   useEffect(() => {
     const getConversations = async () => {
