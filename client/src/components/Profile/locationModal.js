@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CountrySelector from '../Form/countrySelector'; // Path to the CountrySelector component
 import './locationModal.css'
-
+//Popup displaying the countrySelector
 function Modal({ isOpen, onClose, onSave, onDelete, user }) {
     const [selectedLocation, setSelectedLocation] = useState(null);
 

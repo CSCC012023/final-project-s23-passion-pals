@@ -30,7 +30,7 @@ export default function Dashboard() {
   }, [userId]);
 
   /**
-   * Fetches the enrolled event IDs of the user.
+   * Fetches the enrolled event IDs of the user, their preferred locations, and their themes
    */
   useEffect(() => {
     axios.get(`http://localhost:5000/getUsers/${userId}`)
@@ -48,7 +48,7 @@ export default function Dashboard() {
   }, [userId]);
 
   /**
-   * Fetches the events based on the enrolled event IDs.
+   * Fetches the events based on the enrolled event IDs and also fetches all events for the recommended filter
    */
   useEffect(() => {
     axios
@@ -67,6 +67,8 @@ export default function Dashboard() {
     filterRecommended();
   }, [preferredLocations, themes]);
 
+  //from all events it will pick out everything that matches the users set locations, 
+  //then it will pick out everything that doesn't match the users themes
   const filterRecommended = () => {
     if (preferredLocations && themes) {
       // Parse the user's preferred locations from local storage
