@@ -9,14 +9,16 @@
 
 #### Decisions that turned out well
 
-1. Code Reviews
+1. GitHub branching
+* We did branching much more effectively which allowed us to have better organization and deal with merge conflicts easily
+2. Code Reviews
 * We were able to catch bugs and errors early on, which resulted in higher-quality code, and reduced the chances of running into a lot of merge conflicts down the road
 * Allowed us to discuss the coding standards and style guidelines we will be adhering to, so we could achieve a consistent codebase.
-2. Jira
+3. Jira
 * Utilized the user story point system to allow for better estimation and planning
 * We were able to track the progress of user stories throughout the sprint, as we could set the status of each story to "To Do," "In Progress," or "Done."
 * We defined and assigned user stories to specific sprints, which helped organize work, set priorities, and allocate tasks within the team.
-3. Frequent Standups
+4. Frequent Standups
 * We were able to identify and address challenges early on
 * Maintained a shared understanding of the project goals
 
