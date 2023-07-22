@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Country, State, City } from "country-state-city";
 
+//component that creates a set of 3 boxes to set city, region and country
 function CountrySelector({ postData, setPostData }) {
     const [countryOptions, setCountryOptions] = useState([]);
     const [stateOptions, setStateOptions] = useState([]);

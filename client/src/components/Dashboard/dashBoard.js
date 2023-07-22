@@ -92,9 +92,9 @@ export default function Dashboard() {
       const locationObjects = preferredLocations.map(location => {
         const parts = location.split(', ');
 
-        let eventCity = '';
-        let eventCountry = '';
-        let eventRegion = '';
+        let eventCity = "";
+        let eventCountry = "";
+        let eventRegion = "";
 
         if (parts.length === 3) {
           [eventCity, eventRegion, eventCountry] = parts;
@@ -106,13 +106,15 @@ export default function Dashboard() {
 
         return { eventCity, eventCountry, eventRegion };
       });
+      console.log(locationObjects)
+      console.log(allEvents)
       const locationFiltered = allEvents.filter((event) => {
         // Check if the event matches any of the locationObjects
         return locationObjects.some(locationObject => {
           return (
             ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
-              (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
-              (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase()))
+              (event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+              (event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase()))
           );
         });
       });
@@ -122,7 +124,7 @@ export default function Dashboard() {
         return event.themes && event.themes.some((theme) => themes.includes(theme));
       });
       setRecommended(themeFiltered);
-      console.log(recommendedEvents)
+      console.log(themeFiltered)
     }
   };
 
