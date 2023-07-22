@@ -27,15 +27,17 @@ Describe the different roles on the team and the responsibilities associated wit
 
 #### Events
 
-Describe meetings (and other events) you are planning to have:
-
-Standup Meetings
+* Standup Meetings
 
 We will try to have an online standup meeting every 2-3 days of the sprint just to have a brief check-in with team members, discuss any blockers or challenges, and ensure everyone is on track for their goals.
 
-Mid-sprint meeting
+* Mid-sprint meeting
 
 We will hold an online meeting halfway through the sprint to evaluate where everyone is at and possibly make changes.
+
+* Code Reviews
+
+If we need in smaller groups we may get on a call online together to work on shared issues
 
 #### Artifacts
 
