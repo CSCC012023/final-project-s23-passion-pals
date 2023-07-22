@@ -174,9 +174,17 @@ export default function EventCard() {
         // Check if the event matches any of the locationObjects
         return locationObjects.some(locationObject => {
           return (
-            (event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
-            (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
-            (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase())
+            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+              (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+              (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase())) ||
+
+            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+              (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+              (event.eventCity === "")) ||
+
+            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+              (event.eventRegion === "") &&
+              (event.eventCity === ""))
           );
         });
       });
