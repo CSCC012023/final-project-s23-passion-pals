@@ -94,7 +94,8 @@
 
 
 .event-body-bottom {
-  position: absolute; /* should be ok because it anchors to nearest positioned ancestor */
+  position: absolute;
+  /* should be ok because it anchors to nearest positioned ancestor */
   bottom: 10px;
   left: 0;
   opacity: 1;
@@ -138,30 +139,32 @@
 }
 
 .pagination-container {
-  list-style-type : none;
-  margin          : 0;
-  padding         : 0;
-  overflow        : hidden;
-  text-align      : center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
 }
 
 .pagination-container li {
-  display         : inline-block;
-  margin          : 0 5px;
+  display: inline-block;
+  margin: 0 5px;
 }
 
 .active-page {
-  color           : #41C1F2;
-  font-weight     : bold;
+  color: #41C1F2;
+  font-weight: bold;
 }
 
 .filter-and-search-container {
   display: flex;
-  align-items: center; /* Align items vertically */
-  margin-bottom: 10px; /* Optional margin for spacing */
+  align-items: center;
+  /* Align items vertically */
+  margin-bottom: 10px;
+  /* Optional margin for spacing */
 }
 
-.search_input{
+.search_input {
   height: 31px;
   width: 100%;
   border-radius: 5px;
@@ -170,4 +173,16 @@
   font-size: 16px;
   margin-bottom: 20px;
   font-family: Arial, sans-serif;
+}
+
+.toggle-button {
+  display: block;
+  width: 30%;
+  text-align: center;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
 }

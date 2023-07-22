@@ -50,25 +50,29 @@ const MyEvents = () => {
       {userEvents.map(event => (
         <div key={event._id} className="event-card">
           <div className="event-image-container">
-            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})`}}></div>
+            <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
           </div>
           <div className="event-body">
             <div className="event-body-top">
               <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
             </div>
-            <div className="event-body-middle"> 
+            <div className="event-body-middle">
               <span className="event-name">{event.eventName}</span>
               <br></br>
               <span className="event-description">{event.eventDescription}</span>
-             
+
             </div>
             <div className="event-body-bottom">
-              <span className="event-location event-body-bottom-text subtle-styled-text">{event.eventLocation}</span>
+              <span className="event-location event-body-bottom-text subtle-styled-text">
+                {(event.eventCity ? event.eventCity + ", " : "") +
+                  (event.eventRegion ? event.eventRegion + ", " : "") +
+                  event.eventCountry}
+              </span>
               <span className="event-price event-body-bottom-text subtle-styled-text float-right">
                 {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
               </span>
-              
+
             </div>
             <div className="event-body-bottom event-body-bottom-reveal">
               <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
@@ -110,7 +114,7 @@ const MyEvents = () => {
 //                   </a>
 //                 </p>
 //               )}
-          
+
 //             </li>
 //           ))}
 //         </ul>
