@@ -1,4 +1,4 @@
-# YOUR PRODUCT/TEAM NAME
+# Passion Pals
 
 ## Iteration 02 - Review & Retrospect
 
