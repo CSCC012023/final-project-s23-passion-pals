@@ -5,8 +5,12 @@ const userSchema = new mongoose.Schema({
   lname: String,
   email: String,
   password: String,
-  interest:[String],
-  enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }]
+  profilePic: String,
+  interest: [String],
+  friend: [String],
+  followings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+  enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }],
+  locations: [String]
 }, {
   collection: 'Users'
 });
