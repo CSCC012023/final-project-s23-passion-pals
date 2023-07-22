@@ -82,14 +82,16 @@
 }
 
 .event-description {
+  display: inline-block;
   font-size: 14px;
   margin-bottom: 5px;
   text-decoration: none;
-  white-space: normal;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 40px;
+  max-width: 100%;
 }
+
 
 .event-body-bottom {
   position: absolute;

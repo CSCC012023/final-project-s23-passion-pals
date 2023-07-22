@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   profilePic: String,
   interest: [String],
   friend: [String],
+  followings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
   enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }],
   locations: [String]
 }, {
