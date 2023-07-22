@@ -104,9 +104,6 @@ const Form = () => {
         themes: [],
         eventDate: "",
         eventPrice: "",
-        eventCity: "",
-        eventCountry: "",
-        eventRegion: "",
         eventAddress: "",
         spots: 0,
       });

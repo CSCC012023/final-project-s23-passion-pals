@@ -96,7 +96,7 @@ export default function Dashboard() {
                   <div className="event-body-bottom">
                     <span className="event-location event-body-bottom-text subtle-styled-text">
                       {(event.eventCity ? event.eventCity + ", " : "") +
-                        event.eventRegion + " " +
+                        (event.eventRegion ? event.eventRegion + ", " : "") +
                         event.eventCountry}
                     </span>
                     <span className="event-price event-body-bottom-text subtle-styled-text float-right">

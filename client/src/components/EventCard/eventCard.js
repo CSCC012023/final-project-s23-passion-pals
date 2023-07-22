@@ -16,6 +16,7 @@ export default function EventCard() {
     themes: []
   });
   const [filteredData, setFilteredData] = useState([]);
+  const [preferredLocations, setPreferredLocations] = useState([]);
 
   // Get all events
   useEffect(() => {
@@ -61,6 +62,7 @@ export default function EventCard() {
         const user = response.data;
         if (user) {
           setEnrolledEvents(user.enrolledEvents);
+          setPreferredLocations(user.locations);
         }
       })
       .catch(error => {
@@ -133,6 +135,57 @@ export default function EventCard() {
       });
   };
 
+  const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
+
+  const handleToggleUserLocationFilter = () => {
+    setIsUserLocationFilterOn((prev) => !prev);
+    if (!isUserLocationFilterOn) {
+      // Filter events based on user's preferred locations when the toggle is turned on
+      filterEventsByUserLocation();
+    } else {
+      // Show all events when the toggle is turned off
+      setFilteredData(events);
+      setTotalPages(Math.ceil(events.length / itemsPerPage));
+      setCurrentPage(0);
+    }
+  };
+
+  const filterEventsByUserLocation = () => {
+    if (preferredLocations) {
+      // Parse the user's preferred locations from local storage
+      const locationObjects = preferredLocations.map(location => {
+        const parts = location.split(', ');
+
+        let eventCity = '';
+        let eventCountry = '';
+        let eventRegion = '';
+
+        if (parts.length === 3) {
+          [eventCity, eventRegion, eventCountry] = parts;
+        } else if (parts.length === 2) {
+          [eventRegion, eventCountry] = parts;
+        } else if (parts.length === 1) {
+          [eventCountry] = parts;
+        }
+
+        return { eventCity, eventCountry, eventRegion };
+      });
+      const filteredData = events.filter((event) => {
+        // Check if the event matches any of the locationObjects
+        return locationObjects.some(locationObject => {
+          return (
+            (event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+            (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+            (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase())
+          );
+        });
+      });
+
+      setFilteredData(filteredData);
+      setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+      setCurrentPage(0);
+    }
+  };
 
 
   // Pagination
@@ -157,6 +210,12 @@ export default function EventCard() {
           onChange={(event) => setQuery(event.target.value)}
         />
         <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+
+        {/* Toggle button for user's preferred locations */}
+        <button onClick={handleToggleUserLocationFilter} className='toggle-button'>
+          {isUserLocationFilterOn ? 'Show All Events' : 'Filter by Preferred Locations'}
+        </button>
+
       </div>
       {currentEvents.map(event => (
         <div key={event._id} className="event-card">
