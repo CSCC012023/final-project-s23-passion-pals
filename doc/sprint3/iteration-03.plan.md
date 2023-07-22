@@ -7,8 +7,6 @@
 
 ## Process
 
-Quick Introduction to the process
-
 #### Changes from previous iteration
 
 * In the previous sprint our goal was to be more active on Jira which was true to an extent, but due to our self imposed shorter timeline most of our stories were finished in the final days and the burndown chart did not look ideal. This sprint we will continue to improve our Jira usage and aim to have a better burndown chart. Same success metric
