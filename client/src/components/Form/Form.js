@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
+import CountrySelector from './countrySelector';
 import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Button,
   Typography,
@@ -16,21 +18,42 @@ import {
 } from "@material-ui/core";
 import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
+import { State } from "country-state-city";
 //intilizing the filds for the databse
 const Form = () => {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
-    creator: "",
+    name: "",
     eventName: "",
+    eventLink: "",
     eventDescription: "",
     eventImage: "",
     themes: [],
     eventDate: "",
     eventPrice: "",
-    eventLocation: "",
+    eventCity: "",
+    eventCountry: "",
+    eventRegion: "",
+    eventAddress: "",
     spots: null,
   });
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
+  const [isError, setIsError] = useState(false); // State for error handling
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
   const classes = useStyles();
 
   /**
@@ -42,24 +65,69 @@ const Form = () => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(createPost(postData));
-    setIsEventCreated(true);
-    setPostData({
-      creator: "",
-      eventName: "",
-      eventDescription: "",
-      eventImage: "",
-      themes: [],
-      eventDate: "",
-      eventPrice: "",
-      eventLocation: "",
-      spots: 0,
-    });
 
-    setTimeout(() => {
-      setIsEventCreated(false);
-    }, 2000);
+    // Validation checks
+    if (
+      postData.name === "" ||
+      postData.eventName === "" ||
+      postData.eventDescription === "" ||
+      postData.eventDate === "" ||
+      postData.eventPrice === "" ||
+      postData.eventCountry === "" ||
+      postData.spots <= 0
+    ) {
+      setIsError(true);
+      console.log(postData.eventCity)
+      console.log(postData.eventCountry)
+      console.log(postData.eventRegion)
+      console.log(State.getStatesOfCountry(postData.eventRegion).length)
+      return;
+    }
+    // Check if user state is available (user data is fetched)
+    if (user) {
+      // Use user.email as the eventCreator in postData
+      const eventPostData = {
+        ...postData,
+        eventCreator: user.email,
+      };
+
+      // Dispatch the createPost action with the updated postData
+      await dispatch(createPost(eventPostData));
+
+      setIsEventCreated(true);
+      setPostData({
+        name: "",
+        eventName: "",
+        eventLink: "",
+        eventDescription: "",
+        eventImage: "",
+        themes: [],
+        eventDate: "",
+        eventPrice: "",
+        eventAddress: "",
+        spots: 0,
+      });
+
+      setTimeout(() => {
+        setIsEventCreated(false);
+      }, 2000);
+    } else {
+      // If user state is not available, show an error or handle accordingly
+      console.log("User data not available");
+    }
   };
+
+  useEffect(() => {
+    if (isError) {
+      const timer = setTimeout(() => {
+        setIsError(false);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isError]);
 
   /**
    * Handles the change event for theme checkboxes.
@@ -82,26 +150,26 @@ const Form = () => {
   };
 
   return (
-    
-// The provided code snippet represents a form component for creating events. The form includes vario
-// us input fields such as creator name, event name, event description, event date, event price, event location, 
-// and available spots. The user can enter the required information, and upon form submission, the handleSubmit function
-//  is triggered. The function dispatches a createPost action and resets the form fields. Additionally, there are checkboxes for 
-//  selecting event themes, which update the postData state based on the selected themes using the handleThemeChange function. The form is 
-//  styled using Material-UI components and custom CSS classes. The component also includes the necessary imports and utilizes React hooks such as 
-//  useState and useDispatch. Overall, this form provides a user-friendly interface for creating events and handles the necessary data submission.
+
+    // The provided code snippet represents a form component for creating events. The form includes vario
+    // us input fields such as creator name, event name, event description, event date, event price, event location, 
+    // and available spots. The user can enter the required information, and upon form submission, the handleSubmit function
+    //  is triggered. The function dispatches a createPost action and resets the form fields. Additionally, there are checkboxes for 
+    //  selecting event themes, which update the postData state based on the selected themes using the handleThemeChange function. The form is 
+    //  styled using Material-UI components and custom CSS classes. The component also includes the necessary imports and utilizes React hooks such as 
+    //  useState and useDispatch. Overall, this form provides a user-friendly interface for creating events and handles the necessary data submission.
     <Container component="main">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
           Create Event
         </Typography>
         <input
-          name="creator"
+          name="name"
           type="text"
           className="input"
           placeholder="Enter your name"
-          value={postData.creator}
-          onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
+          value={postData.name}
+          onChange={(e) => setPostData({ ...postData, name: e.target.value })}
         />
         <input
           name="eventName"
@@ -112,6 +180,14 @@ const Form = () => {
           onChange={(e) => setPostData({ ...postData, eventName: e.target.value })}
         />
         <input
+          name="eventLink"
+          type="text"
+          className="input"
+          placeholder="Enter event link (optional)"
+          value={postData.eventLink}
+          onChange={(e) => setPostData({ ...postData, eventLink: e.target.value })}
+        />
+        <textarea
           name="eventDescription"
           className="textarea"
           placeholder="Enter event description"
@@ -121,76 +197,95 @@ const Form = () => {
         <FormControl component="fieldset" fullWidth>
           <Typography>Select Event Themes</Typography>
           <div>
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-music"
-                value="Music"
-                checked={postData.themes.includes("Music")}
-                onChange={(e) => handleThemeChange(e, "Music")}
-              />
-            }
-            label="Music"
-          />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-gaming"
+                  value="Gaming"
+                  checked={postData.themes.includes("Gaming")}
+                  onChange={(e) => handleThemeChange(e, "Gaming")}
+                />
+              }
+              label="Gaming"
+            />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-groupoutings"
-                value="Group Outings"
-                checked={postData.themes.includes("Group Outings")}
-                onChange={(e) => handleThemeChange(e, "Group Outings")}
-              />
-            }
-            label="Group Outings"
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-sports"
-                value="Sports"
-                checked={postData.themes.includes("Sports")}
-                onChange={(e) => handleThemeChange(e, "Sports")}
-              />
-            }
-            label="Sports"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-education"
-                value="Education"
-                checked={postData.themes.includes("Education")}
-                onChange={(e) => handleThemeChange(e, "Education")}
-              />
-            }
-            label="Education"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-culture"
-                value="Culture"
-                checked={postData.themes.includes("Culture")}
-                onChange={(e) => handleThemeChange(e, "Culture")}
-              />
-            }
-            label="Culture"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="theme-adventure"
-                value="Adventure"
-                checked={postData.themes.includes("Adventure")}
-                onChange={(e) => handleThemeChange(e, "Adventure")}
-              />
-            }
-            label="Adventure"
-          />
-          
-
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-nature"
+                  value="Nature"
+                  checked={postData.themes.includes("Nature")}
+                  onChange={(e) => handleThemeChange(e, "Nature")}
+                />
+              }
+              label="Nature"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-creativity"
+                  value="Creativity"
+                  checked={postData.themes.includes("Creativity")}
+                  onChange={(e) => handleThemeChange(e, "Creativity")}
+                />
+              }
+              label="Creativity"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-festivals"
+                  value="Festivals"
+                  checked={postData.themes.includes("Festivals")}
+                  onChange={(e) => handleThemeChange(e, "Festivals")}
+                />
+              }
+              label="Festivals"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-sports"
+                  value="Sports"
+                  checked={postData.themes.includes("Sports")}
+                  onChange={(e) => handleThemeChange(e, "Sports")}
+                />
+              }
+              label="Sports"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-culinary"
+                  value="Culinary"
+                  checked={postData.themes.includes("Culinary")}
+                  onChange={(e) => handleThemeChange(e, "Culinary")}
+                />
+              }
+              label="Culinary"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-adventure"
+                  value="Adventure"
+                  checked={postData.themes.includes("Adventure")}
+                  onChange={(e) => handleThemeChange(e, "Adventure")}
+                />
+              }
+              label="Adventure"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="theme-health"
+                  value="Health"
+                  checked={postData.themes.includes("Health")}
+                  onChange={(e) => handleThemeChange(e, "Health")}
+                />
+              }
+              label="Health"
+            />
           </div>
         </FormControl>
         <input
@@ -199,7 +294,7 @@ const Form = () => {
           value={postData.eventDate}
           onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
         />
-       <input
+        <input
           name="eventPrice"
           type="text"
           className="input"
@@ -209,14 +304,20 @@ const Form = () => {
             setPostData({ ...postData, eventPrice: e.target.value.replace("$", "") })
           }
         />
+
+        <div>
+          <CountrySelector postData={postData} setPostData={setPostData} />
+        </div>
+
         <input
-          name="eventLocation"
+          name="eventAddress"
           type="text"
           className="input"
-          placeholder="Enter event location"
-          value={postData.eventLocation}
-          onChange={(e) => setPostData({ ...postData, eventLocation: e.target.value })}
+          placeholder="Enter event address (optional)"
+          value={postData.eventAddress}
+          onChange={(e) => setPostData({ ...postData, eventAddress: e.target.value })}
         />
+
         <input
           name="spots"
           type="number"
@@ -232,6 +333,11 @@ const Form = () => {
             onDone={({ base64 }) => setPostData({ ...postData, eventImage: base64 })}
           />
         </div>
+        {isError && (
+          <Alert severity="error" className="alert">
+            Please fill in all the required fields and ensure the spots value is greater than 0.
+          </Alert>
+        )}
         {isEventCreated && (
           <Alert severity="success" className="alert">
             Event created successfully!
