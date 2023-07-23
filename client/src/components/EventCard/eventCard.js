@@ -5,6 +5,8 @@ import { State } from "country-state-city";
 import CheckBox from '../checkbox';
 import Popup from './eventPopup';
 import './eventCard.css';
+import io from 'socket.io-client';
+
 
 export default function EventCard() {
   const [currentPage, setCurrentPage] = useState(() => {
@@ -35,6 +37,8 @@ export default function EventCard() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [currentPage]);
+
+  const socket = io('http://localhost:5000');
 
   // Get all events
   useEffect(() => {
@@ -106,7 +110,6 @@ export default function EventCard() {
             prevEnrolledEvents.filter(id => id !== eventId)
           );
           localStorage.setItem('currentPage', currentPage);
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -118,7 +121,6 @@ export default function EventCard() {
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
           localStorage.setItem('currentPage', currentPage);
-          window.location.reload();
         })
         .catch(error => {
           console.log(error);
@@ -155,6 +157,24 @@ export default function EventCard() {
       });
   };
 
+// Listen for spotUpdate event
+useEffect(() => {
+  socket.on('spotUpdate', ({ eventId, spots }) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) => {
+        if (event._id === eventId) {
+          return { ...event, spots };
+        }
+        return event;
+      })
+    );
+  });
+
+  // Clean up the socket connection
+  return () => {
+    socket.off('spotUpdate');
+  };
+}, []);
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
