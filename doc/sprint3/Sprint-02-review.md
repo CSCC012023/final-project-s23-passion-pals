@@ -57,9 +57,11 @@ Because of our timeline we ended up finishing everything near the end of the spr
 #### Goals and/or tasks that were planned but not met/completed:
 
 * Associate created event with user
+
 Did not get to it
 
 * As a user, I would like to be able to delete events I created so that I can remove any unnecessary or outdated events from the system and ensure accurate information for other users.
+
 Required the first one to be finished
 
 ## Meeting Highlights
