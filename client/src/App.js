@@ -14,7 +14,7 @@ import Signup from "./components/Signup/signup";
 import Dash from "./components/Dashboard/dashBoard";
 import Profile from "./components/Profile/Profile";
 import UpdateProfile from "./components/Profile/UpdateProfile";
-import EventCard from "./components/EventCard/eventCard";
+import FindEvent from "./components/EventCard/findEvent";
 import Navbar from "./components/Dashboard/navBar";
 import Select from './components/interestSelection/selectInterest';
 import SelectEdition from './components/interestSelection/selectEdit';
@@ -45,7 +45,7 @@ const App = () => {
         <Route path="/dash" element={<Dash />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/updateProfile" element={<UpdateProfile />} />
-        <Route path="/eventCard" element={<EventCard />} />
+        <Route path="/findEvent" element={<FindEvent />} />
         <Route path="/myEvents" element={<MyEvents />} />
         <Route path="/pfp" element={<ProfilePic />} />
         <Route path="/messenger" element={<Messenger />} />

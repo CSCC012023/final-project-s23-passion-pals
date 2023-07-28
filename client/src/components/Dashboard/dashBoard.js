@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./dashBoard.css";
+import EventCard from '../EventCard/eventCard';
 import { theme } from 'antd';
 
 /**
@@ -66,31 +67,6 @@ export default function Dashboard() {
       });
   }, [enrolledEvents]);
 
-  const handleEnroll = (eventId) => {
-    if (enrolledEvents.includes(eventId)) {
-      // Unenroll from the event
-      axios
-        .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents =>
-            prevEnrolledEvents.filter(id => id !== eventId)
-          );
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } else {
-      // Enroll in the event
-      axios
-        .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  };
 
   useEffect(() => {
     filterRecommended();
@@ -166,42 +142,7 @@ export default function Dashboard() {
         ) : (
           <div className="event-card-container">
             {events.map(event => (
-              <div key={event._id} className="event-card">
-                <div className="event-image-container">
-                  <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
-                </div>
-                <div className="event-body">
-                  <div className="event-body-top">
-                    <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                    <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
-                  </div>
-                  <div className="event-body-middle">
-                    <span className="event-name">{event.eventName}</span>
-                    <br></br>
-                    <span className="event-description">{event.eventDescription}</span>
-                  </div>
-                  <div className="event-body-bottom">
-                    <span className="event-location event-body-bottom-text subtle-styled-text">
-                      {(event.eventCity ? event.eventCity + ", " : "") +
-                        (event.eventRegion ? event.eventRegion + ", " : "") +
-                        event.eventCountry}
-                    </span>
-                    <span className="event-price event-body-bottom-text subtle-styled-text float-right">
-                      {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
-                    </span>
-                  </div>
-                  <div className="event-body-bottom event-body-bottom-reveal">
-                    <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-                    {enrolledEvents.includes(event._id) ?
-                      <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-                      : (event.spots > 0 ? (
-                        <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
-                      ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
-                      ))
-                    }
-                  </div>
-                </div>
-              </div>
+              <EventCard event={event} onEdit={false} handleDeleteEvent={null} handleEditEvent={null} />
             ))}
           </div>
         )}
@@ -217,43 +158,7 @@ export default function Dashboard() {
         ) : (
           <div className="event-card-container">
             {recommendedEvents.map(event => (
-              <div key={event._id} className="event-card">
-                <div className="event-image-container">
-                  <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
-                </div>
-                <div className="event-body">
-                  <div className="event-body-top">
-                    <span className="event-date subtle-styled-text">{new Date(event.eventDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                    <span className="event-spots subtle-styled-text float-right">{event.spots} spots left</span>
-                  </div>
-                  <div className="event-body-middle">
-                    <span className="event-name">{event.eventName}</span>
-                    <br></br>
-                    <span className="event-description">{event.eventDescription}</span>
-                  </div>
-                  <div className="event-body-bottom">
-                    <span className="event-location event-body-bottom-text subtle-styled-text">
-                      {(event.eventCity ? event.eventCity + ", " : "") +
-                        (event.eventRegion ? event.eventRegion + ", " : "") +
-                        event.eventCountry}
-                    </span>
-                    <span className="event-price event-body-bottom-text subtle-styled-text float-right">
-                      {event.eventPrice.startsWith("$") ? event.eventPrice : `$${event.eventPrice}`}
-                    </span>
-                  </div>
-                  <div className="event-body-bottom event-body-bottom-reveal">
-                    <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-                    {enrolledEvents.includes(event._id) ?
-                      <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
-                      : (event.spots > 0 ? (
-                        <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
-                      ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
-                      ))
-                    }
-                    {/*FIX ABOVE ENROLL SHIT */}
-                  </div>
-                </div>
-              </div>
+              <EventCard event={event} onEdit={false} handleDeleteEvent={null} handleEditEvent={null} />
             ))}
           </div>
         )}
