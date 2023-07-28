@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./dashBoard.css";
+import { theme } from 'antd';
 
 /**
  * Dashboard component displays user information and events.
@@ -8,12 +9,13 @@ import "./dashBoard.css";
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
-  const [eventIds, setEventIds] = useState([]);
+  const [enrolledEvents, setEnrolledEvents] = useState([]);
   const [events, setEvents] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [recommendedEvents, setRecommended] = useState([]);
   const [preferredLocations, setPreferredLocations] = useState([]);
   const [themes, setThemes] = useState([]);
+  const [userEmail, setEmail] = useState('');
 
   /**
    * Fetches user data from the server based on the user ID.
@@ -37,9 +39,10 @@ export default function Dashboard() {
       .then(response => {
         const user = response.data;
         if (user) {
-          setEventIds(user.enrolledEvents);
+          setEnrolledEvents(user.enrolledEvents);
           setPreferredLocations(user.locations);
           setThemes(user.interest)
+          setEmail(user.email)
         }
       })
       .catch(error => {
@@ -54,25 +57,34 @@ export default function Dashboard() {
     axios
       .get('http://localhost:5000/events')
       .then(response => {
-        const filteredEvents = response.data.filter(event => eventIds.includes(event._id));
+        const filteredEvents = response.data.filter(event => enrolledEvents.includes(event._id));
         setEvents(filteredEvents);
         setAllEvents(response.data)
       })
       .catch(error => {
         console.log(error);
       });
-  }, [eventIds]);
+  }, [enrolledEvents]);
 
   const handleEnroll = (eventId) => {
-    if (eventIds.includes(eventId)) { // likely redundant but just in case
+    if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
       axios
         .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
         .then(() => {
-          setEventIds(prevEnrolledEvents =>
+          setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
-          window.location.reload();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      // Enroll in the event
+      axios
+        .post(`http://localhost:5000/enroll/${eventId}`, { userId })
+        .then(() => {
+          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
         })
         .catch(error => {
           console.log(error);
@@ -82,7 +94,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     filterRecommended();
-  }, [preferredLocations, themes]);
+  }, [preferredLocations, themes, userEmail, enrolledEvents]);
 
   //from all events it will pick out everything that matches the users set locations, 
   //then it will pick out everything that doesn't match the users themes
@@ -106,8 +118,7 @@ export default function Dashboard() {
 
         return { eventCity, eventCountry, eventRegion };
       });
-      console.log(locationObjects)
-      console.log(allEvents)
+
       const locationFiltered = allEvents.filter((event) => {
         // Check if the event matches any of the locationObjects
         return locationObjects.some(locationObject => {
@@ -123,8 +134,12 @@ export default function Dashboard() {
       const themeFiltered = locationFiltered.filter((event) => {
         return event.themes && event.themes.some((theme) => themes.includes(theme));
       });
-      setRecommended(themeFiltered);
-      console.log(themeFiltered)
+
+      // Filter user's own events and event they have enrolled in
+      const userFiltered = themeFiltered.filter((event) => {
+        return (event.eventCreator !== userEmail && !enrolledEvents.includes(event._id))
+      });
+      setRecommended(userFiltered);
     }
   };
 
@@ -177,7 +192,13 @@ export default function Dashboard() {
                   </div>
                   <div className="event-body-bottom event-body-bottom-reveal">
                     <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-                    <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+                    {enrolledEvents.includes(event._id) ?
+                      <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+                      : (event.spots > 0 ? (
+                        <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+                      ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
+                      ))
+                    }
                   </div>
                 </div>
               </div>
@@ -222,7 +243,13 @@ export default function Dashboard() {
                   </div>
                   <div className="event-body-bottom event-body-bottom-reveal">
                     <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-                    <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+                    {enrolledEvents.includes(event._id) ?
+                      <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+                      : (event.spots > 0 ? (
+                        <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+                      ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
+                      ))
+                    }
                     {/*FIX ABOVE ENROLL SHIT */}
                   </div>
                 </div>
