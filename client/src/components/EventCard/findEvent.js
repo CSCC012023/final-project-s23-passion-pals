@@ -207,6 +207,34 @@ useEffect(() => {
     }
   };
 
+ // Enroll or unenroll from an event
+ const handleEnroll = (eventId) => {
+  if (enrolledEvents.includes(eventId)) {
+    // Unenroll from the event
+    axios
+      .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
+      .then(() => {
+        setEnrolledEvents(prevEnrolledEvents =>
+          prevEnrolledEvents.filter(id => id !== eventId)
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  } else {
+    // Enroll in the event
+    axios
+      .post(`http://localhost:5000/enroll/${eventId}`, { userId })
+      .then(() => {
+        setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+};
+
+
 
   // Pagination
   const startIndex = currentPage * itemsPerPage;
@@ -240,7 +268,7 @@ useEffect(() => {
       </div>
       {currentEvents.map(event => (
         // add event card here
-        <EventCard event={event} onEdit={false} handleDeleteEvent={null} handleEditEvent={null} />
+        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
       ))}
       {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
         <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div> // ghost element and css should be applied even though event-card isn't in findEvent.css

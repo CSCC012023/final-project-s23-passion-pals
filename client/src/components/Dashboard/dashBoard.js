@@ -119,6 +119,34 @@ export default function Dashboard() {
     }
   };
 
+   // Enroll or unenroll from an event
+   const handleEnroll = (eventId) => {
+    if (enrolledEvents.includes(eventId)) {
+      // Unenroll from the event
+      axios
+        .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
+        .then(() => {
+          setEnrolledEvents(prevEnrolledEvents =>
+            prevEnrolledEvents.filter(id => id !== eventId)
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      // Enroll in the event
+      axios
+        .post(`http://localhost:5000/enroll/${eventId}`, { userId })
+        .then(() => {
+          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  };
+
+
   return (
     <div className='dashboard'
       style={{
@@ -142,8 +170,8 @@ export default function Dashboard() {
         ) : (
           <div className="event-card-container">
             {events.map(event => (
-              <EventCard event={event} onEdit={false} handleDeleteEvent={null} handleEditEvent={null} />
-            ))}
+        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
+        ))}
           </div>
         )}
       </div>
@@ -158,8 +186,8 @@ export default function Dashboard() {
         ) : (
           <div className="event-card-container">
             {recommendedEvents.map(event => (
-              <EventCard event={event} onEdit={false} handleDeleteEvent={null} handleEditEvent={null} />
-            ))}
+        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
+        ))}
           </div>
         )}
 

@@ -1,40 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Popup from './eventPopup';
-import axios from 'axios';
 
-export default function EventCard({ event, onEdit, handleDeleteEvent, handleEditEvent }) {
+export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll, handleDeleteEvent, handleEditEvent }) {
     const [openPopups, setOpenPopups] = useState({});
-    const [enrolledEvents, setEnrolledEvents] = useState([]);
-
     const userId = localStorage.getItem('userId');
-
-
-// Enroll or unenroll from an event
-const handleEnroll = (eventId) => {
-    if (enrolledEvents.includes(eventId)) {
-      // Unenroll from the event
-      axios
-        .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents =>
-            prevEnrolledEvents.filter(id => id !== eventId)
-          );
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } else {
-      // Enroll in the event
-      axios
-        .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  };
 
 const handleOpenPopup = (eventId) => {
     setOpenPopups(prevOpenPopups => ({
@@ -87,9 +56,9 @@ const handleOpenPopup = (eventId) => {
                     <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
                 </div>
                 : (enrolledEvents.includes(event._id) ?
-                    <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)}>Unenroll</button>
+                    <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Unenroll</button>
                     : (event.spots > 0 ? (
-                    <button className="event-body-bottom-text float-right event-button" onClick={() => handleEnroll(event._id)} disabled={event.spots <= 0}>Enroll Now</button>
+                    <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll} disabled={event.spots <= 0}>Enroll Now</button>
                     ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
                     )))
               }
