@@ -176,7 +176,7 @@ app.get('/checkFriendStatus/:userId/:friendId', async (req, res) => {
         await user.save();
       }
   
-      // Remove userId from friend's friend list
+      // Remove userId from friend's friend list both direnctional
       const index2 = friend.friend.indexOf(userId);
       if (index2 !== -1) {
         friend.friend.splice(index2, 1);
@@ -233,7 +233,7 @@ app.post('/addFriend/:userId', async (req, res) => {
       }
    
 
-      
+
       // Check if the friend's ID already exists in the friend list
       if (user.friend.includes(friendId)) {
         return res.status(400).json({ error: 'Friend already exists' });
