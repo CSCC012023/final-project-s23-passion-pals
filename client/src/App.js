@@ -22,14 +22,14 @@ import Friend from './components/Friend/friend';
 import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
-
+import Request from './components/Friend/request';
 
 
 
 const App = () => {
 //Determines whether to exclude the Navbar component from rendering based on the current path. The component sets up the routes using the
   const location = useLocation();
-  const exclude = location.pathname === '/signup' || location.pathname === '/' || location.pathname === '/select' || location.pathname === '/selectEdit' || location.pathname === '/friend'
+  const exclude = location.pathname === '/signup' || location.pathname === '/' || location.pathname === '/select' || location.pathname === '/selectEdit' || location.pathname === '/friend'|| location.pathname === '/request'
 //  Routes and Route components from React Router. Each Route is mapped to a specific path and corresponding component. The component renders the 
 //  Navbar component if it is not excluded, and the appropriate component based on the current route.
   return (
@@ -38,6 +38,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Signup />} />
         <Route path="/friend" element={<Friend />} />
+        <Route path="/request" element={<Request />} />
         <Route path="/select" element={<Select />} />
         <Route path="/selectEdit" element={<SelectEdition />} />
         <Route path="/signup" element={<Signup />} />

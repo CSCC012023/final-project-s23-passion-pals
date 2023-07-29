@@ -17,6 +17,10 @@ export default function Navbar() {
                     <Link to="/profile" className='link-style'>Profile</Link>
                 </li>
                 <li>
+                    {/* Profile link */}
+                    <Link to="/friend" className='link-style'>Friend</Link>
+                </li>
+                <li>
                     {/* Create Event link */}
                     <Link to="/createEvent" className='link-style'>Create Event</Link>
                 </li>

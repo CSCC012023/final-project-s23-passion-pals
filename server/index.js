@@ -122,65 +122,189 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-//remoce friend 
-app.delete('/removeFriend/:userId', async (req, res) => {
-  const { userId } = req.params;
-  const { friendId } = req.body;
 
-  try {
-    const user = await UserModel.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+
+app.get('/checkFriendStatus/:userId/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      if (user.friend.includes(friendId)) {
+        // The two users are already friends
+        return res.json('friends');
+      }
+      if (user.request.includes(friendId)) {
+        // The two users are already friends
+        return res.json('in_request');
+      }
+      // The two users are not yet friends
+      return res.json('not_friends');
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
     }
+  });
+  
+  
+  
 
-    // Check if the friend's ID exists in the friend list
-    if (!user.friend.includes(friendId)) {
-      return res.json({ error: 'Friend not found', needToAdd: true });
+
+
+
+
+  app.delete('/removeFriend/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      const friend = await UserModel.findById(friendId);
+  
+      if (!user || !friend) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Remove friendId from user's friend list
+      const index1 = user.friend.indexOf(friendId);
+      if (index1 !== -1) {
+        user.friend.splice(index1, 1);
+        await user.save();
+      }
+  
+      // Remove userId from friend's friend list
+      const index2 = friend.friend.indexOf(userId);
+      if (index2 !== -1) {
+        friend.friend.splice(index2, 1);
+        await friend.save();
+      }
+  
+      res.json({ success: true, message: 'Friend removed successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    // Remove the friend's ID from the friend list
-    user.friend.pull(friendId);
-    await user.save();
-
-    res.json({ success: true, message: 'Friend removed successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
+  });
+  app.delete('/declineFriendRequest/:userId/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend request ID exists in the current user's request list
+      if (!user.request.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend request not found' });
+      }
+  
+      // Remove the friend request ID from the current user's request list
+      user.request = user.request.filter((requestId) => requestId !== friendId);
+      await user.save();
+  
+      res.json({ success: true, message: 'Friend request declined successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  
+  
+  
+  
 //add friend 
 // ...
 
 app.post('/addFriend/:userId', async (req, res) => {
-  const { friendId } = req.body;
-  const userId = req.params.userId;
-
-  try {
-    const user = await UserModel.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    const { friendId } = req.body;
+    const userId = req.params.userId;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend's ID already exists in the friend list
+      if (user.friend.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend already exists' });
+      }
+  
+      // Add the friend's ID to the friend list of the user accepting the request
+      user.friend.push(friendId);
+      await user.save();
+  
+      // Find the sender of the friend request
+      const sender = await UserModel.findById(friendId);
+  
+      if (sender) {
+        // Add the user accepting the request to the sender's friend list (bidirectional)
+        sender.friend.push(userId);
+        await sender.save();
+  
+        // Remove the recipient's ID from the sender's request array
+        sender.request.pull(userId);
+        await sender.save();
+      }
+  
+      res.json({ status: 'success', message: 'Friend added successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
     }
+  });
+  
 
-    // Check if the friend's ID already exists in the friend list
-    if (user.friend.includes(friendId)) {
-      return res.status(400).json({ error: 'Friend already exists' });
+//requst friend 
+app.post('/addFriendRequest/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { senderId } = req.body;
+  
+    try {
+      // Find the user who is receiving the friend request
+      const recipientUser = await UserModel.findById(userId);
+  
+      // Check if the user is already in the request list (to avoid duplicates)
+      if (!recipientUser.request.includes(senderId)) {
+        recipientUser.request.push(senderId);
+        await recipientUser.save();
+  
+        res.status(200).json({ success: true });
+      } else {
+        // User is already in the request list
+        res.status(200).json({ success: false, message: 'Friend request already sent' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: 'Error sending friend request' });
     }
-
-    // Add the friend's ID to the friend list
-    user.friend.push(friendId);
-    await user.save();
-
-    res.json({ status: 'success', message: 'Friend added successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
+  });
 // ...
-
+// Route to get friend requests for a specific user
+app.get('/friendRequests/:userId', async (req, res) => {
+    const userId = req.params.userId;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const friendRequestIds = user.request; // Get the friend request IDs
+  
+      // Find the users who sent friend requests to the current user
+      const friendRequests = await UserModel.find({ _id: { $in: friendRequestIds } });
+  
+      res.json(friendRequests);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 // Route to upload a profile picture for a user
 app.post('/upload-profile-pic/:userId', upload.single('profilePic'), async (req, res) => {
   const userId = req.params.userId;
