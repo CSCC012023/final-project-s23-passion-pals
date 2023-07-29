@@ -231,17 +231,19 @@ app.post('/addFriend/:userId', async (req, res) => {
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-  
+   
+
+      
       // Check if the friend's ID already exists in the friend list
       if (user.friend.includes(friendId)) {
         return res.status(400).json({ error: 'Friend already exists' });
       }
   
-      // Add the friend's ID to the friend list of the user accepting the request
+      // Add the friend's ID to the friend list of the user accepting the request,
       user.friend.push(friendId);
       await user.save();
   
-      // Find the sender of the friend request
+      // Find the sender of the friend request,
       const sender = await UserModel.findById(friendId);
   
       if (sender) {
@@ -254,6 +256,7 @@ app.post('/addFriend/:userId', async (req, res) => {
         await sender.save();
       }
   
+
       res.json({ status: 'success', message: 'Friend added successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -264,10 +267,12 @@ app.post('/addFriend/:userId', async (req, res) => {
 //requst friend 
 app.post('/addFriendRequest/:userId', async (req, res) => {
     const { userId } = req.params;
+
     const { senderId } = req.body;
   
     try {
       // Find the user who is receiving the friend request
+
       const recipientUser = await UserModel.findById(userId);
   
       // Check if the user is already in the request list (to avoid duplicates)
