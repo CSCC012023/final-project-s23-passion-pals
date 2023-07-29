@@ -31,12 +31,14 @@ app.use('/messages', messagesRoute);
 // Set up multer storage
 const storage = multer.memoryStorage(); // This will store the uploaded file in memory as a buffer
 const upload = multer({ storage }); // Create the multer middleware
-
+//connection witht hte database
 const CONNECTION_URL = 'mongodb+srv://Mustafa:mustafa0503@cluster0.seqdo7a.mongodb.net/'
-const PORT = process.env.PORT || 5000;
 
+const PORT = process.env.PORT || 5000;
+//Create the multer middleware
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
+    // connecting the portal
     server.listen(PORT, () => {
       console.log(`Server running on port: ${PORT}`);
       console.log('Connected to MongoDB!');
