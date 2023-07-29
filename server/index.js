@@ -209,7 +209,7 @@ app.get('/checkFriendStatus/:userId/:friendId', async (req, res) => {
   
       res.json({ success: true, message: 'Friend request declined successfully' });
     } catch (error) {
-        
+
       res.status(500).json({ error: 'Internal server error' });
     }
   });
@@ -286,7 +286,7 @@ app.post('/addFriendRequest/:userId', async (req, res) => {
     }
   });
 // ...
-// Route to get friend requests for a specific user
+// Route to get friend requests for a specific user with id
 app.get('/friendRequests/:userId', async (req, res) => {
     const userId = req.params.userId;
   
