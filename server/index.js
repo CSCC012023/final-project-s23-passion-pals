@@ -112,14 +112,19 @@ app.post("/signup", async (req, res) => {
 
 
 
-// Route to get all users
+// Route to get all users inclduing current user
+
 app.get('/users', async (req, res) => {
   try {
     const users = await UserModel.find(); // Retrieve all users from the UserModel
 
     res.json(users); // Respond with the retrieved users
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });       
+
+
+
+    
   }
 });
 
