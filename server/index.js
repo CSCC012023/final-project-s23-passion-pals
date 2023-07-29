@@ -209,6 +209,7 @@ app.get('/checkFriendStatus/:userId/:friendId', async (req, res) => {
   
       res.json({ success: true, message: 'Friend request declined successfully' });
     } catch (error) {
+        
       res.status(500).json({ error: 'Internal server error' });
     }
   });
