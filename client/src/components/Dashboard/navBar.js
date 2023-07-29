@@ -22,7 +22,7 @@ export default function Navbar() {
                 </li>
                 <li>
                     {/* Find Events link */}
-                    <Link to="/eventCard" className='link-style'>Find Events</Link>
+                    <Link to="/findEvent" className='link-style'>Find Events</Link>
                 </li>
                 <li>
                     {/* Logout link */}
