@@ -98,7 +98,7 @@ export default function FindEvent() {
     }
   }, []);
 
-  
+
 
   // Handle filters
   const handleFilters = (selectedFilters, category) => {
@@ -129,41 +129,32 @@ export default function FindEvent() {
       });
   };
 
-// Listen for spotUpdate event
-useEffect(() => {
-  socket.on('spotUpdate', ({ eventId, spots }) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) => {
-        if (event._id === eventId) {
-          return { ...event, spots };
-        }
-        return event;
-      })
-    );
-  });
+  // Listen for spotUpdate event
+  useEffect(() => {
+    socket.on('spotUpdate', ({ eventId, spots }) => {
+      setEvents((prevEvents) =>
+        prevEvents.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, spots };
+          }
+          return event;
+        })
+      );
+    });
 
-  // Clean up the socket connection
-  return () => {
-    socket.off('spotUpdate');
-  };
-}, []);
+    // Clean up the socket connection
+    return () => {
+      socket.off('spotUpdate');
+    };
+  }, []);
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
-    if (!isUserLocationFilterOn) {
-      // Filter events based on user's preferred locations when the toggle is turned on
-      filterEventsByUserLocation();
-    } else {
-      // Show all events when the toggle is turned off
-      setFilteredData(events);
-      setTotalPages(Math.ceil(events.length / itemsPerPage));
-      setCurrentPage(0);
-    }
   };
 
-  const filterEventsByUserLocation = () => {
-    if (preferredLocations) {
+  useEffect(() => {
+    if (preferredLocations && isUserLocationFilterOn) {
       // Parse the user's preferred locations from local storage
       const locationObjects = preferredLocations.map(location => {
         const parts = location.split(', ');
@@ -204,35 +195,42 @@ useEffect(() => {
       setFilteredData(filteredData);
       setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
       setCurrentPage(0);
+    } else {
+      // Show all events when the toggle is turned off
+      setFilteredData(events);
+      setTotalPages(Math.ceil(events.length / itemsPerPage));
+      setCurrentPage(0);
+    }
+  }, [isUserLocationFilterOn, enrolledEvents]);
+
+  // Enroll or unenroll from an event
+  const handleEnroll = (eventId) => {
+    if (enrolledEvents.includes(eventId)) {
+      // Unenroll from the event
+      axios
+        .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
+        .then(() => {
+          setEnrolledEvents(prevEnrolledEvents =>
+            prevEnrolledEvents.filter(id => id !== eventId)
+          );
+          localStorage.setItem('currentPage', currentPage);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      // Enroll in the event
+      axios
+        .post(`http://localhost:5000/enroll/${eventId}`, { userId })
+        .then(() => {
+          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
+          localStorage.setItem('currentPage', currentPage);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
-
- // Enroll or unenroll from an event
- const handleEnroll = (eventId) => {
-  if (enrolledEvents.includes(eventId)) {
-    // Unenroll from the event
-    axios
-      .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-      .then(() => {
-        setEnrolledEvents(prevEnrolledEvents =>
-          prevEnrolledEvents.filter(id => id !== eventId)
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  } else {
-    // Enroll in the event
-    axios
-      .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-      .then(() => {
-        setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-};
 
 
 
