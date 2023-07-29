@@ -67,13 +67,16 @@ const FriendList = () => {
           <ul id="users_ul">
             {data.map((item, index) => {
               const { fname, lname, email, _id } = item;
+              
               const fullName = `${fname} ${lname}`;
 
               return (
                 <li key={index}>
                   <div className="name">{fullName}</div>
                   <div className="email">{email}</div>
+
                   <div className="button-container">
+
                     <button onClick={() => handleAcceptRequest(_id)}>Accept</button>
                     <button onClick={() => handleDeclineRequest(_id)}>Decline</button>
                   </div>
