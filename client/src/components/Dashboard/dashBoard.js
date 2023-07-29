@@ -140,7 +140,7 @@ export default function Dashboard() {
         );
       });
 
-      // Filter user's own events and events they have enrolled in
+      // Filter user's own events and events they have enrolled inr
       const userFiltered = themeFiltered.filter((event) => {
         return event.eventCreator !== userEmail && !enrolledEvents.includes(event._id);
       });
@@ -159,6 +159,7 @@ export default function Dashboard() {
             prevEnrolledEvents.filter((id) => id !== eventId)
           );
         })
+
         .catch((error) => {
           console.log(error);
         });
