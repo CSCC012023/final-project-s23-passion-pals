@@ -74,6 +74,8 @@ app.post("/", async (req, res) => {
 
 
 
+
+//api call  for backend signup
 app.post("/signup", async (req, res) => {
   const { email, password, fname, lname } = req.body;
 
@@ -81,6 +83,12 @@ app.post("/signup", async (req, res) => {
   if (!password || !email || !fname || !lname) {
     return res.json("emptyPassword");
   }
+  //moch verification
+
+
+    // Check if the email is in the correct format
+
+
   else if (!email.includes("@gmail.com")) {
     return res.json("wrongFormat")
   }
@@ -124,7 +132,7 @@ app.get('/users', async (req, res) => {
 
 
 
-    
+
   }
 });
 
