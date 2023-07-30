@@ -13,7 +13,6 @@ export default function FindEvent() {
     const storedPage = localStorage.getItem('currentPage');
     return storedPage ? parseInt(storedPage) : 0; // get stored page or default to 0
   });
-  const [resetPage, setResetPage] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 3; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
@@ -25,6 +24,7 @@ export default function FindEvent() {
   const [filteredData, setFilteredData] = useState([]);
   const [preferredLocations, setPreferredLocations] = useState([]);
   const [userEmail, setEmail] = useState('');
+  const [isFilterChange, setIsFilterChange] = useState(false);
 
   // Save current page to local storage
   useEffect(() => {
@@ -94,7 +94,9 @@ export default function FindEvent() {
     setFilteredData(filteredData);
     setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
     // Update the 'filteredData' state based on the search query
-    setCurrentPage(0); // Reset the current page to the first page when the search query changes
+    if (query.length > 0) {
+      setIsFilterChange(true);
+    }
   }, [events, query]);
 
   const userId = localStorage.getItem('userId');
@@ -113,6 +115,7 @@ export default function FindEvent() {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
     setFilters(newFilters);
+    setIsFilterChange(true);
     localStorage.setItem('filters', JSON.stringify(newFilters));
   };
 
@@ -161,6 +164,7 @@ export default function FindEvent() {
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
+    setIsFilterChange(true);
   };
 
   useEffect(() => {
@@ -204,13 +208,11 @@ export default function FindEvent() {
 
       setFilteredData(filteredData);
       setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-      setCurrentPage(0);
       setQuery('');
     } else {
       // Show all events when the toggle is turned off
       setFilteredData(events);
       setTotalPages(Math.ceil(events.length / itemsPerPage));
-      setCurrentPage(0);
       setQuery('');
     }
   }, [isUserLocationFilterOn, events]);
@@ -241,6 +243,13 @@ export default function FindEvent() {
         });
     }
   };
+
+  useEffect(() => {
+    if (isFilterChange) {
+      setCurrentPage(0);
+      setIsFilterChange(false);
+    }
+  }, [isFilterChange]);
 
 
 
