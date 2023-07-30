@@ -44,6 +44,8 @@ function Signup() {
         } else if (response.data.status === "notexist") {
           const userId = response.data.userId;
           localStorage.setItem("userId", userId);
+          localStorage.setItem("loggedIn", true);
+
           signInHistory("/pfp", { state: { id: userId } });
         } else if (response.data === "emptyPassword") {
           alert("Email and password cannot be empty");
@@ -70,6 +72,7 @@ function Signup() {
         if (response.data.status === "exist") {
           const userId = response.data.userId;
           localStorage.setItem("userId", userId);
+          localStorage.setItem("loggedIn", true);
           console.log(localStorage);
           loginHistory("/dash", { state: { id: userId } });
         } else if (response.data === "notexist") {

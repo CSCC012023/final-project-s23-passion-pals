@@ -13,28 +13,28 @@ export default function Messenger() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [chatMembers, setChatMembers] = useState([]);
   const socket = useRef();
-  const user = localStorage.getItem('userId');
+  const user = JSON.parse(localStorage.getItem('userID'));
 
   const scrollRef = useRef();
 
-  useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.on("getMessage", (data) => {
-      setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
-        createdAt: Date.now(),
-      });
-    });
-  }, []);
 
   useEffect(() => {
-    arrivalMessage &&
-      currentChat?.members.includes(arrivalMessage.sender) &&
-      setMessages((prev) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentChat]);
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", async (data) => {
+      const senderInfo = await fetchSenderInfo(data.senderId);
+      if (senderInfo) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: data.senderId,
+            text: data.text,
+            createdAt: Date.now(),
+          },
+        ]);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     socket.current.emit("addUser", user);
@@ -45,7 +45,7 @@ export default function Messenger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await axios.get("/conversations/" + user);
+        const res = await axios.get("/conversations/" + user._id);
         setConversations(res.data);
       } catch (err) {
         console.log(err);
@@ -54,24 +54,6 @@ export default function Messenger() {
     getConversations();
   }, [user]);
 
-  const handleSelectConversation = async (conversation) => {
-    setCurrentChat(conversation);
-
-    try {
-      const res = await axios.get(`/messages/${conversation._id}`);
-      setMessages(res.data);
-
-      const memberPromises = conversation.members.map(async (memberId) => {
-        const res = await axios.get(`http://localhost:5000/getUsers/${memberId}`);
-        return res.data;
-      });
-
-      const memberUsers = await Promise.all(memberPromises);
-      setChatMembers(memberUsers);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,7 +87,7 @@ export default function Messenger() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, currentChat]);
+  }, [messages]);
 
   return (
     <>
@@ -114,7 +96,7 @@ export default function Messenger() {
           <div className='chatMenuWrapper'>
             <h2>Conversations</h2>
             {conversations.map((c) => (
-              <div key={c._id} onClick={() => handleSelectConversation(c)}>
+              <div key={c._id} onClick={() => setCurrentChat(c)}>
                 <Conversation conversation={c} currentUser={user} />
               </div>
             ))}
@@ -125,26 +107,18 @@ export default function Messenger() {
             {currentChat ? (
               <>
                 <div className="chatBoxTop">
-                  {messages.map((m) => {
-                    const member = chatMembers.find((member) => member._id === m.sender);
-                    const profilePic = member?.profilePic || img1;
-                    const firstName = member?.fname || 'Unknown';
-                    const lastName = member?.lname || '';
-
-                    return (
-                      <div key={m._id}>
-                        <Message
-                          message={m}
-                          own={m.sender === user}
-                          profilePic={profilePic}
-                          firstName={firstName}
-                          lastName={lastName}
-                          conversation={currentChat}
-                        />
-                      </div>
-                    );
-                  })}
-                  <div ref={scrollRef} />
+                  {messages.map((m) => (
+                    <div ref={scrollRef} key={m._id}>
+                      <Message
+                        message={m}
+                        own={m.sender === user}
+                        profilePic={profilePics[m.sender]}
+                        //firstName={m.senderInfo?.fname}
+                        //lastName={m.senderInfo?.lname}
+                        //conversation={currentChat} 
+                      />
+                    </div>
+                  ))}
                 </div>
                 <div className='chatBoxBottom'>
                   <div className="chatInputWrapper">

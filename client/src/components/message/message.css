@@ -5,6 +5,10 @@
     
 }
 
+.messageUsername{
+    display: flex;
+}
+
 .messageTop{
     display: flex;
 }
@@ -21,7 +25,7 @@
     padding: 10px;
     border-radius: 20px;
     background-color: rgb(245, 241, 241);
-    color: black;
+    color: black !important;
     max-width: 400px;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -38,5 +42,11 @@
 
 .message.own .messageText{
     background-color: #1877f2;
-    color: white;
+    color: white !important;
 }
+
+.messageUsername{
+    color: gray !important;
+    font-size: small;
+}
+
