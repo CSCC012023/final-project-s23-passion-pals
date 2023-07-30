@@ -23,6 +23,8 @@ export default function FindEvent() {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [preferredLocations, setPreferredLocations] = useState([]);
+  const [userEmail, setEmail] = useState('');
+  const [isFilterChange, setIsFilterChange] = useState(false);
 
   // Save current page to local storage
   useEffect(() => {
@@ -39,13 +41,35 @@ export default function FindEvent() {
 
   const socket = io('http://localhost:5000');
 
+  // Get all events that the user is enrolled in
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then(response => {
+        const user = response.data;
+        if (user) {
+          setEnrolledEvents(user.enrolledEvents);
+          setPreferredLocations(user.locations);
+          setEmail(user.email);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   // Get all events
   useEffect(() => {
     axios
       .get('http://localhost:5000/events')
       .then(response => {
         setEvents(response.data);
-        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+        const filtered = events.filter((event) => {
+          return (event.eventCreator !== userEmail)
+        });
+        setEvents(filtered);
+        console.log(enrolledEvents);
+        setTotalPages(Math.ceil(events.length / itemsPerPage));
       })
       .catch(error => {
         console.log(error);
@@ -70,26 +94,12 @@ export default function FindEvent() {
     setFilteredData(filteredData);
     setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
     // Update the 'filteredData' state based on the search query
-    setCurrentPage(0); // Reset the current page to the first page when the search query changes
+    if (query.length > 0) {
+      setIsFilterChange(true);
+    }
   }, [events, query]);
 
   const userId = localStorage.getItem('userId');
-
-  // Get all events that the user is enrolled in
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/getUsers/${userId}`)
-      .then(response => {
-        const user = response.data;
-        if (user) {
-          setEnrolledEvents(user.enrolledEvents);
-          setPreferredLocations(user.locations);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
 
   useEffect(() => {
     const storedFilters = localStorage.getItem('filters');
@@ -105,6 +115,7 @@ export default function FindEvent() {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
     setFilters(newFilters);
+    setIsFilterChange(true);
     localStorage.setItem('filters', JSON.stringify(newFilters));
   };
 
@@ -123,6 +134,7 @@ export default function FindEvent() {
       .get('http://localhost:5000/events', { params })
       .then(response => {
         setEvents(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.log(error);
@@ -147,10 +159,12 @@ export default function FindEvent() {
       socket.off('spotUpdate');
     };
   }, []);
+
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
+    setIsFilterChange(true);
   };
 
   useEffect(() => {
@@ -194,14 +208,14 @@ export default function FindEvent() {
 
       setFilteredData(filteredData);
       setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-      setCurrentPage(0);
+      setQuery('');
     } else {
       // Show all events when the toggle is turned off
       setFilteredData(events);
       setTotalPages(Math.ceil(events.length / itemsPerPage));
-      setCurrentPage(0);
+      setQuery('');
     }
-  }, [isUserLocationFilterOn, enrolledEvents]);
+  }, [isUserLocationFilterOn, events]);
 
   // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
@@ -213,7 +227,6 @@ export default function FindEvent() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
-          localStorage.setItem('currentPage', currentPage);
         })
         .catch(error => {
           console.log(error);
@@ -224,13 +237,19 @@ export default function FindEvent() {
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-          localStorage.setItem('currentPage', currentPage);
         })
         .catch(error => {
           console.log(error);
         });
     }
   };
+
+  useEffect(() => {
+    if (isFilterChange) {
+      setCurrentPage(0);
+      setIsFilterChange(false);
+    }
+  }, [isFilterChange]);
 
 
 
