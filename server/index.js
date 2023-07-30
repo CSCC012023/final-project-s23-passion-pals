@@ -11,6 +11,7 @@ import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
 
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -62,7 +63,7 @@ app.post("/", async (req, res) => {
     const user = await UserModel.findOne({ email, password });
 
     if (user) {
-      res.json({ status: "exist", userId: user._id });
+      res.json({ status: "exist", userId: user._id});
     } else {
       res.json("notexist");
     }
@@ -71,8 +72,6 @@ app.post("/", async (req, res) => {
   }
 });
     
-
-
 
 app.post("/signup", async (req, res) => {
   const { email, password, fname, lname } = req.body;
