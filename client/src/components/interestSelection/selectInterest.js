@@ -39,7 +39,7 @@ const SelectInterest = () => {
   
       // Add a delay of 600ms before navigating to "/dash"
       setTimeout(() => {
-        history("/dash", { state: { id: userId } });
+        history("/loading", { state: { id: userId } });
       }, 600);
     };
 
