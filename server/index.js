@@ -10,7 +10,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
-
+import ConversationModel from './models/Conversation.js';
 //backend for the project 
 const app = express();
 const server = http.createServer(app);
@@ -688,6 +688,71 @@ app.get('/getUserId', (req, res) => {
 
   res.json({ userId });
 });
+
+
+
+app.post('/createConversation', async (req, res) => {
+    const conversationData = req.body;
+  
+    try {
+      const newConversation = await ConversationModel.create(conversationData);
+      res.json(newConversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to create conversation' });
+    }
+  });
+
+  app.get('/findConversationByEvent/:eventName', async (req, res) => {
+    const eventName = req.params.eventName;
+  
+    if (!eventName) {
+      return res.status(400).json({ error: 'Event name is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ event: eventName });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+  app.put('/updateConversation/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    const updatedConversation = req.body;
+  
+    try {
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        updatedConversation,
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+
+
+
+
+
 
 app.listen(5500, () => {
   console.log("Server is running");
