@@ -15,7 +15,7 @@ import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
 
-
+import Loading from "./components/Dashboard/LoadingPage";
 
 const App = () => {
   const isLoggedIn = localStorage.getItem("loggedIn") === "true";
@@ -26,6 +26,7 @@ const App = () => {
     location.pathname === "/" ||
     location.pathname === "/select" ||
     location.pathname === "/selectEdit" ||
+    location.pathname === "/loading" ||
     location.pathname === "/friend";
 
   const PrivateRoute = ({ element, path }) => {
@@ -88,6 +89,10 @@ const App = () => {
         <Route
           path="/messenger"
           element={<PrivateRoute element={<Messenger />} path="/messenger" />}
+        />
+        <Route
+          path="/loading"
+          element={<PrivateRoute element={<Loading />} path="/loading" />}
         />
         <Route
           path="/request"
