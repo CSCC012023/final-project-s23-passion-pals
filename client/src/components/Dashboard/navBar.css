@@ -34,6 +34,8 @@
     color: inherit;
     text-decoration: none;
     height: 100%;
+
+    /* Styling for the anchor link when hovered */
     display: flex;
     align-items: center;
     padding: .25rem;

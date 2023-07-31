@@ -13,6 +13,9 @@ import FindEvent from "./components/EventCard/findEvent";
 import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
+import Request from './components/Friend/request';
+
+
 
 const App = () => {
   const isLoggedIn = localStorage.getItem("loggedIn") === "true";
@@ -37,7 +40,7 @@ const App = () => {
     <div>
       {!exclude && <Navbar />}
       <Routes>
-      <Route
+        <Route
           path="/"
           element={<PrivateRoute element={<Signup />} path="/" />}
         />
@@ -85,6 +88,10 @@ const App = () => {
         <Route
           path="/messenger"
           element={<PrivateRoute element={<Messenger />} path="/messenger" />}
+        />
+        <Route
+          path="/request"
+          element={<PrivateRoute element={<Request />} path="/request" />}
         />
       </Routes>
     </div>
