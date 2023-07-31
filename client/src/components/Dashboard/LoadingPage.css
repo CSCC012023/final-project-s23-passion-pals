@@ -1,13 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .loading-page {
+    
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     background-color: #3F485B; /* Add the background color you want here */
   }
-  
+  /* positioning the ocntainer */
   .loading-container {
     position: relative;
     top: 50%;
