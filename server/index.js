@@ -10,7 +10,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
-
+import ConversationModel from './models/Conversation.js';
 //backend for the project 
 const app = express();
 const server = http.createServer(app);
@@ -688,6 +688,24 @@ app.get('/getUserId', (req, res) => {
 
   res.json({ userId });
 });
+
+
+
+app.post('/createConversation', async (req, res) => {
+    const conversationData = req.body;
+  
+    try {
+      const newConversation = await ConversationModel.create(conversationData);
+      res.json(newConversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to create conversation' });
+    }
+  });
+
+
+
+
 
 app.listen(5500, () => {
   console.log("Server is running");
