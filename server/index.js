@@ -65,7 +65,7 @@ app.post("/", async (req, res) => {
     const user = await UserModel.findOne({ email, password });
 
     if (user) {
-      res.json({ status: "exist", userId: user._id });
+      res.json({ status: "exist", userId: user._id});
     } else {
       res.json("notexist");
     }
@@ -74,8 +74,6 @@ app.post("/", async (req, res) => {
   }
 });
     
-
-
 
 
 //api call  for backend signup

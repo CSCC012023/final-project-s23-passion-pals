@@ -20,10 +20,8 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  
-  console.log("a user connected.");
+  console.log("A user connected.");
 
-  
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
     io.emit("getUsers", users);
@@ -35,17 +33,17 @@ io.on("connection", (socket) => {
       io.to(user.socketId).emit("getMessage", {
         senderId,
         text,
+        
       });
     } else {
-
       console.log(`User with userId ${receiverId} not found.`);
-     
     }
   });
-  
+
+ 
 
   socket.on("disconnect", () => {
-    console.log("a user disconnected!");
+    console.log("A user disconnected!");
     removeUser(socket.id);
     io.emit("getUsers", users);
   });
