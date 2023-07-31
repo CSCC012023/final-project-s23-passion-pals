@@ -703,6 +703,53 @@ app.post('/createConversation', async (req, res) => {
     }
   });
 
+  app.get('/findConversationByEvent/:eventName', async (req, res) => {
+    const eventName = req.params.eventName;
+  
+    if (!eventName) {
+      return res.status(400).json({ error: 'Event name is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ event: eventName });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+  app.put('/updateConversation/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    const updatedConversation = req.body;
+  
+    try {
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        updatedConversation,
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+
+
 
 
 
