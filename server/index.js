@@ -78,10 +78,10 @@ app.post("/", async (req, res) => {
 
 //api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, fname, lname } = req.body;
+  const { email, password, phoneNumber, fname, lname } = req.body;
 
   // Check if the password is empty
-  if (!password || !email || !fname || !lname) {
+  if (!password || !email || !phoneNumber || !fname || !lname) {
     return res.json("emptyPassword");
   }
   //moch verification
@@ -97,6 +97,7 @@ app.post("/signup", async (req, res) => {
   const data = {
     email: email,
     password: password,
+    phoneNumber: phoneNumber,
     fname: fname,
     lname: lname
   };
@@ -460,12 +461,12 @@ app.put('/users/:userId', (req, res) => {
   }
 
 
-  const { fname, lname, email } = req.body;
+  const { fname, lname, email, phoneNumber } = req.body;
 
 
   UserModel.findByIdAndUpdate(
     userId,
-    { fname, lname, email },
+    { fname, lname, email, phoneNumber },
     { new: true }
   )
     .then(updatedUser => {
