@@ -7,6 +7,7 @@ function UpdateProfile() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [selectedProfilePic, setSelectedProfilePic] = useState(null);
     const navigate = useNavigate();
   
@@ -20,6 +21,7 @@ function UpdateProfile() {
           setFirstName(user.fname); // Set the initial first name value
           setLastName(user.lname); // Set the initial last name value
           setEmail(user.email); // Set the initial email value
+          setPhoneNumber(user.phoneNumber); // Set the initial phone number value
         })
         .catch((error) => {
           console.log(error);
@@ -44,6 +46,7 @@ function UpdateProfile() {
           fname: firstName,
           lname: lastName,
           email: email,
+          phoneNumber: phoneNumber,
         });
   
         console.log('Profile updated successfully');
@@ -91,6 +94,16 @@ function UpdateProfile() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Phone Number:</label>
+          <input
+            type="text"
+            className="form-input"
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>
         <div className="form-group">
