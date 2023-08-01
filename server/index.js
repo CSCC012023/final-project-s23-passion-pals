@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import twilio from 'twilio';
 import multer from 'multer'; // Import multer
 import postRoutes from './routes/posts.js';
 import UserModel from './models/Users.js';
@@ -10,6 +11,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
+
 
 //backend for the project 
 const app = express();
@@ -590,6 +592,13 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
 });
 
 
+// Twillo Credentials
+const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
+const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
+const twilioPhoneNumber = '+16672305883';
+// Create a Twilio client
+const twilioClient = twilio(accountSid, authToken);
+
 app.post('/enroll/:eventId', async (req, res) => {
 
   const eventId = req.params.eventId;
@@ -618,33 +627,23 @@ app.post('/enroll/:eventId', async (req, res) => {
     /* Use sockets to update all other clients */
     io.emit('spotUpdate', { eventId, spots: event.spots});
 
+    const eventCreatorPhoneNumber = event.creatorPhoneNum;
+    const creatorName = event.name;
+    const smsMessage = `Hi ${creatorName}, someone has joined your event ${event.name}!`;
+
+    // Use Twilio API to send SMS
+    await twilioClient.messages.create({
+      to: eventCreatorPhoneNumber,
+      from: twilioPhoneNumber,
+      body: smsMessage,
+    });
+
     res.json(event);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-/* Update user enrolledEvents */
-/*
-UserModel.findByIdAndUpdate(
-  userId,
-  { $addToSet: { enrolledEvents: event._id } },
-  { new: true }
-)
-  .then(updatedUser => {
-    if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(event);
-  })
-  .catch(err => {
-    res.status(500).json({ error: 'Internal server error' });
-  });
-})
-.catch(err => {
-res.status(500).json({ error: 'Internal server error' });
-});
-*/
 
 app.post('/unenroll/:eventId', async (req, res) => {
   const eventId = req.params.eventId;

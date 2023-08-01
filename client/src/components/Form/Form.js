@@ -89,6 +89,7 @@ const Form = () => {
       const eventPostData = {
         ...postData,
         eventCreator: user.email,
+        creatorPhoneNum: user.phoneNumber,
       };
 
       // Dispatch the createPost action with the updated postData
