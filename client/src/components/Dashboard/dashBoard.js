@@ -3,40 +3,39 @@ import axios from 'axios';
 import PopupNotification from './PopupNotification'; // Import the PopupNotification component
 import './dashBoard.css';
 import EventCard from '../EventCard/eventCard';
-import { theme } from 'antd';
 
 /**
  * Dashboard component displays user information and events.
  */
 export default function Dashboard() {
-    const [user, setUser] = useState(null);
-    const userId = localStorage.getItem('userId');
-    const [enrolledEvents, setEnrolledEvents] = useState([]);
-    const [events, setEvents] = useState([]);
-    const [allEvents, setAllEvents] = useState([]);
-    const [recommendedEvents, setRecommended] = useState([]);
-    const [preferredLocations, setPreferredLocations] = useState([]);
-    const [themes, setThemes] = useState([]);
-    const [userEmail, setEmail] = useState('');
-    const [showNotification, setShowNotification] = useState(false); // Initially set to false
-  
-    // Fetch user data and other data using useEffect hooks as before
-  
-    useEffect(() => {
-      // Fetch user data from the server based on the user ID.
-      axios
-        .get(`http://localhost:5000/getUsers/${userId}`)
-        .then((response) => {
-          setUser(response.data);
-          // Check if the user's request list is not empty and set showNotification accordingly
-          if (response.data.request && response.data.request.length > 0) {
-            setShowNotification(true);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, [userId]);
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem('userId');
+  const [enrolledEvents, setEnrolledEvents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
+  const [recommendedEvents, setRecommended] = useState([]);
+  const [preferredLocations, setPreferredLocations] = useState([]);
+  const [themes, setThemes] = useState([]);
+  const [userEmail, setEmail] = useState('');
+  const [showNotification, setShowNotification] = useState(false); // Initially set to false
+
+  // Fetch user data and other data using useEffect hooks as before
+
+  useEffect(() => {
+    // Fetch user data from the server based on the user ID.
+    axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+        // Check if the user's request list is not empty and set showNotification accordingly
+        if (response.data.request && response.data.request.length > 0) {
+          setShowNotification(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
 
   /**
    * Fetches user data from the server based on the user ID.
@@ -123,11 +122,11 @@ export default function Dashboard() {
           return (
             event.eventCountry &&
             event.eventCountry.toLowerCase() ===
-              locationObject.eventCountry.toLowerCase() &&
+            locationObject.eventCountry.toLowerCase() &&
             event.eventRegion.toLowerCase() ===
-              locationObject.eventRegion.toLowerCase() &&
+            locationObject.eventRegion.toLowerCase() &&
             event.eventCity.toLowerCase() ===
-              locationObject.eventCity.toLowerCase()
+            locationObject.eventCity.toLowerCase()
           );
         });
       });

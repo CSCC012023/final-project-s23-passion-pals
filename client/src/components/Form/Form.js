@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
-import { Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+
 import {
   Button,
   Typography,
-  Paper,
   Container,
   FormControl,
   FormControlLabel,

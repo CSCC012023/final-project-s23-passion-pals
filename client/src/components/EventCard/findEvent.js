@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-import { State } from "country-state-city";
 import CheckBox from '../checkbox';
 import EventCard from './eventCard';
 import './findEvent.css';
@@ -23,13 +22,13 @@ export default function FindEvent() {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [preferredLocations, setPreferredLocations] = useState([]);
-  const [userEmail, setEmail] = useState('');
   const [isFilterChange, setIsFilterChange] = useState(false);
 
   // Save current page to local storage
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       localStorage.setItem('currentPage', currentPage);
+      console.log(localStorage.getItem('currentPage'))
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -50,7 +49,6 @@ export default function FindEvent() {
         if (user) {
           setEnrolledEvents(user.enrolledEvents);
           setPreferredLocations(user.locations);
-          setEmail(user.email);
         }
       })
       .catch(error => {
@@ -65,10 +63,9 @@ export default function FindEvent() {
       .then(response => {
         setEvents(response.data);
         const filtered = events.filter((event) => {
-          return (event.eventCreator !== userEmail)
+          return (event.eventCreator !== localStorage.getItem('email'))
         });
         setEvents(filtered);
-        console.log(enrolledEvents);
         setTotalPages(Math.ceil(events.length / itemsPerPage));
       })
       .catch(error => {
@@ -133,8 +130,10 @@ export default function FindEvent() {
     axios
       .get('http://localhost:5000/events', { params })
       .then(response => {
-        setEvents(response.data);
-        console.log(response.data);
+        const filtered = response.data.filter((event) => {
+          return (event.eventCreator !== localStorage.getItem('email'))
+        });
+        setEvents(filtered);
       })
       .catch(error => {
         console.log(error);
@@ -260,6 +259,7 @@ export default function FindEvent() {
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
+    localStorage.setItem('currentPage', selectedPage);
   };
 
 
