@@ -629,7 +629,7 @@ app.post('/enroll/:eventId', async (req, res) => {
 
     const eventCreatorPhoneNumber = event.creatorPhoneNum;
     const creatorName = event.name;
-    const smsMessage = `Hi ${creatorName}, someone has joined your event ${event.name}!`;
+    const smsMessage = `Hi ${creatorName}, someone has joined your event: ${event.eventName}!`;
 
     // Use Twilio API to send SMS
     await twilioClient.messages.create({
