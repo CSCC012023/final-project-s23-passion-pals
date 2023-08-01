@@ -12,6 +12,12 @@ import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
 
+// Twillo Credentials
+const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
+const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
+const twilioPhoneNumber = '+16672305883';
+// Create a Twilio client
+const twilioClient = twilio(accountSid, authToken);
 
 //backend for the project 
 const app = express();
@@ -291,11 +297,24 @@ app.post('/addFriendRequest/:userId', async (req, res) => {
       // Find the user who is receiving the friend request
 
       const recipientUser = await UserModel.findById(userId);
+      const senderUser = await UserModel.findById(senderId);
   
       // Check if the user is already in the request list (to avoid duplicates)
       if (!recipientUser.request.includes(senderId)) {
         recipientUser.request.push(senderId);
         await recipientUser.save();
+
+        const recipientPhoneNumber = recipientUser.phoneNumber;
+        const senderName = senderUser.fname;
+        const recipientName = recipientUser.fname;
+        const smsMessage = `Hi ${recipientName}, you've got a new friend request from ${senderName}! 🤝 Accept the request to connect and start sharing memories together!`;
+
+        // Use Twilio API to send SMS
+        await twilioClient.messages.create({
+          to: recipientPhoneNumber,
+          from: twilioPhoneNumber,
+          body: smsMessage,
+        });
   
         res.status(200).json({ success: true });
       } else {
@@ -591,13 +610,6 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
   }
 });
 
-
-// Twillo Credentials
-const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
-const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
-const twilioPhoneNumber = '+16672305883';
-// Create a Twilio client
-const twilioClient = twilio(accountSid, authToken);
 
 app.post('/enroll/:eventId', async (req, res) => {
 
