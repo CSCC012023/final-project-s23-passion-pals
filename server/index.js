@@ -803,6 +803,35 @@ app.put('/updateConversationMembers/:conversationId', async (req, res) => {
 
 
 
+
+
+
+
+
+// Endpoint to check if a valid conversation exists between the current user and the user to add
+app.get('/checkValidConversation/:currentUserId/:userIdToAdd', async (req, res) => {
+    const currentUserId = req.params.currentUserId;
+    const userIdToAdd = req.params.userIdToAdd;
+  
+    try {
+      // Perform a database query to check if a valid conversation exists
+      const conversation = await ConversationModel.findOne({
+        members: { $all: [currentUserId, userIdToAdd] },
+        eventId: { $exists: false },
+      });
+  
+      // Return the result of the query to the front-end
+      res.json({ hasValidConversation: conversation !== null });
+    } catch (error) {
+      console.error('Error checking conversation:', error);
+      res.status(500).json({ error: 'Error checking conversation' });
+    }
+  });
+  
+
+
+
+
 app.listen(5500, () => {
   console.log("Server is running");
 });
