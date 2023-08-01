@@ -84,10 +84,20 @@ const Form = () => {
 
     // Check if user state is available (user data is fetched)
     if (user) {
+    // Use user.email as the eventCreator in postData
+    const eventPostData = {
+        ...postData,
+        eventCreator: user.email,
+        };
+
+        // Dispatch the createPost action with the updated postData
+    const createdPostData = await dispatch(createPost(eventPostData));
+    const postId = createdPostData._id;
       // Create the conversation object to be posted
       const conversationObject = {
         members: [userId], // Add the current user's ID to the members array
         event: postData.eventName, // Set the event name as the "event" field
+        eventId: postId,
       };
 
       try {
@@ -95,14 +105,7 @@ const Form = () => {
         const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
         console.log("Conversation created:", response.data);
 
-        // Use user.email as the eventCreator in postData
-        const eventPostData = {
-          ...postData,
-          eventCreator: user.email,
-        };
 
-        // Dispatch the createPost action with the updated postData
-        await dispatch(createPost(eventPostData));
 
         setIsEventCreated(true);
         setPostData({
