@@ -78,7 +78,7 @@ function Signup() {
         localStorage.setItem("loggedIn", true);
         localStorage.setItem("email", emailLogin);
         console.log(localStorage);
-        loginHistory("/dash", { state: { id: userId } });
+        loginHistory("/loading", { state: { id: userId } });
       } else if (response.data === "notexist") {
         alert("Please check your email or password");
       }

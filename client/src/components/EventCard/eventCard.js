@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Popup from './eventPopup';
-
+import axios from 'axios';
 export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll, handleDeleteEvent, handleEditEvent }) {
   const [openPopups, setOpenPopups] = useState({});
   const userId = localStorage.getItem('userId');
@@ -19,6 +19,31 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
     }));
   };
 
+
+  const addUserToConversation = async (eventId) => {
+    try {
+      // Make an API call to find the conversation by event ID
+      const response = await axios.get(`/findConversationByEvent/${event.eventName}`);
+      const conversation = response.data;
+
+      if (conversation) {
+        // If conversation is found, add the user ID to the members array
+        const updatedConversation = {
+          ...conversation,
+          members: [...conversation.members, userId] // Assuming `userId` is the current user's ID
+        };
+
+        // Make another API call to update the conversation with the new members array
+        await axios.put(`/updateConversation/${conversation._id}`, updatedConversation);
+
+        console.log('User added to conversation successfully');
+      } else {
+        console.log('Conversation not found for the event');
+      }
+    } catch (error) {
+      console.log('Error adding user to conversation:', error);
+    }
+  };
 
   return (
     <div key={event._id} className="event-card">
@@ -58,7 +83,12 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
             : (enrolledEvents.includes(event._id) ?
               <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Unenroll</button>
               : (event.spots > 0 ? (
-                <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll} disabled={event.spots <= 0}>Enroll Now</button>
+                <button className="event-body-bottom-text float-right event-button" onClick={() => {
+                  handleEnroll();
+                  addUserToConversation(event._id); // Call the function here after successful enrollment
+                }}
+                  disabled={event.spots <= 0}
+                >Enroll Now</button>
               ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
               )))
           }
