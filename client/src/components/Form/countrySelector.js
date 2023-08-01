@@ -28,7 +28,7 @@ function CountrySelector({ postData, setPostData }) {
             label: country.name,
         }));
         setCountryOptions(options);
-    }, []);
+    }, [setPostData]);
 
     const handleCountryChange = (selectedCountry) => {
         setSelectedCountry(selectedCountry);
