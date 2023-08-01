@@ -9,7 +9,7 @@ const LoadingPage = () => {
     // After 5 seconds, navigate to the dashboard page
     const redirectTimeout = setTimeout(() => {
       navigate("/dash");
-    }, 5000);
+    }, 1000);
 
     // Clean up the timeout when the component unmounts
     return () => clearTimeout(redirectTimeout);
