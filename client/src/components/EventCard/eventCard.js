@@ -54,11 +54,6 @@ export default function EventCard() {
       // Unenroll from the event
       axios
         .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents =>
-            prevEnrolledEvents.filter(id => id !== eventId)
-          );
-        })
         .catch(error => {
           console.log(error);
         });
@@ -66,9 +61,6 @@ export default function EventCard() {
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-        })
         .catch(error => {
           console.log(error);
         });
@@ -126,14 +118,14 @@ useEffect(() => {
   // Listen for waitlistUpdate event
   useEffect(() => {
     socket.on('waitlistUpdate', ({ eventId, waitlist }) => {
-      setEvents((prevEvents) =>
-        prevEvents.map((event) => {
-          if (event._id === eventId) {
-            return { ...event, waitlist };
-          }
-          return event;
-        })
-      );
+      axios
+      .get('http://localhost:5000/events')
+      .then(response => {
+        setEvents(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     });
 
     // Clean up the socket connection
@@ -141,6 +133,23 @@ useEffect(() => {
       socket.off('waitlistUpdate');
     };
   }, []);
+
+  // Listen for enrolledEventsUpdate event
+  useEffect(() => {
+    // Listen for 'enrolledEventsUpdate' event
+    socket.on('enrolledEventsUpdate', handleEnrolledEventsUpdate);
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('enrolledEventsUpdate', handleEnrolledEventsUpdate);
+    };
+  }, []);
+
+  const handleEnrolledEventsUpdate = (data) => {
+    if (data.userId === userId) {
+      setEnrolledEvents(data.enrolledEvents);
+    }
+  };
 
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database

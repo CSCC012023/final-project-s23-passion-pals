@@ -260,14 +260,22 @@ app.post('/enroll/:eventId', async (req, res) => {
       return res.status(404).json({ error: 'Event not found' });
     }
 
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     if (event.spots > 0) {
       // Enroll the user if spots are available
       event.spots--;
       await event.save();
-      await UserModel.findByIdAndUpdate(userId, { $addToSet: { enrolledEvents: event._id } });
+      user.enrolledEvents = user.enrolledEvents.push(eventId);
 
       // Emit socket event to update all other clients
       io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+      
+      console.log("Adding user to event...");
 
       return res.json(event);
     } else if (!event.waitlist.includes(userId)){
@@ -275,12 +283,19 @@ app.post('/enroll/:eventId', async (req, res) => {
       event.waitlist.push(userId);
       await event.save();
       io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+
+      console.log("Adding user to event waitlist...");
+
       return res.json({ message: 'Added to waitlist.' });
     } else {
       // Remove user from waitlist if user is already in waitlist
       event.waitlist = event.waitlist.filter((id) => id !== userId);
+      await EventCardModel.findByIdAndUpdate(eventId, { $pull: { waitlist: userId } });
       await event.save();
       io.emit('waitlistUpdate', { eventId, waitlist: event.waitlist });
+
+      console.log("Deleting user from event waitlist...");
+
       return res.json({ message: 'Removed from waitlist.' });
     }
   } catch (error) {
@@ -327,16 +342,28 @@ app.post('/unenroll/:eventId', async (req, res) => {
         if (!event) {
           return res.status(404).json({ error: 'Event not found' });
         }
+        const user = await UserModel.findById(userId);
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
         // Remove user from event
+        user.enrolledEvents = user.enrolledEvents.filter((id) => id !== eventId);
         await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
+        io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
     
         // Check if there are users in the waitlist
         if (event.waitlist.length > 0) {
-          const nextUser = event.waitlist.shift();
-          
-          await UserModel.findByIdAndUpdate(nextUser, { $addToSet: { enrolledEvents: event._id } });
-          
-          event.waitlist = event.waitlist.filter((id) => id !== userId);
+          const nextUserId = event.waitlist.shift();
+
+          const nextUser = await UserModel.findById(nextUserId);
+          if (!nextUser) {
+            return res.status(404).json({ error: 'Next user not found' });
+          }
+
+          nextUser.enrolledEvents = nextUser.enrolledEvents.push(eventId);
+          console.log("Enrolling from waitlist " + nextUser.fname);
+          io.emit('enrolledEventsUpdate', {userId: nextUserId, enrolledEvents: nextUser.enrolledEvents});
+
           await event.save();
 
           io.emit('spotUpdate', { eventId, spots: event.spots });
