@@ -119,7 +119,6 @@ export default function Profile() {
         <Link to="/myEvents" className="edit-button">
           My Created Events
         </Link>
-
         <br />
         {/* Button to open the modal */}
         <button onClick={() => setIsModalOpen(true)} className='edit-button'>Update Preferred Locations</button>
