@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../Profile/locationModal';
 import './pfp.css';
 import canadaFlag from '../../images/canada-flag.png'; // Import the Canada flag image
+import Interests from '../interestSelection/selectInterest';
 
 const Pfp = () => {
   const [selectedProfilePic, setSelectedProfilePic] = useState(null);
@@ -52,7 +53,7 @@ const Pfp = () => {
       });
 
       // Navigate to the next page (choose interests page) after the profile picture is uploaded
-      history('/select');
+      history('/dash');
     } catch (error) {
       // Handle the error if needed
     }
@@ -93,10 +94,12 @@ const Pfp = () => {
 
   return (
     <div className="pfp-container">
-      <h1 className="pfp-title">Congratulations! You're almost there. Just a few quick steps away from completing your profile setup.</h1>
+      <h1 className="pfp-heading">Congratulations! You're almost there. Just a few quick steps away from completing your profile setup.</h1>
 
       <div className="step-container">
+        <br />
         <h2 className="step-title">STEP 1: Enter your phone number</h2>
+        <br />
         <div className="phone-input-container">
           <img src={canadaFlag} alt="Canada Flag" className="canada-flag" />
           <span className="phone-prefix">+1</span>
@@ -107,26 +110,29 @@ const Pfp = () => {
             required
           />
         </div>
-      </div>
+        <br />
 
-      <div className="step-container">
+    
         <h2 className="step-title">STEP 2: Upload your profile picture</h2>
+        <br />
         <input
           type="file"
           accept="image/*"
           onChange={handleFileChange}
           className="profile-picture-input"
         />
-      </div>
+        <br />
 
-      <div className="step-container">
+    
         <h2 className="step-title">STEP 3: Set your preferred locations</h2>
+        <br />
          {/* Location icon to open the modal */}
         <div className="location-icon" onClick={handleOpenModal}>
           <i className="fa fa-map-marker" aria-hidden="true"></i>
         </div>
-      </div>
 
+        <br />
+    
       {/* Render the modal */}
       <Modal
         isOpen={isModalOpen}
@@ -136,11 +142,16 @@ const Pfp = () => {
         user={user}
       />
 
-      <div className="step-container">
-        <button onClick={handleSubmit} className="submit-button">
-          Go to Step 4
+
+        <h2 className="step-title">STEP 4: Choose your interests</h2>
+        <Interests />
+
+        <br />
+  </div>
+
+      <button onClick={handleSubmit} className="submit-button">
+          Create Account!
         </button>
-      </div>
     </div>
   );
 };
