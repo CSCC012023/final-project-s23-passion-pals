@@ -37,6 +37,9 @@ const FriendList = () => {
         setData((prevData) => prevData.filter((item) => item._id !== userIdToAdd));
         console.log('Friend request accepted:', response.data);
 
+        //remove from senders list
+        const removeSentRequestResponse = await axios.delete(`/removeSentRequest/${userIdToAdd}/${localStorage.getItem('userId')}`);
+        console.log('Sent request removed:', removeSentRequestResponse.data);
         // Get the current user's ID from localStorage
     const currentUserId = localStorage.getItem('userId');
 
@@ -87,6 +90,9 @@ const FriendList = () => {
         // Filter out the declined request ID from the data state
         setData((prevData) => prevData.filter((item) => item._id !== userIdToDecline));
         console.log('Friend request declined:', response.data);
+                //remove from senders list
+                const removeSentRequestResponse = await axios.delete(`/removeSentRequest/${userIdToDecline}/${localStorage.getItem('userId')}`);
+                console.log('Sent request removed:', removeSentRequestResponse.data);
         // Update the UI or any other actions for successful decline
       } else {
         console.log('Error declining friend request:', response.data);
