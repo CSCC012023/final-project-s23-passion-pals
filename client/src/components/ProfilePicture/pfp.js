@@ -63,21 +63,51 @@ const Pfp = () => {
   const updateLocation = async () => {
     try {
       // Make a POST request to the server to add the location
-      await axios.post(`http://localhost:5000/addLocation/${userId}`, {
-        location: selectedLocation,
-      });
-      console.log('Location added successfully');
-      setSelectedLocation(''); // Clear the selected location after adding it
-
+      if (selectedLocation && !user.locations.includes(selectedLocation)) {
+        await axios.post(`http://localhost:5000/addLocation/${userId}`, {
+          location: selectedLocation,
+        });
+        console.log('Location added successfully');
+        setSelectedLocation(''); // Clear the selected location after adding it
+        setUser((prevUser) => ({
+          ...prevUser,
+          locations: [...prevUser.locations, selectedLocation],
+        }));
+      }
       // Update the user's locations after adding a new location
-      setUser((prevUser) => ({
-        ...prevUser,
-        locations: [...prevUser.locations, selectedLocation],
-      }));
     } catch (error) {
       console.error('Error updating location:', error);
     }
   };
+
+  const handleDeleteLocation = async (locationIndex) => {
+    try {
+      // Make a DELETE request to the server to remove the location from the user's profile
+      const response = await axios.delete(`http://localhost:5000/removeLocation/${userId}`, {
+        data: {
+          locationIndex: locationIndex
+        }
+      });
+
+      // Check the response status and update the user's locations if successful
+      if (response.status === 200) {
+        setUser((prevUser) => {
+          const updatedUser = { ...prevUser };
+          updatedUser.locations.splice(locationIndex, 1);
+          return updatedUser;
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // Only call the handleSubmit function when selectedLocation is not empty
+    if (selectedLocation) {
+      updateLocation();
+    }
+  }, [selectedLocation]);
 
   // Function to open the modal
   const handleOpenModal = () => {
@@ -87,9 +117,6 @@ const Pfp = () => {
   // Function to close the modal and update the location
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    if (selectedLocation) {
-      updateLocation();
-    }
   };
 
   return (
@@ -126,7 +153,7 @@ const Pfp = () => {
     
         <h2 className="step-title">STEP 3: Set your preferred locations</h2>
         <br />
-         {/* Location icon to open the modal */}
+        {/* Location icon to open the modal */}
         <div className="location-icon" onClick={handleOpenModal}>
           <i className="fa fa-map-marker" aria-hidden="true"></i>
         </div>
@@ -138,7 +165,7 @@ const Pfp = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={(location) => setSelectedLocation(location)}
-        onDelete={() => {}}
+        onDelete={handleDeleteLocation}
         user={user}
       />
 
