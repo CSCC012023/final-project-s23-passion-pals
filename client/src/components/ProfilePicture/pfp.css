@@ -1,0 +1,126 @@
+/* Pfp.css */
+.pfp-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .pfp-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .step-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .step-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .phone-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  .canada-flag {
+    width: 60px;
+    margin-bottom: 11px;
+  }
+  
+  .phone-prefix {
+    margin-right: 20px;
+  }
+  
+  .phone-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 18px;
+  }
+  
+  .profile-picture-input {
+    margin-top: 10px;
+  }
+  
+  .location-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .location-icon {
+    cursor: pointer;
+    background-color: #2196F3;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 36px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .location-icon:hover {
+    background-color: #1976D2;
+  }
+  
+  .location-icon:active {
+    background-color: #1565C0;
+  }
+
+
+  
+ 
+  
+ 
+  
+  
+  /* Modal styles (add more styles as per your requirements) */
+  .modal {
+    /* Your modal styles here */
+  }
+  
+  .modal-title {
+    /* Your modal title styles here */
+  }
+  
+  .modal-content {
+    /* Your modal content styles here */
+  }
+  
+  .modal-location-item {
+    /* Your modal location item styles here */
+  }
+  
+  .modal-location-delete {
+    /* Your modal location delete button styles here */
+  }
+  

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../Profile/locationModal';
+import './pfp.css';
+import canadaFlag from '../../images/canada-flag.png'; // Import the Canada flag image
 
 const Pfp = () => {
   const [selectedProfilePic, setSelectedProfilePic] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('+1');
   const [user, setUser] = useState(null);
-  const [userLocations, setUserLocations] = useState([]); // Add userLocations state
   const history = useNavigate();
   const userId = localStorage.getItem('userId');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +19,6 @@ const Pfp = () => {
       .get(`http://localhost:5000/getUsers/${userId}`)
       .then((response) => {
         setUser(response.data);
-        setUserLocations(response.data.locations); // Set userLocations from the response
       })
       .catch((error) => {
         console.log(error);
@@ -27,6 +27,12 @@ const Pfp = () => {
 
   const handleFileChange = (event) => {
     setSelectedProfilePic(event.target.files[0]);
+  };
+
+  const handlePhoneNumberChange = (event) => {
+    // Remove non-numeric characters from the input value and add "+1" prefix
+    const phoneNumber = "+1" + event.target.value.replace(/\D/g, '');
+    setPhoneNumber(phoneNumber);
   };
 
   const handleSubmit = async () => {
@@ -63,7 +69,10 @@ const Pfp = () => {
       setSelectedLocation(''); // Clear the selected location after adding it
 
       // Update the user's locations after adding a new location
-      setUserLocations([...userLocations, selectedLocation]);
+      setUser((prevUser) => ({
+        ...prevUser,
+        locations: [...prevUser.locations, selectedLocation],
+      }));
     } catch (error) {
       console.error('Error updating location:', error);
     }
@@ -83,33 +92,40 @@ const Pfp = () => {
   };
 
   return (
-    <div>
-      <h1>You're Almost There!</h1>
-      <h2>Upload a Profile Picture</h2>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+    <div className="pfp-container">
+      <h1 className="pfp-title">Congratulations! You're almost there. Just a few quick steps away from completing your profile setup.</h1>
 
-      <input
-        type="tel"
-        placeholder="Phone Number"
-        onChange={(e) => {
-          const phoneNumber = e.target.value.replace(/\D/g, '');
-          setPhoneNumber(phoneNumber);
-        }}
-        onKeyPress={(e) => {
-          const keyCode = e.keyCode || e.which;
-          const keyValue = String.fromCharCode(keyCode);
-          const numericRegex = /^[0-9]*$/;
-          if (!numericRegex.test(keyValue)) {
-            e.preventDefault();
-          }
-        }}
-        required
-      />
+      <div className="step-container">
+        <h2 className="step-title">STEP 1: Enter your phone number</h2>
+        <div className="phone-input-container">
+          <img src={canadaFlag} alt="Canada Flag" className="canada-flag" />
+          <span className="phone-prefix">+1</span>
+          <input
+            type="tel"
+            className="phone-input"
+            onChange={handlePhoneNumberChange}
+            required
+          />
+        </div>
+      </div>
 
-      {/* Button to open the modal */}
-      <button onClick={handleOpenModal}>
-        Update Preferred Locations
-      </button>
+      <div className="step-container">
+        <h2 className="step-title">STEP 2: Upload your profile picture</h2>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="profile-picture-input"
+        />
+      </div>
+
+      <div className="step-container">
+        <h2 className="step-title">STEP 3: Set your preferred locations</h2>
+         {/* Location icon to open the modal */}
+        <div className="location-icon" onClick={handleOpenModal}>
+          <i className="fa fa-map-marker" aria-hidden="true"></i>
+        </div>
+      </div>
 
       {/* Render the modal */}
       <Modal
@@ -118,13 +134,14 @@ const Pfp = () => {
         onSave={(location) => setSelectedLocation(location)}
         onDelete={() => {}}
         user={user}
-        userLocations={userLocations} // Pass userLocations to the modal
       />
 
-      {/* Submit button */}
-      <button onClick={handleSubmit}>Submit</button>
+      <div className="step-container">
+        <button onClick={handleSubmit} className="submit-button">
+          Go to Step 4
+        </button>
+      </div>
     </div>
   );
 };
-
 export default Pfp;

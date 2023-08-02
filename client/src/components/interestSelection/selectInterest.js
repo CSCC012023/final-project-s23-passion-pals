@@ -497,7 +497,7 @@ const SelectInterest = () => {
 
 
       </fieldset>
-      <button class="bubbly-button" onClick={handleSubmit} >Submit</button>
+      <button class="bubbly-button" onClick={handleSubmit} >Create Profile!</button>
     </div>
   );
 };
