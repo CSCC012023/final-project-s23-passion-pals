@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import './eventCard.css'
 import Popup from './eventPopup';
+import Form from '../Form/Form';
 
+// event is an event object, onEdit is a boolean (if the page should display edit options over enroll), 
+// enrolledEvents is an array of event ids, handleEnroll is a function, handleDeleteEvent is a function, handleEditEvent is a function
 export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll, handleDeleteEvent, handleEditEvent }) {
     const [openPopups, setOpenPopups] = useState({});
+    const [openEditForm, setOpenEditForm] = useState(false);
     const userId = localStorage.getItem('userId');
 
 const handleOpenPopup = (eventId) => {
@@ -53,6 +58,7 @@ const handleOpenPopup = (eventId) => {
               { onEdit ? 
                 <div className="modify-event-buttons">
                     <button className="event-body-bottom-text float-right event-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
+                    
                     <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
                 </div>
                 : (enrolledEvents.includes(event._id) ?

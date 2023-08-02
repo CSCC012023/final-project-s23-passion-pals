@@ -3,11 +3,21 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import CheckBox from '../checkbox';
 import EventCard from '../EventCard/eventCard';
+import Popup from '../EventCard/eventPopup';
+import Form from '../Form/Form';
 
 const MyEvents = () => {
   const [user, setUser] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
   const userId = localStorage.getItem('userId');
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const handleOpenEditForm = (event) => {
+    setSelectedEvent(event);
+    setOpenEditForm(true);
+  };
+
 
   useEffect(() => {
     axios
@@ -44,12 +54,15 @@ const MyEvents = () => {
         console.log(error);
       });
   };
+
   return (
     <div className="event-card-container">
-
       {userEvents.map(event => (
-        <EventCard key={event._id} event={event} handleDeleteEvent={handleDeleteEvent} />
+        <EventCard key={event._id} event={event} onEdit={true} handleDeleteEvent={handleDeleteEvent} handleEditEvent={() => handleOpenEditForm(event)} />
       ))}
+      <Popup isOpen={openEditForm} onClose={() => setOpenEditForm(false)}>
+        <Form event={selectedEvent} />
+      </Popup>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -20,9 +21,11 @@ import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
 import { State } from "country-state-city";
 //intilizing the filds for the databse
-const Form = () => {
+const Form = (eventData) => {
+  console.log('eventData:', eventData);
   const dispatch = useDispatch();
-  const [postData, setPostData] = useState({
+  const navigate = useNavigate();
+  const [postData, setPostData] = useState( {
     name: "",
     eventName: "",
     eventLink: "",
@@ -37,6 +40,26 @@ const Form = () => {
     eventAddress: "",
     spots: null,
   });
+  useEffect(() => {
+    if (eventData) {
+      setPostData({
+        name: eventData.event.name,
+        eventName: eventData.event.eventName,
+        eventLink: eventData.event.eventLink,
+        eventDescription: eventData.event.eventDescription,
+        eventImage: eventData.event.eventImage,
+        themes: eventData.event.themes,
+        eventDate: eventData.event.eventDate,
+        eventPrice: eventData.event.eventPrice,
+        eventCity: eventData.event.eventCity,
+        eventCountry: eventData.event.eventCountry,
+        eventRegion: eventData.event.eventRegion,
+        eventAddress: eventData.event.eventAddress,
+        spots: eventData.event.spots
+      });
+    }
+  }, [eventData]);
+  
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const [isError, setIsError] = useState(false); // State for error handling
   const [user, setUser] = useState(null);
@@ -91,8 +114,18 @@ const Form = () => {
         eventCreator: user.email,
       };
 
-      // Dispatch the createPost action with the updated postData
-      await dispatch(createPost(eventPostData));
+      if (eventData) {
+        try {
+          await axios.patch(`http://localhost:5000/events/${eventData.event._id}`, eventPostData);
+          console.log('updated Data:', eventPostData);
+          navigate('/myEvents');
+        } catch (error) {
+          console.log("Error updating event: ", error);
+        }
+      } else {
+        // Dispatch a create action with the postData
+        await dispatch(createPost(postData));
+      }
 
       setIsEventCreated(true);
       setPostData({
@@ -161,7 +194,7 @@ const Form = () => {
     <Container component="main">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
-          Create Event
+          {eventData ? "Edit Event" : "Create Event"}
         </Typography>
         <input
           name="name"
@@ -323,7 +356,7 @@ const Form = () => {
           type="number"
           className="input"
           placeholder="Enter available spots"
-          value={postData.spots}
+          value={postData ? postData.spots : 0}
           onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
@@ -340,7 +373,7 @@ const Form = () => {
         )}
         {isEventCreated && (
           <Alert severity="success" className="alert">
-            Event created successfully!
+            {eventData ? "Event Updated!" : "Event created successfully!"}
           </Alert>
         )}
         <Button
