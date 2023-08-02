@@ -5,6 +5,7 @@ import CheckBox from '../checkbox';
 import EventCard from '../EventCard/eventCard';
 import Popup from '../EventCard/eventPopup';
 import Form from '../Form/Form';
+import io from 'socket.io-client';
 
 const MyEvents = () => {
   const [user, setUser] = useState(null);
@@ -17,6 +18,8 @@ const MyEvents = () => {
     setSelectedEvent(event);
     setOpenEditForm(true);
   };
+
+  const socket = io('http://localhost:5000');
 
 
   useEffect(() => {
@@ -54,6 +57,26 @@ const MyEvents = () => {
         console.log(error);
       });
   };
+
+    // Listen for eventUpdate event
+    useEffect(() => {
+      socket.on('eventUpdate', () => {
+        axios
+        .get(`http://localhost:5000/getUsers/${userId}`)
+        .then((response) => {
+          setUser(response.data);
+          fetchUserEvents(response.data.email); // Fetch events using the user's email
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
+
+      // Clean up the socket connection
+      return () => {
+        socket.off('eventUpdate');
+      };
+    }, []);
 
   return (
     <div className="event-card-container">

@@ -147,6 +147,28 @@ export default function FindEvent() {
       socket.off('spotUpdate');
     };
   }, []);
+
+  // Listen for eventUpdate event
+  useEffect(() => {
+    socket.on('eventUpdate', () => {
+      axios
+      .get('http://localhost:5000/events')
+      .then(response => {
+        setEvents(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('eventUpdate');
+    };
+  }, []);
+
+
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
