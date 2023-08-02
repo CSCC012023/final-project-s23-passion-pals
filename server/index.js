@@ -78,10 +78,10 @@ app.post("/", async (req, res) => {
 
 //api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, phoneNumber, fname, lname } = req.body;
+  const { email, password, fname, lname } = req.body;
 
   // Check if the password is empty
-  if (!password || !email || !phoneNumber || !fname || !lname) {
+  if (!password || !email || !fname || !lname) {
     return res.json("emptyPassword");
   }
   //moch verification
@@ -97,7 +97,6 @@ app.post("/signup", async (req, res) => {
   const data = {
     email: email,
     password: password,
-    phoneNumber: phoneNumber,
     fname: fname,
     lname: lname
   };
@@ -120,6 +119,25 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post('/updatePhoneNumber', async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await UserModel.findById(userId);
+    
+    // Update the phone number field
+    user.phoneNumber = phoneNumber;
+
+    // Save the changes to the database
+    await user.save();
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error updating phone number' });
+  }
+});
 
 
 // Route to get all users inclduing current user

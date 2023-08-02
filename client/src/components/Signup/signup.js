@@ -13,7 +13,7 @@ function Signup() {
   const [passwordSignup, setSignupPassword] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  
   const [isRegistrationActive, setIsRegistrationActive] = useState(true);
 
   const [emailLogin, setLoginEmail] = useState("");
@@ -35,7 +35,6 @@ function Signup() {
       const response = await axios.post("http://localhost:5000/signup", {
         email: emailSignup,
         password: passwordSignup,
-        phoneNumber,
         fname,
         lname,
       });
@@ -120,25 +119,7 @@ function Signup() {
                 setSignupEmail(e.target.value);
               }}
             />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              onChange={(e) => {
-                // Remove any non-numeric characters from the input value
-                const phoneNumber = e.target.value.replace(/\D/g, "");
-                setPhoneNumber(phoneNumber);
-              }}
-              onKeyPress={(e) => {
-                // Allow only numeric characters and some special keys (e.g., Backspace, Enter)
-                const keyCode = e.keyCode || e.which;
-                const keyValue = String.fromCharCode(keyCode);
-                const numericRegex = /^[0-9]*$/;
-                if (!numericRegex.test(keyValue)) {
-                  e.preventDefault();
-                }
-              }}
-              required
-            />
+          
             <input
               type="password"
               placeholder="Password"
