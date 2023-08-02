@@ -64,8 +64,7 @@ export default function FindEvent() {
     axios
       .get('http://localhost:5000/events')
       .then(response => {
-        setEvents(response.data);
-        const filtered = events.filter((event) => {
+        const filtered = response.data.filter((event) => {
           return (event.eventCreator !== localStorage.getItem('email'))
         });
         setEvents(filtered);
@@ -195,21 +194,22 @@ export default function FindEvent() {
           const allFriendEvents = friendEvents.flat();
           //Convert eventIds into their details
           const friendEnrolledEventDetails = allFriendEvents.map(eventId => {
-            return events.find(event => event._id === eventId);
+            return (events.find(event => event._id === eventId));
           });
           const friendCreatedEvent = friendEmails.map(email => {
             return events.find(event => event.eventCreator === email);
           });
           // Filter out any 'undefined' values from the array and update the original array
-          const excludeUndefined = friendEnrolledEventDetails.filter(event => event !== undefined);
-          const finalReturn = excludeUndefined.concat(friendCreatedEvent);
+          const excludeUndefinedenrol = friendEnrolledEventDetails.filter(event => event !== undefined);
+          const excludeUndefinedcreate = friendCreatedEvent.filter(event => event !== undefined);
+          const finalReturn = excludeUndefinedenrol.concat(excludeUndefinedcreate);
           setFriendEnrolledEvents([...new Set(finalReturn)]); //remove duplicate elements with Set
         })
         .catch(error => {
           console.log(error);
         });
     }
-  }, [friends]);
+  }, [friends, events]);
 
   const filterEventsByLocationObjects = (events, preferredLocations) => {
     const locationObjects = preferredLocations.map(location => {
