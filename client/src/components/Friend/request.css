@@ -10,18 +10,17 @@
   
   #users {
     background: rgb(255, 255, 255);
-    position: absolute;
+    position: left;
     left: 50%;
-    margin-left: -175px;
+    margin-left: -300px;
     margin-top: 280px;
-    width: 350px;
+    width: 600px;
     padding: 15px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     box-shadow: inset 1px 1px 0 white;
     max-height: 450px;
   }
-  
   #users ul {
     margin: 0 auto;
     padding: 0;

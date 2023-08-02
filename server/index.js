@@ -912,10 +912,7 @@ app.post('/addSentRequest/:userId', async (req, res) => {
   
       // Save the updated sender user to the database
       const updatedSenderUser = await senderUser.save();
-  
-      console.log("******************");
-      console.log(updatedSenderUser.sentRequests);
-      console.log("******************");
+
   
       return res.json({ success: true });
     } catch (error) {
@@ -924,6 +921,31 @@ app.post('/addSentRequest/:userId', async (req, res) => {
     }
   });
   
+
+
+  app.get('/getFriends/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Fetch the user's data from the database
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Retrieve the user's friends list from the 'friends' field
+      const friends = user.friend;
+
+      return res.json(friends);
+    } catch (error) {
+      console.log('Error fetching friends:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+
 
 
 

@@ -8,6 +8,14 @@ const Friend = () => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [requestedUsers, setRequestedUsers] = useState([]);
+  const [currentFriends, setCurrentFriends] = useState([]);
+
+  // Fetch the current user's friends list from the backend and store the friend IDs in currentFriends state
+  const userId = localStorage.getItem('userId'); // Get the current user's ID from localStorage
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,7 +29,7 @@ const Friend = () => {
     fetchData();
   }, []);
 
-  const userId = localStorage.getItem('userId'); // Get the current user's ID from localStorage
+
 
   // Fetch the current user's sent requests from the backend
   useEffect(() => {
@@ -47,7 +55,19 @@ const Friend = () => {
     );
   }
   filteredData = filteredData.filter((item) => item._id !== userId);
+  useEffect(() => {
+    const fetchCurrentFriends = async () => {
+      try {
+        const response = await axios.get(`/getFriends/${userId}`);
 
+        setCurrentFriends(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCurrentFriends();
+  }, [userId]);
   const handleButtonClick = async (userIdToAdd) => {
     if (userId === userIdToAdd) {
       console.log("Cannot add yourself as a friend");
@@ -101,12 +121,17 @@ const Friend = () => {
       if (response.data.success) {
         console.log('Friend removed:', friendIdToDelete);
         alert('Friend removed successfully :)');
+        setCurrentFriends((prevCurrentFriends) =>
+        prevCurrentFriends.filter((friendId) => friendId !== friendIdToDelete)
+      );
       } else if (response.data.needToAdd) {
         console.log('You need to be friends first');
         alert('You need to be friends first');
       } else {
         console.log('Friend removal failed:', friendIdToDelete);
       }
+ 
+ 
     } catch (error) {
       console.log('An error occurred while removing friend:', error);
     }
@@ -133,7 +158,8 @@ const Friend = () => {
 
                     // Check if the user ID is in the requestedUsers array
                     const isRequested = requestedUsers.includes(_id);
-
+                    const isFriend = currentFriends.includes(_id);
+       
                     return (
                       <li key={index} className="user-item">
                         <div className="profile-pic">
@@ -147,9 +173,9 @@ const Friend = () => {
                           <div className="email">{email}</div>
                         </div>
                         <div className="button-container">
-                          {isRequested ? (
-                            <button className="requested-button" disabled>
-                              Requested
+                        {isFriend || isRequested ? (
+                            <button className={`requested-button ${isFriend || isRequested ? 'disabled' : ''}`} disabled>
+                                {isFriend ? 'Added' : 'Request Sent'}
                             </button>
                           ) : (
                             <button className="add-button" onClick={() => handleButtonClick(_id)}>
@@ -160,7 +186,7 @@ const Friend = () => {
                           
                           {isRequested ? (
                             <button className="requested-button" disabled>
-                              Sent
+                              
                             </button>
                           ) : (
                             <button className="remove-button" onClick={() => handleDeleteClick(_id)}>
