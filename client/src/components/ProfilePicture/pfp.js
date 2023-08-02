@@ -103,7 +103,7 @@ const Pfp = () => {
 
   useEffect(() => {
     // Only call the handleSubmit function when selectedLocation is not empty
-    if (selectedLocation) {
+    if (selectedLocation.length) {
       updateLocation();
     }
   }, [selectedLocation]);
@@ -115,7 +115,9 @@ const Pfp = () => {
 
   // Function to close the modal and update the location
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    if (user.locations.length > 0) {
+      setIsModalOpen(false);
+    }
   };
 
   return (

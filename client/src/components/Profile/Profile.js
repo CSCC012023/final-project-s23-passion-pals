@@ -66,7 +66,7 @@ export default function Profile() {
 
   useEffect(() => {
     // Only call the handleSubmit function when selectedLocation is not empty
-    if (selectedLocation) {
+    if (selectedLocation.length) {
       handleSubmit();
     }
   }, [selectedLocation]);
@@ -90,6 +90,12 @@ export default function Profile() {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (user.locations.length > 0) {
+      setIsModalOpen(false);
     }
   };
 
@@ -130,7 +136,7 @@ export default function Profile() {
         {/* Render the modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleCloseModal}
           onSave={(location, e) => {
             e.preventDefault();
             setSelectedLocation(location);

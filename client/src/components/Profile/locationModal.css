@@ -53,6 +53,7 @@
     color: #fff;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 1s ease;
 }
 
 .modal-buttons button.greyed-out {
