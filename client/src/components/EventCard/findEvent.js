@@ -150,12 +150,13 @@ export default function FindEvent() {
 
   // Listen for eventUpdate event
   useEffect(() => {
-    socket.on('eventUpdate', () => {
+    socket.on('eventUpdate', (data) => {
       axios
       .get('http://localhost:5000/events')
       .then(response => {
         setEvents(response.data);
         setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+        localStorage.setItem('currentPage', currentPage);
       })
       .catch(error => {
         console.log(error);
@@ -168,7 +169,7 @@ export default function FindEvent() {
     };
   }, []);
 
-
+  
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {

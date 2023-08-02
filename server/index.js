@@ -324,7 +324,7 @@ app.patch('/events/:id', (req, res) => {
       if (!updatedEvent) {
         return res.status(404).json({ error: 'Event not found' });
       }
-      socket.emit("eventUpdate");
+      io.emit('eventUpdate');
       res.json(updatedEvent);
     })
     .catch(err => {
