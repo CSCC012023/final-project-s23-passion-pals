@@ -162,6 +162,28 @@ export default function FindEvent() {
     };
   }, []);
 
+
+  // Listen for eventUpdate event
+  useEffect(() => {
+    socket.on('eventUpdate', (data) => {
+      axios
+      .get('http://localhost:5000/events')
+      .then(response => {
+        setEvents(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+        localStorage.setItem('currentPage', currentPage);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('eventUpdate');
+    };
+  }, []);
+
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
   const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
 
@@ -277,7 +299,72 @@ export default function FindEvent() {
   }, [isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
 
 
+  const removeUserFromConversation = async (eventId) => {
+    try {
+      // Make an API call to find the conversation by eventId
+      const response = await axios.get(`/findConversationByEventId/${eventId}`);
+      const conversation = response.data;
 
+      if (conversation) {
+        // Check if the current user ID is a member of the conversation
+        const isUserMember = conversation.members.includes(userId);
+
+        if (isUserMember) {
+          // If the current user is a member, remove the user ID from the members array
+          const updatedMembers = conversation.members.filter(memberId => memberId !== userId);
+
+          // Make another API call to update the conversation with the new members array
+          await axios.put(`/updateConversationMembers/${conversation._id}`, { members: updatedMembers });
+
+          console.log('User removed from conversation successfully');
+        } else {
+          console.log('User is not a member of the conversation');
+        }
+      } else {
+        console.log('Conversation not found for the event');
+      }
+    } catch (error) {
+      console.log('Error removing user from conversation:', error);
+    }
+  };
+
+  const addUserToConversation = async (eventId) => {
+    try {
+      // Make an API call to find the conversation by eventId
+      const response = await axios.get(`/findConversationByEventId/${eventId}`);
+      const conversation = response.data;
+
+      if (conversation) {
+        // Check if the current user ID is already a member of the conversation
+        const isUserAlreadyMember = conversation.members.includes(userId);
+
+        if (!isUserAlreadyMember) {
+          // If the current user is not a member, add the user ID to the members array
+          const updatedConversation = {
+            ...conversation,
+            members: [...conversation.members, userId] // Assuming `userId` is the current user's ID
+          };
+
+          // Make another API call to update the conversation with the new members array
+          await axios.put(`/updateConversationMembers/${conversation._id}`, { members: updatedConversation.members });
+
+          console.log('User added to conversation successfully');
+        } else {
+          console.log('User is already a member of the conversation');
+        }
+      } else {
+        console.log('Conversation not found for the event');
+      }
+    } catch (error) {
+      console.log('Error adding user to conversation:', error);
+    }
+  };
+
+  // New function to handle unenrollment and remove the user from the conversation
+  const handleUnenroll = async (eventId) => {
+    await removeUserFromConversation(eventId);
+  };
+  
 
   // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
@@ -303,6 +390,17 @@ export default function FindEvent() {
         .catch(error => {
           console.log(error);
         });
+    }
+  };
+
+
+  const compoundHandleEnroll = (eventId) => {
+    if (enrolledEvents.includes(eventId)) {
+      handleUnenroll(eventId);
+      handleEnroll(eventId);
+    } else {
+      handleEnroll(eventId);
+      addUserToConversation(eventId);
     }
   };
 
@@ -352,7 +450,7 @@ export default function FindEvent() {
       </div>
       {currentEvents.map(event => (
         // add event card here
-        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
+        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => compoundHandleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
       ))}
       {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
         <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div> // ghost element and css should be applied even though event-card isn't in findEvent.css
