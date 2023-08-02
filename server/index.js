@@ -10,7 +10,8 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
-
+import ConversationModel from './models/Conversation.js';
+//backend for the project 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -31,12 +32,14 @@ app.use('/messages', messagesRoute);
 // Set up multer storage
 const storage = multer.memoryStorage(); // This will store the uploaded file in memory as a buffer
 const upload = multer({ storage }); // Create the multer middleware
-
+//connection witht hte database
 const CONNECTION_URL = 'mongodb+srv://Mustafa:mustafa0503@cluster0.seqdo7a.mongodb.net/'
-const PORT = process.env.PORT || 5000;
 
+const PORT = process.env.PORT || 5000;
+//Create the multer middleware
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
+    // connecting the portal
     server.listen(PORT, () => {
       console.log(`Server running on port: ${PORT}`);
       console.log('Connected to MongoDB!');
@@ -62,7 +65,7 @@ app.post("/", async (req, res) => {
     const user = await UserModel.findOne({ email, password });
 
     if (user) {
-      res.json({ status: "exist", userId: user._id });
+      res.json({ status: "exist", userId: user._id});
     } else {
       res.json("notexist");
     }
@@ -73,14 +76,20 @@ app.post("/", async (req, res) => {
     
 
 
-
+//api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, fname, lname } = req.body;
+  const { email, password, phoneNumber, fname, lname } = req.body;
 
   // Check if the password is empty
-  if (!password || !email || !fname || !lname) {
+  if (!password || !email || !phoneNumber || !fname || !lname) {
     return res.json("emptyPassword");
   }
+  //moch verification
+
+
+    // Check if the email is in the correct format
+
+
   else if (!email.includes("@gmail.com")) {
     return res.json("wrongFormat")
   }
@@ -88,6 +97,7 @@ app.post("/signup", async (req, res) => {
   const data = {
     email: email,
     password: password,
+    phoneNumber: phoneNumber,
     fname: fname,
     lname: lname
   };
@@ -112,75 +122,210 @@ app.post("/signup", async (req, res) => {
 
 
 
-// Route to get all users
+// Route to get all users inclduing current user
+
 app.get('/users', async (req, res) => {
   try {
     const users = await UserModel.find(); // Retrieve all users from the UserModel
 
     res.json(users); // Respond with the retrieved users
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-//remoce friend 
-app.delete('/removeFriend/:userId', async (req, res) => {
-  const { userId } = req.params;
-  const { friendId } = req.body;
+    res.status(500).json({ error: 'Internal server error' });       
 
-  try {
-    const user = await UserModel.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
 
-    // Check if the friend's ID exists in the friend list
-    if (!user.friend.includes(friendId)) {
-      return res.json({ error: 'Friend not found', needToAdd: true });
-    }
 
-    // Remove the friend's ID from the friend list
-    user.friend.pull(friendId);
-    await user.save();
-
-    res.json({ success: true, message: 'Friend removed successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 
+
+app.get('/checkFriendStatus/:userId/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      if (user.friend.includes(friendId)) {
+        // The two users are already friends
+        return res.json('friends');
+      }
+      if (user.request.includes(friendId)) {
+        // The two users are already friends
+        return res.json('in_request');
+      }
+      // The two users are not yet friends
+      return res.json('not_friends');
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  
+  
+
+
+
+
+
+  app.delete('/removeFriend/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      const friend = await UserModel.findById(friendId);
+  
+      if (!user || !friend) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Remove friendId from user's friend list
+      const index1 = user.friend.indexOf(friendId);
+      if (index1 !== -1) {
+        user.friend.splice(index1, 1);
+        await user.save();
+      }
+  
+      // Remove userId from friend's friend list both direnctional
+      const index2 = friend.friend.indexOf(userId);
+      if (index2 !== -1) {
+        friend.friend.splice(index2, 1);
+        await friend.save();
+      }
+  
+      res.json({ success: true, message: 'Friend removed successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  app.delete('/declineFriendRequest/:userId/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend request ID exists in the current user's request list
+      if (!user.request.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend request not found' });
+      }
+  
+      // Remove the friend request ID from the current user's request list
+      user.request = user.request.filter((requestId) => requestId !== friendId);
+      await user.save();
+  
+      res.json({ success: true, message: 'Friend request declined successfully' });
+    } catch (error) {
+
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  
+  
+  
+  
 //add friend 
 // ...
 
 app.post('/addFriend/:userId', async (req, res) => {
-  const { friendId } = req.body;
-  const userId = req.params.userId;
+    const { friendId } = req.body;
+    const userId = req.params.userId;
+  
+    try {
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+   
 
-  try {
-    const user = await UserModel.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      // Check if the friend's ID already exists in the friend list
+      if (user.friend.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend already exists' });
+      }
+  
+      // Add the friend's ID to the friend list of the user accepting the request,
+      user.friend.push(friendId);
+      await user.save();
+  
+      // Find the sender of the friend request,
+      const sender = await UserModel.findById(friendId);
+  
+      if (sender) {
+        // Add the user accepting the request to the sender's friend list (bidirectional)
+        sender.friend.push(userId);
+        await sender.save();
+  
+        // Remove the recipient's ID from the sender's request array
+        sender.request.pull(userId);
+        await sender.save();
+      }
+  
+
+      res.json({ status: 'success', message: 'Friend added successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
     }
+  });
+  
 
-    // Check if the friend's ID already exists in the friend list
-    if (user.friend.includes(friendId)) {
-      return res.status(400).json({ error: 'Friend already exists' });
+//requst friend 
+app.post('/addFriendRequest/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    const { senderId } = req.body;
+  
+    try {
+      // Find the user who is receiving the friend request
+
+      const recipientUser = await UserModel.findById(userId);
+  
+      // Check if the user is already in the request list (to avoid duplicates)
+      if (!recipientUser.request.includes(senderId)) {
+        recipientUser.request.push(senderId);
+        await recipientUser.save();
+  
+        res.status(200).json({ success: true });
+      } else {
+        // User is already in the request list
+        res.status(200).json({ success: false, message: 'Friend request already sent' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: 'Error sending friend request' });
     }
-
-    // Add the friend's ID to the friend list
-    user.friend.push(friendId);
-    await user.save();
-
-    res.json({ status: 'success', message: 'Friend added successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
+  });
 // ...
-
+// Route to get friend requests for a specific user with id
+app.get('/friendRequests/:userId', async (req, res) => {
+    const userId = req.params.userId;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const friendRequestIds = user.request; // Get the friend request IDs
+  
+      // Find the users who sent friend requests to the current user
+      const friendRequests = await UserModel.find({ _id: { $in: friendRequestIds } });
+  
+      res.json(friendRequests);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 // Route to upload a profile picture for a user
 app.post('/upload-profile-pic/:userId', upload.single('profilePic'), async (req, res) => {
   const userId = req.params.userId;
@@ -344,12 +489,12 @@ app.put('/users/:userId', (req, res) => {
   }
 
 
-  const { fname, lname, email } = req.body;
+  const { fname, lname, email, phoneNumber } = req.body;
 
 
   UserModel.findByIdAndUpdate(
     userId,
-    { fname, lname, email },
+    { fname, lname, email, phoneNumber },
     { new: true }
   )
     .then(updatedUser => {
@@ -571,6 +716,120 @@ app.get('/getUserId', (req, res) => {
 
   res.json({ userId });
 });
+
+
+
+app.post('/createConversation', async (req, res) => {
+    const { members, event, eventId } = req.body; // Extract members, event, and eventId from the request body
+  
+    try {
+      // Create a new conversation with the provided data
+      const newConversation = await ConversationModel.create({ members, event, eventId });
+  
+      res.json(newConversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to create conversation' });
+    }
+  });
+
+  
+// Route to find the conversation by event ID
+app.get('/findConversationByEventId/:eventId', async (req, res) => {
+    const eventId = req.params.eventId;
+  
+    if (!eventId) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ eventId: eventId });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+  app.get('/findConversationByEvent/:eventName', async (req, res) => {
+    const eventName = req.params.eventName;
+  
+    if (!eventName) {
+      return res.status(400).json({ error: 'Event name is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ event: eventName });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+  app.put('/updateConversation/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    const updatedConversation = req.body;
+  
+    try {
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        updatedConversation,
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+//handle unenroll for chat 
+// Route to update the conversation's members
+app.put('/updateConversationMembers/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+    const updatedMembers = req.body.members;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    try {
+      // Find the conversation by its ID and update the members array
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        { members: updatedMembers },
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+
+
+
 
 app.listen(5500, () => {
   console.log("Server is running");

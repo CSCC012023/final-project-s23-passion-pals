@@ -4,6 +4,14 @@ import "./navBar.css"
 import uoft from '../../images/uoft.png';
 
 export default function Navbar() {
+    const logOut = async () => { 
+        window.localStorage.clear();
+        
+        window.localStorage.setItem("loggedIn", "false");
+    
+        window.location.href = "/signup";
+    }
+
     return (
         <nav className="nav">
             {/* Site logo and title */}
@@ -17,6 +25,10 @@ export default function Navbar() {
                     <Link to="/profile" className='link-style'>Profile</Link>
                 </li>
                 <li>
+                    {/* Profile link */}
+                    <Link to="/friend" className='link-style'>Friend</Link>
+                </li>
+                <li>
                     {/* Create Event link */}
                     <Link to="/createEvent" className='link-style'>Create Event</Link>
                 </li>
@@ -25,8 +37,12 @@ export default function Navbar() {
                     <Link to="/findEvent" className='link-style'>Find Events</Link>
                 </li>
                 <li>
+                    {/* Messenger link */}
+                    <Link to="/messenger" className='link-style'>Chat</Link>
+                </li>
+                <li>
                     {/* Logout link */}
-                    <Link to="/signup" className='link-style'>
+                    <Link onClick={logOut} className='link-style'>
                         <i className='bx bx-log-out'></i>
                     </Link>
                 </li>

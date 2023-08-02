@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-import { State } from "country-state-city";
 import CheckBox from '../checkbox';
 import EventCard from './eventCard';
 import './findEvent.css';
@@ -23,11 +22,15 @@ export default function FindEvent() {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [preferredLocations, setPreferredLocations] = useState([]);
+  const [isFilterChange, setIsFilterChange] = useState(false);
+  const [friends, setFriends] = useState([]);
+  const [friendEnrolledEvents, setFriendEnrolledEvents] = useState([]);
 
   // Save current page to local storage
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       localStorage.setItem('currentPage', currentPage);
+      console.log(localStorage.getItem('currentPage'))
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -39,13 +42,33 @@ export default function FindEvent() {
 
   const socket = io('http://localhost:5000');
 
+  // Get all events that the user is enrolled in
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then(response => {
+        const user = response.data;
+        if (user) {
+          setEnrolledEvents(user.enrolledEvents);
+          setPreferredLocations(user.locations);
+          setFriends(user.friend);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   // Get all events
   useEffect(() => {
     axios
       .get('http://localhost:5000/events')
       .then(response => {
-        setEvents(response.data);
-        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+        const filtered = response.data.filter((event) => {
+          return (event.eventCreator !== localStorage.getItem('email'))
+        });
+        setEvents(filtered);
+        setTotalPages(Math.ceil(events.length / itemsPerPage));
       })
       .catch(error => {
         console.log(error);
@@ -70,26 +93,12 @@ export default function FindEvent() {
     setFilteredData(filteredData);
     setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
     // Update the 'filteredData' state based on the search query
-    setCurrentPage(0); // Reset the current page to the first page when the search query changes
+    if (query.length > 0) {
+      setIsFilterChange(true);
+    }
   }, [events, query]);
 
   const userId = localStorage.getItem('userId');
-
-  // Get all events that the user is enrolled in
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/getUsers/${userId}`)
-      .then(response => {
-        const user = response.data;
-        if (user) {
-          setEnrolledEvents(user.enrolledEvents);
-          setPreferredLocations(user.locations);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
 
   useEffect(() => {
     const storedFilters = localStorage.getItem('filters');
@@ -105,6 +114,7 @@ export default function FindEvent() {
     const newFilters = { ...filters };
     newFilters[category] = selectedFilters;
     setFilters(newFilters);
+    setIsFilterChange(true);
     localStorage.setItem('filters', JSON.stringify(newFilters));
   };
 
@@ -122,7 +132,11 @@ export default function FindEvent() {
     axios
       .get('http://localhost:5000/events', { params })
       .then(response => {
-        setEvents(response.data);
+        const filtered = response.data.filter((event) => {
+          return (event.eventCreator !== localStorage.getItem('email'))
+        });
+        setEvents(filtered);
+        setFilteredData(filtered);
       })
       .catch(error => {
         console.log(error);
@@ -148,6 +162,7 @@ export default function FindEvent() {
     };
   }, []);
 
+
   // Listen for eventUpdate event
   useEffect(() => {
     socket.on('eventUpdate', (data) => {
@@ -169,62 +184,122 @@ export default function FindEvent() {
     };
   }, []);
 
-  
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
+  const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
+    setIsFilterChange(true);
+  };
+
+  const handleToggleFriendFilter = () => {
+    setIsFriendFilterOn((prev) => !prev);
+    setIsFilterChange(true);
+  };
+  //gets all events friends are enrolled in or created
+  useEffect(() => {
+    if (friends.length > 0) {
+      const promises = friends.map(friendId =>
+        axios.get(`http://localhost:5000/getUsers/${friendId}`)
+      );
+      Promise.all(promises)
+        .then(responses => {
+          const friendEvents = responses.map(response => {
+            const user = response.data;
+            return user.enrolledEvents;
+          })
+          const friendEmails = responses.map(response => {
+            const user = response.data;
+            return user.email;
+          });
+          // Combine all the friend enrolled events into a single array
+          const allFriendEvents = friendEvents.flat();
+          //Convert eventIds into their details
+          const friendEnrolledEventDetails = allFriendEvents.map(eventId => {
+            return (events.find(event => event._id === eventId));
+          });
+          const friendCreatedEvent = friendEmails.map(email => {
+            return events.find(event => event.eventCreator === email);
+          });
+          // Filter out any 'undefined' values from the array and update the original array
+          const excludeUndefinedenrol = friendEnrolledEventDetails.filter(event => event !== undefined);
+          const excludeUndefinedcreate = friendCreatedEvent.filter(event => event !== undefined);
+          const finalReturn = excludeUndefinedenrol.concat(excludeUndefinedcreate);
+          setFriendEnrolledEvents([...new Set(finalReturn)]); //remove duplicate elements with Set
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, [friends, events]);
+
+  const filterEventsByLocationObjects = (events, preferredLocations) => {
+    const locationObjects = preferredLocations.map(location => {
+      const parts = location.split(', ');
+
+      let eventCity = '';
+      let eventCountry = '';
+      let eventRegion = '';
+
+      if (parts.length === 3) {
+        [eventCity, eventRegion, eventCountry] = parts;
+      } else if (parts.length === 2) {
+        [eventRegion, eventCountry] = parts;
+      } else if (parts.length === 1) {
+        [eventCountry] = parts;
+      }
+
+      return { eventCity, eventCountry, eventRegion };
+    });
+    return events.filter((event) => {
+      return locationObjects.some(locationObject => {
+        return (
+          ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+            (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+            (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase())) ||
+
+          ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+            (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
+            (event.eventCity === "")) ||
+
+          ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
+            (event.eventRegion === "") &&
+            (event.eventCity === ""))
+        );
+      });
+    });
+  };
+
+  const filterEventByFriends = () => {
+    const finalEvents = isUserLocationFilterOn
+      ? filteredData.filter((event) => friendEnrolledEvents.some(friendEvent => event._id === friendEvent._id))
+      : events.filter((event) => friendEnrolledEvents.some(friendEvent => event._id === friendEvent._id));
+    return finalEvents;
   };
 
   useEffect(() => {
-    if (preferredLocations && isUserLocationFilterOn) {
-      // Parse the user's preferred locations from local storage
-      const locationObjects = preferredLocations.map(location => {
-        const parts = location.split(', ');
+    let finalEvents = [];
 
-        let eventCity = '';
-        let eventCountry = '';
-        let eventRegion = '';
-
-        if (parts.length === 3) {
-          [eventCity, eventRegion, eventCountry] = parts;
-        } else if (parts.length === 2) {
-          [eventRegion, eventCountry] = parts;
-        } else if (parts.length === 1) {
-          [eventCountry] = parts;
-        }
-
-        return { eventCity, eventCountry, eventRegion };
-      });
-      const filteredData = events.filter((event) => {
-        // Check if the event matches any of the locationObjects
-        return locationObjects.some(locationObject => {
-          return (
-            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
-              (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
-              (event.eventCity && event.eventCity.toLowerCase() === locationObject.eventCity.toLowerCase())) ||
-
-            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
-              (event.eventRegion && event.eventRegion.toLowerCase() === locationObject.eventRegion.toLowerCase()) &&
-              (event.eventCity === "")) ||
-
-            ((event.eventCountry && event.eventCountry.toLowerCase() === locationObject.eventCountry.toLowerCase()) &&
-              (event.eventRegion === "") &&
-              (event.eventCity === ""))
-          );
-        });
-      });
-
-      setFilteredData(filteredData);
-      setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-      setCurrentPage(0);
+    if (isUserLocationFilterOn && preferredLocations.length > 0) {
+      finalEvents = filterEventsByLocationObjects(events, preferredLocations);
     } else {
-      // Show all events when the toggle is turned off
-      setFilteredData(events);
-      setTotalPages(Math.ceil(events.length / itemsPerPage));
-      setCurrentPage(0);
+      finalEvents = [...events];
     }
-  }, [isUserLocationFilterOn, enrolledEvents]);
+
+    if (isFriendFilterOn && friendEnrolledEvents.length > 0) {
+      const friendFilteredEvents = finalEvents.filter((event) =>
+        friendEnrolledEvents.some((friendEvent) => event._id === friendEvent._id)
+      );
+      finalEvents = friendFilteredEvents;
+    }
+
+    setFilteredData(finalEvents);
+    setTotalPages(Math.ceil(finalEvents.length / itemsPerPage));
+    setQuery('');
+  }, [isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
+
+
+
 
   // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
@@ -236,7 +311,6 @@ export default function FindEvent() {
           setEnrolledEvents(prevEnrolledEvents =>
             prevEnrolledEvents.filter(id => id !== eventId)
           );
-          localStorage.setItem('currentPage', currentPage);
         })
         .catch(error => {
           console.log(error);
@@ -247,13 +321,19 @@ export default function FindEvent() {
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
           setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-          localStorage.setItem('currentPage', currentPage);
         })
         .catch(error => {
           console.log(error);
         });
     }
   };
+
+  useEffect(() => {
+    if (isFilterChange) {
+      setCurrentPage(0);
+      setIsFilterChange(false);
+    }
+  }, [isFilterChange]);
 
 
 
@@ -264,6 +344,7 @@ export default function FindEvent() {
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage);
+    localStorage.setItem('currentPage', selectedPage);
   };
 
 
@@ -284,6 +365,10 @@ export default function FindEvent() {
         {/* Toggle button for user's preferred locations */}
         <button onClick={handleToggleUserLocationFilter} className='toggle-button'>
           {isUserLocationFilterOn ? 'Show All Events' : 'Filter by Preferred Locations'}
+        </button>
+
+        <button onClick={handleToggleFriendFilter} className='toggle-button'>
+          {isFriendFilterOn ? 'Show All Events' : 'Your friends are in'}
         </button>
 
       </div>
