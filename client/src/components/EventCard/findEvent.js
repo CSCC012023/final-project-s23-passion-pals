@@ -362,9 +362,9 @@ export default function FindEvent() {
 
   // New function to handle unenrollment and remove the user from the conversation
   const handleUnenroll = async (eventId) => {
-    await removeUserFromConversation(eventId); // Call the function to remove the user from the conversation
-    handleEnroll(); // Call the existing handleEnroll function to unenroll from the event
+    await removeUserFromConversation(eventId);
   };
+  
 
   // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
@@ -397,6 +397,7 @@ export default function FindEvent() {
   const compoundHandleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       handleUnenroll(eventId);
+      handleEnroll(eventId);
     } else {
       handleEnroll(eventId);
       addUserToConversation(eventId);
