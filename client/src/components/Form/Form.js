@@ -21,8 +21,9 @@ import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
 import { State } from "country-state-city";
 //intilizing the filds for the databse
-const Form = (eventData) => {
-  console.log('eventData:', eventData);
+const Form = (event) => {
+  console.log('eventData:', event);
+  const eventData = event.hasOwnProperty('event') ? event : null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [postData, setPostData] = useState( {
@@ -74,7 +75,7 @@ const Form = (eventData) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+    }, []);
 
 
   const classes = useStyles();
@@ -113,6 +114,7 @@ const Form = (eventData) => {
         ...postData,
         eventCreator: user.email,
       };
+      console.log('User successfully logged in: ', user.email);
 
       if (eventData) {
         try {
@@ -124,7 +126,7 @@ const Form = (eventData) => {
         }
       } else {
         // Dispatch a create action with the postData
-        await dispatch(createPost(postData));
+        await dispatch(createPost(eventPostData));
       }
 
       setIsEventCreated(true);
