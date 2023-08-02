@@ -26,7 +26,7 @@ export default function Profile() {
       .catch((error) => {
         console.log(error);
       });
-  }, [selectedLocation]);
+  }, [userId]);
 
   const handleSubmit = async () => {
 
@@ -39,6 +39,10 @@ export default function Profile() {
         });
         console.log('Location added successfully');
         setSelectedLocation('')
+        setUser((prevUser) => ({
+          ...prevUser,
+          locations: [...prevUser.locations, selectedLocation],
+        }));
       } else {
         setIsError(true);
         console.log('error')
@@ -129,7 +133,6 @@ export default function Profile() {
           onClose={() => setIsModalOpen(false)}
           onSave={(location, e) => {
             e.preventDefault();
-            console.log(location)
             setSelectedLocation(location);
           }}
           onDelete={handleDeleteLocation}
