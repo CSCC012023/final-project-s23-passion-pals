@@ -31,7 +31,7 @@ body {
     align-items: center;
     margin-bottom: 30px;
     background-color: #37465B;
-    border-radius: 8px; /* Rounded edges */
+    border-radius: 30px; /* Rounded edges */
     padding: 10px; /* Adding some padding for spacing inside the container */
   }
   
@@ -88,7 +88,7 @@ body {
     background-color: #0BC6AB;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
   }
 
