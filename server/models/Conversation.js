@@ -2,16 +2,17 @@ import mongoose from "mongoose";
 
 const ConversationSchema = new mongoose.Schema(
     {
-      members: {
-        type: Array,
-      },
-      event: {
-        type: String,
-      },
-      eventId: {
-        type: mongoose.Schema.Types.ObjectId, // Store the event ID as an ObjectId
-        ref: "EventCard", // Reference the EventCard model
-      },
+        members:{
+            type: Array,
+        },
+
+        event:{
+            type: String,
+        },
+
+        eventId:{
+            type: { type: mongoose.Schema.Types.ObjectId, ref: 'Events' },
+        }
     },
     { timestamps: true }
   );

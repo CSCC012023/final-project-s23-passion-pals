@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const eventCardSchema = new mongoose.Schema({
   name: String,
   eventCreator: String,
+  creatorPhoneNum: String,
   eventName: String,
   eventLink: String,
   eventCity: String,
@@ -14,7 +15,8 @@ const eventCardSchema = new mongoose.Schema({
   eventDescription: String,
   eventDate: Date,
   themes: [String],
-  spots: Number
+  spots: Number,
+  waitlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserModel' }]
 }, {
   collection: 'Events'
 

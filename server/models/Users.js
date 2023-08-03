@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
   followings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
   enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }],
   locations: [String],
-  verified: Boolean
+  verified: Boolean,
+  initialized: Boolean,
 }, {
   collection: 'Users'
 });

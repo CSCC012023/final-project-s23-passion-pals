@@ -14,6 +14,8 @@ import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
+import EmailVerify from './components/EmailVerify/index';
+
 import Loading from "./components/Dashboard/LoadingPage";
 
 const App = () => {
@@ -25,7 +27,9 @@ const App = () => {
     location.pathname === "/" ||
     location.pathname === "/select" ||
     location.pathname === "/selectEdit" ||
-    location.pathname === "/loading";
+    location.pathname === "/loading" ||
+    location.pathname === "/pfp" ||
+    location.pathname === "/friend";
 
   const PrivateRoute = ({ element, path }) => {
     return isLoggedIn ? (

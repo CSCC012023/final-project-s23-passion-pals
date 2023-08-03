@@ -115,6 +115,8 @@ const Form = (event) => {
     const eventPostData = {
         ...postData,
         eventCreator: user.email,
+        creatorPhoneNum: user.phoneNumber,
+
         };
 
         // Dispatch the createPost action with the updated postData
@@ -125,6 +127,7 @@ const Form = (event) => {
         members: [userId], // Add the current user's ID to the members array
         event: postData.eventName, // Set the event name as the "event" field
         eventId: postId,
+
       };
       console.log('User successfully logged in: ', user.email);
 
@@ -136,10 +139,7 @@ const Form = (event) => {
         } catch (error) {
           console.log("Error updating event: ", error);
         }
-      } else {
-        // Dispatch a create action with the postData
-        await dispatch(createPost(eventPostData));
-      }
+      } 
 
       try {
         // Make an HTTP POST request to save the conversation

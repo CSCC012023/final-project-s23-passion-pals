@@ -1,21 +1,83 @@
-
-.right {
-  float: right;
+.friend-container {
   position: relative;
-  top: 6px;
+  margin: 50px auto;
+  max-width: 800px;
+  padding: 20px;
 }
 
-.top {
-  margin-top: -30px;
+.background-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-pic img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-item {
+  list-style: none;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px 15px 10px 25px;
+  border: 1px solid #ccc;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.email {
+  color: #888;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.add-button,
+.remove-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.remove-button {
+  background-color: #f44336;
+  color: white;
 }
 
 #users {
   background: rgb(255, 255, 255);
   position: absolute;
   left: 50%;
-  margin-left: -175px;
+  transform: translateX(-50%);
   margin-top: 280px;
-  width: 350px;
+  width: 800px;
   padding: 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
@@ -32,26 +94,6 @@
   padding: 5px 5px 0 5px;
   border-left: none;
   border-right: none;
-}
-
-#users li{
-  list-style: none;
-  background-color: rgba(0, 0, 0, 0.05);
-  background-image: 
-    linear-gradient(
-      90deg,
-    rgb(109, 7, 139),
-      #EEE 10px,
-      #EEE 11px,
-      transparent 11px);
-  padding: 10px 15px 10px 25px;
-  border: 1px solid #CCC;
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
-  margin-bottom: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  cursor: pointer;
-  border-radius: 3px;
 }
 
 #query {
@@ -92,16 +134,9 @@
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
-#users select:focus, #query:focus {
+#users select:focus,
+#query:focus {
   border: 1px solid rgb(73, 162, 225);
   box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
   outline: none;
 }
-.button-container {
-    text-align: center;
-    margin-top: 5px;
-  }
-  
-  .button-container button {
-    margin-left: 10px;
-  }
