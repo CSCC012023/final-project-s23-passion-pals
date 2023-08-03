@@ -61,13 +61,18 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
                 <button className="event-body-bottom-text float-right event-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
                 <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
             </div>
-            : (enrolledEvents.includes(event._id) ?
-                <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Unenroll</button>
-                : (event.spots > 0 ? (
-                  <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll} disabled={event.spots <= 0}>Enroll Now</button>
-                ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
-                )))
-          }
+            : (enrolledEvents.includes(event._id) ? (
+              <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Unenroll</button>
+            ) : (
+              event.waitlist.includes(userId) ? (<button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Leave Waitlist</button>
+              ) : (
+                event.spots > 0 ? (
+                  <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Enroll</button>
+                ) : (
+                  <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Join Waitlist</button>
+                )
+              )
+            ))}
         </div>
       </div>
     </div>
