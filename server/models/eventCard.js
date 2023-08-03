@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const eventCardSchema = new mongoose.Schema({
   name: String,
   eventCreator: String,
+  creatorPhoneNum: String,
   eventName: String,
   eventLink: String,
   eventCity: String,

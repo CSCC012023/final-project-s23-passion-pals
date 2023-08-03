@@ -5,43 +5,38 @@ import './button.css';
 import { useNavigate, Link } from "react-router-dom"
 
 const SelectInterest = () => {
-  const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
-  const history = useNavigate(); // Navigation hook for handling history
-
-  const handleInterestChange = (event) => {
-    const value = event.target.value; // Get the value of the selected interest
-    const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
-
-    if (isChecked) {
-      // If the checkbox is checked, add the interest to the selectedInterests state
-      setSelectedInterests((prevInterests) => [...prevInterests, value]);
-    } else {
-      // If the checkbox is unchecked, remove the interest from the selectedInterests state
-      setSelectedInterests((prevInterests) =>
-        prevInterests.filter((interest) => interest !== value)
-      );
-    }
-  };
-
-  const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId"); // Retrieve the userId from local storage
-
-    try {
-      // Send a POST request to the server with the userId and selectedInterests
-      const response = await axios.post('http://localhost:5000/select', {
-        userId: userId,
-        interests: selectedInterests,
-      });
-      // Handle the response if needed
-    } catch (error) {
-      // Handle the error if needed
-    }
-
-    // Add a delay of 600ms before navigating to "/dash"
-    setTimeout(() => {
-      history("/loading", { state: { id: userId } });
-    }, 600);
-  };
+    const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
+    const history = useNavigate(); // Navigation hook for handling history
+  
+    const handleInterestChange = (event) => {
+      const value = event.target.value; // Get the value of the selected interest
+      const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
+  
+      if (isChecked) {
+        // If the checkbox is checked, add the interest to the selectedInterests state
+        setSelectedInterests((prevInterests) => [...prevInterests, value]);
+      } else {
+        // If the checkbox is unchecked, remove the interest from the selectedInterests state
+        setSelectedInterests((prevInterests) =>
+          prevInterests.filter((interest) => interest !== value)
+        );
+      }
+    };
+  
+    const handleSubmit = async () => {
+      const userId = localStorage.getItem("userId"); // Retrieve the userId from local storage
+  
+      try {
+        // Send a POST request to the server with the userId and selectedInterests
+        const response = await axios.post('http://localhost:5000/select', {
+          userId: userId,
+          interests: selectedInterests,
+        });
+        // Handle the response if needed
+      } catch (error) {
+        // Handle the error if needed
+      }
+    };
 
   useEffect(() => {
     const animateButton = function (e) {
@@ -70,7 +65,7 @@ const SelectInterest = () => {
   return (
     <div className='Interest'>
       <fieldset class="checkbox-group">
-        <legend class="checkbox-group-legend">Choose your favorites</legend>
+        <legend class="checkbox-group-legend"></legend>
         <div class="checkbox">
           <label class="checkbox-wrapper">
             <input type="checkbox" class="checkbox-input" value="Gaming" onChange={handleInterestChange} />
@@ -497,7 +492,7 @@ const SelectInterest = () => {
 
 
       </fieldset>
-      <button class="bubbly-button" onClick={handleSubmit} >Submit</button>
+      <button class="bubbly-button" onClick={handleSubmit} >Save!</button>
     </div>
   );
 };

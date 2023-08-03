@@ -13,8 +13,7 @@
 .Interest {
   font-family: "Inter", sans-serif; /* Use the Inter font for the .Interest class */
   line-height: 1.5; /* Set the line height for better readability */
-  min-height: 100vh; /* Set a minimum height of 100 viewport height units */
-  display: flex; /* Use flexbox to center the content vertically and horizontally */
+
   align-items: center;
   justify-content: center;
   background-color: #f9f8f800; /* Set the background color of the .Interest class */
