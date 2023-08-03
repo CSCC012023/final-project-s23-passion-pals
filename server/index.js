@@ -654,7 +654,6 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
 
 
 app.post('/enroll/:eventId', async (req, res) => {
-
   const eventId = req.params.eventId;
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
@@ -665,25 +664,52 @@ app.post('/enroll/:eventId', async (req, res) => {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  /* Update spots in event */
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: -1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $addToSet: { enrolledEvents: event._id } },
-      { new: true }
-    ).exec();
-    
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
 
-    res.json(event);
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (event.spots > 0) {
+      // Enroll the user if spots are available
+      event.spots--;
+      await event.save();
+      user.enrolledEvents = user.enrolledEvents.push(eventId);
+
+      // Emit socket event to update all other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+      
+      console.log("Adding "+ user.fname +" to event...");
+
+      return res.json(event);
+    } else if (!event.waitlist.includes(userId)){
+      // Add user to the waitlist if event is full
+      event.waitlist.push(userId);
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Adding "+ user.fname +" to event waitlist...");
+
+      return res.json({ message: 'Added to waitlist.' });
+    } else {
+      // Remove user from waitlist if user is already in waitlist
+      event.waitlist = event.waitlist.filter((id) => id !== userId);
+      await EventCardModel.findByIdAndUpdate(eventId, { $pull: { waitlist: userId } });
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Deleting "+ user.fname +" from event waitlist...");
+
+      return res.json({ message: 'Removed from waitlist.' });
+    }
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -711,7 +737,6 @@ res.status(500).json({ error: 'Internal server error' });
 
 app.post('/unenroll/:eventId', async (req, res) => {
   const eventId = req.params.eventId;
-
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
@@ -720,23 +745,52 @@ app.post('/unenroll/:eventId', async (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
-  /* Update spots in event */
+
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: 1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $pull: { enrolledEvents: eventId } },
-      { new: true }
-    ).exec();
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
-    res.json(event);
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Remove user from event
+    user.enrolledEvents = user.enrolledEvents.filter((id) => id !== eventId);
+    await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
+    io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+
+    // Check if there are users in the waitlist
+    if (event.waitlist.length > 0) {
+      const nextUserId = event.waitlist.shift();
+
+      const nextUser = await UserModel.findById(nextUserId);
+      if (!nextUser) {
+        return res.status(404).json({ error: 'Next user not found' });
+      }
+
+      nextUser.enrolledEvents = nextUser.enrolledEvents.push(eventId);
+      console.log("Enrolling from waitlist " + nextUser.fname);
+      io.emit('enrolledEventsUpdate', {userId: nextUserId, enrolledEvents: nextUser.enrolledEvents});
+
+      await event.save();
+
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('eventUpdate');
+
+      return res.json({ message: 'Unenrolled. Next person from waitlist enrolled' });
+    } else {
+      // Remove the user from enrolledEvents and update spots
+      event.spots++;
+      await event.save();
+
+      // Use socket to update other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      return res.json(event);
+    }
+
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
