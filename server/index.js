@@ -11,13 +11,14 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
-
 // Twillo Credentials
 const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
 const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
 const twilioPhoneNumber = '+16672305883';
 // Create a Twilio client
 const twilioClient = twilio(accountSid, authToken);
+
+import ConversationModel from './models/Conversation.js';
 
 //backend for the project 
 const app = express();
@@ -86,10 +87,10 @@ app.post("/", async (req, res) => {
 
 //api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, phoneNumber, fname, lname } = req.body;
+  const { email, password, fname, lname } = req.body;
 
   // Check if the password is empty
-  if (!password || !email || !phoneNumber || !fname || !lname) {
+  if (!password || !email || !fname || !lname) {
     return res.json("emptyPassword");
   }
   //moch verification
@@ -105,7 +106,6 @@ app.post("/signup", async (req, res) => {
   const data = {
     email: email,
     password: password,
-    phoneNumber: phoneNumber,
     fname: fname,
     lname: lname
   };
@@ -128,6 +128,25 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post('/updatePhoneNumber', async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await UserModel.findById(userId);
+    
+    // Update the phone number field
+    user.phoneNumber = phoneNumber;
+
+    // Save the changes to the database
+    await user.save();
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error updating phone number' });
+  }
+});
 
 
 // Route to get all users inclduing current user
@@ -699,6 +718,120 @@ app.get('/getUserId', (req, res) => {
 
   res.json({ userId });
 });
+
+
+
+app.post('/createConversation', async (req, res) => {
+    const { members, event, eventId } = req.body; // Extract members, event, and eventId from the request body
+  
+    try {
+      // Create a new conversation with the provided data
+      const newConversation = await ConversationModel.create({ members, event, eventId });
+  
+      res.json(newConversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to create conversation' });
+    }
+  });
+
+  
+// Route to find the conversation by event ID
+app.get('/findConversationByEventId/:eventId', async (req, res) => {
+    const eventId = req.params.eventId;
+  
+    if (!eventId) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ eventId: eventId });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+  app.get('/findConversationByEvent/:eventName', async (req, res) => {
+    const eventName = req.params.eventName;
+  
+    if (!eventName) {
+      return res.status(400).json({ error: 'Event name is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ event: eventName });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+  app.put('/updateConversation/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    const updatedConversation = req.body;
+  
+    try {
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        updatedConversation,
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+//handle unenroll for chat 
+// Route to update the conversation's members
+app.put('/updateConversationMembers/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+    const updatedMembers = req.body.members;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    try {
+      // Find the conversation by its ID and update the members array
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        { members: updatedMembers },
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+
+
+
 
 app.listen(5500, () => {
   console.log("Server is running");

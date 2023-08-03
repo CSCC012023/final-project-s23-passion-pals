@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
-import { Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+
 import {
   Button,
   Typography,
-  Paper,
   Container,
   FormControl,
   FormControlLabel,
@@ -77,41 +75,62 @@ const Form = () => {
       postData.spots <= 0
     ) {
       setIsError(true);
-      console.log(postData.eventCity)
-      console.log(postData.eventCountry)
-      console.log(postData.eventRegion)
-      console.log(State.getStatesOfCountry(postData.eventRegion).length)
+      console.log(postData.eventCity);
+      console.log(postData.eventCountry);
+      console.log(postData.eventRegion);
+      console.log(State.getStatesOfCountry(postData.eventRegion).length);
       return;
     }
+
     // Check if user state is available (user data is fetched)
     if (user) {
-      // Use user.email as the eventCreator in postData
-      const eventPostData = {
+    // Use user.email as the eventCreator in postData
+    const eventPostData = {
         ...postData,
         eventCreator: user.email,
         creatorPhoneNum: user.phoneNumber,
+
+        };
+
+        // Dispatch the createPost action with the updated postData
+    const createdPostData = await dispatch(createPost(eventPostData));
+    const postId = createdPostData._id;
+      // Create the conversation object to be posted
+      const conversationObject = {
+        members: [userId], // Add the current user's ID to the members array
+        event: postData.eventName, // Set the event name as the "event" field
+        eventId: postId,
+
       };
 
-      // Dispatch the createPost action with the updated postData
-      await dispatch(createPost(eventPostData));
+      try {
+        // Make an HTTP POST request to save the conversation
+        const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
+        console.log("Conversation created:", response.data);
 
-      setIsEventCreated(true);
-      setPostData({
-        name: "",
-        eventName: "",
-        eventLink: "",
-        eventDescription: "",
-        eventImage: "",
-        themes: [],
-        eventDate: "",
-        eventPrice: "",
-        eventAddress: "",
-        spots: 0,
-      });
 
-      setTimeout(() => {
-        setIsEventCreated(false);
-      }, 2000);
+
+        setIsEventCreated(true);
+        setPostData({
+          name: "",
+          eventName: "",
+          eventLink: "",
+          eventDescription: "",
+          eventImage: "",
+          themes: [],
+          eventDate: "",
+          eventPrice: "",
+          eventAddress: "",
+          spots: 0,
+        });
+
+        setTimeout(() => {
+          setIsEventCreated(false);
+        }, 2000);
+      } catch (error) {
+        console.error("Error creating conversation:", error);
+        // Handle error if the conversation creation fails
+      }
     } else {
       // If user state is not available, show an error or handle accordingly
       console.log("User data not available");
