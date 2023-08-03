@@ -5,15 +5,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 .background-container {
-    background-image: url('https://wallpaperaccess.com/full/1560128.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh; /* Adjust the height as needed */
-  }
-  
+  background-image: url('https://wallpaperaccess.com/full/1560128.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  /* Adjust the height as needed */
+}
+
 .friend-container {
-  position: absolute;
+  position: relative;
   margin: auto;
   top: 20%;
   transform: translateY(-50%);
@@ -110,19 +112,19 @@
   cursor: text;
 }
 
-.friend-container input:focus ~ .search {
+.friend-container input:focus~.search {
   right: -250px;
   background: #7b7979;
   z-index: 6;
 }
 
-.friend-container input:focus ~ .search::before {
+.friend-container input:focus~.search::before {
   top: 0;
   left: 0;
   width: 25px;
 }
 
-.friend-container input:focus ~ .search::after {
+.friend-container input:focus~.search::after {
   top: 0;
   left: 0;
   width: 25px;
