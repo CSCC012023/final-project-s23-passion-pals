@@ -71,7 +71,7 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
                                 ))}
                             </ul>
                         ) : (
-                            <p>No locations added yet.</p>
+                            <p>None</p>
                         )}
                     </div>
                 </div>

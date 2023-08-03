@@ -19,6 +19,10 @@
     font-family: Arial, sans-serif;
 }
 
+.modal p {
+    color: white !important;
+}
+
 /* Styles for the open modal */
 .modal.open {
     opacity: 1;
