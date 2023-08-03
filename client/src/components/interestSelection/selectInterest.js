@@ -283,7 +283,7 @@ const SelectInterest = () => {
 
 
               </span>
-              <span class="checkbox-label" style={{ marginLeft: '14px' }} >Festivals </span>
+              <span class="checkbox-label" style={{ marginLeft: '14px' }} >Festivals</span>
             </span>
           </label>
         </div>

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { io } from "socket.io-client";
 import send from '../../images/send.png';
 import img1 from "../../images/user-circle.png";
+import robo from "../../images/robot.gif";
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -165,7 +166,10 @@ export default function Messenger() {
                 </div>
               </>
             ) : (
-              <span className="noConversationText">Open a conversation to start a chat.</span>
+              <span className="noConversationText">
+              <img className="robotImage" src={robo} alt="Robot" />
+              Open a conversation to start messaging.
+            </span>
             )}
           </div>
         </div>
