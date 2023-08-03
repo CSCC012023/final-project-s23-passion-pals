@@ -18,6 +18,7 @@ function Signup() {
   
     const [emailLogin, setLoginEmail] = useState("");
     const [passwordLogin, setLoginPassword] = useState("");
+
   
     const handleRegClick = (event) => {
       setIsRegistrationActive(false);
@@ -27,12 +28,11 @@ function Signup() {
       setIsRegistrationActive(true);
     };
   
-    // Function to handle the form submission for user signup
     async function submitSignup(e) {
       e.preventDefault();
   
       try {
-        const response = await axios.post("http://localhost:5000/signup", {
+        const response = await axios.post("/signup", {
           email: emailSignup,
           password: passwordSignup,
           phoneNumber,
@@ -44,11 +44,16 @@ function Signup() {
         if (response.data === "exist") {
           alert("User already exists");
         } else if (response.data.status === "notexist") {
-          const userId = response.data.userId;
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("loggedIn", true);
-
-          signInHistory("/pfp", { state: { id: userId } });
+            // Reset input fields after successful account creation
+            setSignupEmail("");
+            setSignupPassword("");
+            setFname("");
+            setLname("");
+            setPhoneNumber("");
+            // Show successful account creation alert
+            alert("Successfully Created an account, email was sent please verify your account to login");
+            // Navigate to the login page
+            handleSignClick();
         } else if (response.data === "emptyPassword") {
           alert("Email and password cannot be empty");
         } else if (response.data === "wrongFormat") {
@@ -70,21 +75,25 @@ function Signup() {
           password: passwordLogin,
         });
   
-        // Handle different response scenarios
-        if (response.data.status === "exist") {
+          // Handle different response scenarios
+      if (response.data.status === "exist") {
           const userId = response.data.userId;
           localStorage.setItem("userId", userId);
           localStorage.setItem("loggedIn", true);
-          console.log(localStorage);
-          loginHistory("/loading", { state: { id: userId } });
-        } else if (response.data === "notexist") {
-          alert("Please check your email or password");
-        }
-      } catch (error) {
-        alert("An error occurred while logging in");
-        console.log(error);
+          localStorage.setItem("email", emailSignup);
+        console.log(localStorage);
+        loginHistory("/dash", { state: { id: userId } });
+      } else if (response.data.status === "notexist") {
+        alert("Please check your email or password");
+      } else if (response.data.status === "notverified") {
+        alert("Account not verified. Please check your email for the verification link.");
+       
       }
+    } catch (error) {
+      alert("An error occurred while logging in");
+      console.log(error);
     }
+  }
 
 
   return (

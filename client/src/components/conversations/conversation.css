@@ -8,7 +8,7 @@
 }
 
 .conversation:hover{
-    background-color: rgb(231, 231, 231);
+    background-color:#5d789b;
 }
 
 .conversationImg{
@@ -17,8 +17,10 @@
     border-radius: 50%;
     object-fit: cover;
     margin-right: 20px;
+    border: 2px solid white;
 }
 
 .conversationName{
-    font-weight: 500;
+    font-weight: 600;
+    color: white;
 }

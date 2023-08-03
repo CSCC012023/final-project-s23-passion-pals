@@ -14,6 +14,7 @@ import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
+import EmailVerify from './components/EmailVerify/index';
 
 import Loading from "./components/Dashboard/LoadingPage";
 
@@ -45,6 +46,7 @@ const App = () => {
           path="/"
           element={<PrivateRoute element={<Signup />} path="/" />}
         />
+         <Route path="/:id/verify/:token" element={<EmailVerify />} />
         <Route
           path="/dash"
           element={<PrivateRoute element={<Dash />} path="/dash" />}

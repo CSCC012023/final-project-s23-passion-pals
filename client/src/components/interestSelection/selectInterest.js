@@ -239,7 +239,7 @@ const SelectInterest = () => {
         </div>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Festivals " onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Festivals" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
               <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +283,7 @@ const SelectInterest = () => {
 
 
               </span>
-              <span class="checkbox-label" style={{ marginLeft: '14px' }} >Festivals </span>
+              <span class="checkbox-label" style={{ marginLeft: '14px' }} >Festivals</span>
             </span>
           </label>
         </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './list.css';
 import './search.css';
+import img1 from '../../images/user-circle.png';
 
 const Friend = () => {
   const [data, setData] = useState([]);
@@ -34,6 +35,8 @@ const Friend = () => {
           item.email.toLowerCase().includes(query.toLowerCase()))
     );
   }
+
+  filteredData = filteredData.filter((item) => item._id !== userId);
 
   const handleButtonClick = async (userIdToAdd) => {
     if (userId === userIdToAdd) {
@@ -102,6 +105,8 @@ const Friend = () => {
   return (
     <div className="background-container">
       <div className="friend-container">
+      <div className="left-container">
+          <div className="search-container">
         <input
           type="text"
           placeholder="Search..."
@@ -109,31 +114,46 @@ const Friend = () => {
           onChange={(event) => setQuery(event.target.value)}
         />
         <div className="search"></div>
-        {query !== '' && ( // Conditional rendering based on query state
+        {query !== '' && (
           <div id="users">
             <ul id="users_ul">
               {filteredData.map((item, index) => {
-                const { fname, lname, email, _id } = item;
+                const { fname, lname, email, _id, profilePic } = item;
                 const fullName = `${fname} ${lname}`;
-
+  
                 return (
-                  <li key={index}>
-                    <div className="name">{fullName}</div>
-                    <div className="email">{email}</div>
+                  <li key={index} className="user-item">
+                    <div className="profile-pic">
+                      <img
+                        src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
+                        alt={fullName}
+                      />
+                    </div>
+                    <div className="user-info">
+                      <div className="name">{fullName}</div>
+                      <div className="email">{email}</div>
+                    </div>
                     <div className="button-container">
-                      <button onClick={() => handleButtonClick(_id)}>Add</button>
-                      <button onClick={() => handleDeleteClick(_id)}>Remove</button>
+                      <button className="add-button" onClick={() => handleButtonClick(_id)}>
+                        Add
+                      </button>
+                      <button className="remove-button" onClick={() => handleDeleteClick(_id)}>
+                        Remove
+                      </button>
                     </div>
                   </li>
                 );
               })}
             </ul>
-            <span>Number of users: {filteredData.length}</span>
           </div>
         )}
       </div>
     </div>
+    </div>
+    </div>
+
   );
+  
 };
 
 export default Friend;

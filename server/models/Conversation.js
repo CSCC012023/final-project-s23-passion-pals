@@ -9,7 +9,10 @@ const ConversationSchema = new mongoose.Schema(
         event:{
             type: String,
         },
- 
+
+        eventId:{
+            type: { type: mongoose.Schema.Types.ObjectId, ref: 'Events' },
+        }
     },
     { timestamps: true }
 
