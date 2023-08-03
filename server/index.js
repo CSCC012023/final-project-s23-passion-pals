@@ -485,6 +485,34 @@ app.get('/getUsers/:userId', async (req, res) => {
   }
 });
 
+//Route to update a specific event
+app.patch('/events/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  if (!eventId) {
+    return res.status(400).json({ error: 'Event ID is required' });
+  }
+
+  const updatedEventData = req.body;
+
+  EventCardModel.findByIdAndUpdate(
+    eventId,
+    updatedEventData,
+    { new: true }
+  )
+    .then(updatedEvent => {
+      if (!updatedEvent) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      io.emit('eventUpdate');
+      res.json(updatedEvent);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
 
 // Route to update a specific user
 app.put('/users/:userId', (req, res) => {
@@ -727,16 +755,37 @@ app.get('/getUserId', (req, res) => {
 
 
 app.post('/createConversation', async (req, res) => {
-    const conversationData = req.body;
+    const { members, event, eventId } = req.body; // Extract members, event, and eventId from the request body
   
     try {
-      const newConversation = await ConversationModel.create(conversationData);
+      // Create a new conversation with the provided data
+      const newConversation = await ConversationModel.create({ members, event, eventId });
+  
       res.json(newConversation);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: 'Failed to create conversation' });
     }
   });
+
+  
+// Route to find the conversation by event ID
+app.get('/findConversationByEventId/:eventId', async (req, res) => {
+    const eventId = req.params.eventId;
+  
+    if (!eventId) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+  
+    try {
+      const conversation = await ConversationModel.findOne({ eventId: eventId });
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 
   app.get('/findConversationByEvent/:eventName', async (req, res) => {
     const eventName = req.params.eventName;
@@ -783,7 +832,35 @@ app.post('/createConversation', async (req, res) => {
   });
 
 
-
+//handle unenroll for chat 
+// Route to update the conversation's members
+app.put('/updateConversationMembers/:conversationId', async (req, res) => {
+    const conversationId = req.params.conversationId;
+    const updatedMembers = req.body.members;
+  
+    if (!conversationId) {
+      return res.status(400).json({ error: 'Conversation ID is required' });
+    }
+  
+    try {
+      // Find the conversation by its ID and update the members array
+      const conversation = await ConversationModel.findByIdAndUpdate(
+        conversationId,
+        { members: updatedMembers },
+        { new: true }
+      ).exec();
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      res.json(conversation);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 
 
 

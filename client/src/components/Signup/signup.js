@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./loginSignup.css";
 //In the above code, we have defined the Signup component which is responsible for handling user registration and login functionality. It consists of a form with input fields for first name, 
 //last name, email, and password. The form submission is handled by the 
 function Signup() {
+
     const signInHistory = useNavigate();
     const loginHistory = useNavigate();
   
@@ -62,8 +63,7 @@ function Signup() {
       } catch (error) {
         alert("Wrong details");
         console.log(error);
-      }
-    }
+
   
     // Function to handle the form submission for user login
     async function submitLogin(e) {
@@ -87,7 +87,6 @@ function Signup() {
         alert("Please check your email or password");
       } else if (response.data.status === "notverified") {
         alert("Account not verified. Please check your email for the verification link.");
-       
       }
     } catch (error) {
       alert("An error occurred while logging in");
