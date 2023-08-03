@@ -147,6 +147,73 @@ export default function Dashboard() {
     }
   };
 
+  const removeUserFromConversation = async (eventId) => {
+    try {
+      // Make an API call to find the conversation by eventId
+      const response = await axios.get(`/findConversationByEventId/${eventId}`);
+      const conversation = response.data;
+
+      if (conversation) {
+        // Check if the current user ID is a member of the conversation
+        const isUserMember = conversation.members.includes(userId);
+
+        if (isUserMember) {
+          // If the current user is a member, remove the user ID from the members array
+          const updatedMembers = conversation.members.filter(memberId => memberId !== userId);
+
+          // Make another API call to update the conversation with the new members array
+          await axios.put(`/updateConversationMembers/${conversation._id}`, { members: updatedMembers });
+
+          console.log('User removed from conversation successfully');
+        } else {
+          console.log('User is not a member of the conversation');
+        }
+      } else {
+        console.log('Conversation not found for the event');
+      }
+    } catch (error) {
+      console.log('Error removing user from conversation:', error);
+    }
+  };
+
+  const addUserToConversation = async (eventId) => {
+    try {
+      // Make an API call to find the conversation by eventId
+      const response = await axios.get(`/findConversationByEventId/${eventId}`);
+      const conversation = response.data;
+
+      if (conversation) {
+        // Check if the current user ID is already a member of the conversation
+        const isUserAlreadyMember = conversation.members.includes(userId);
+
+        if (!isUserAlreadyMember) {
+          // If the current user is not a member, add the user ID to the members array
+          const updatedConversation = {
+            ...conversation,
+            members: [...conversation.members, userId] // Assuming `userId` is the current user's ID
+          };
+
+          // Make another API call to update the conversation with the new members array
+          await axios.put(`/updateConversationMembers/${conversation._id}`, { members: updatedConversation.members });
+
+          console.log('User added to conversation successfully');
+        } else {
+          console.log('User is already a member of the conversation');
+        }
+      } else {
+        console.log('Conversation not found for the event');
+      }
+    } catch (error) {
+      console.log('Error adding user to conversation:', error);
+    }
+  };
+
+  // New function to handle unenrollment and remove the user from the conversation
+  const handleUnenroll = async (eventId) => {
+    await removeUserFromConversation(eventId);
+  };
+  
+
   // Enroll or unenroll from an event
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
@@ -154,12 +221,11 @@ export default function Dashboard() {
       axios
         .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
         .then(() => {
-          setEnrolledEvents((prevEnrolledEvents) =>
-            prevEnrolledEvents.filter((id) => id !== eventId)
+          setEnrolledEvents(prevEnrolledEvents =>
+            prevEnrolledEvents.filter(id => id !== eventId)
           );
         })
-
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     } else {
@@ -167,11 +233,22 @@ export default function Dashboard() {
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
         .then(() => {
-          setEnrolledEvents((prevEnrolledEvents) => [...prevEnrolledEvents, eventId]);
+          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
+    }
+  };
+
+
+  const compoundHandleEnroll = (eventId) => {
+    if (enrolledEvents.includes(eventId)) {
+      handleUnenroll(eventId);
+      handleEnroll(eventId);
+    } else {
+      handleEnroll(eventId);
+      addUserToConversation(eventId);
     }
   };
 
@@ -201,7 +278,7 @@ export default function Dashboard() {
                 event={event}
                 onEdit={false}
                 enrolledEvents={enrolledEvents}
-                handleEnroll={() => handleEnroll(event._id)}
+                handleEnroll={() => compoundHandleEnroll(event._id)}
                 handleDeleteEvent={null}
                 handleEditEvent={null}
               />
@@ -221,7 +298,7 @@ export default function Dashboard() {
                 event={event}
                 onEdit={false}
                 enrolledEvents={enrolledEvents}
-                handleEnroll={() => handleEnroll(event._id)}
+                handleEnroll={() => compoundHandleEnroll(event._id)}
                 handleDeleteEvent={null}
                 handleEditEvent={null}
               />

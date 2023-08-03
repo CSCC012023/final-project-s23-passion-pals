@@ -20,6 +20,10 @@ const twilioClient = twilio(accountSid, authToken);
 
 import ConversationModel from './models/Conversation.js';
 
+import TokenModel from "./models/token.js";
+import crypto from "crypto";
+import sendEmail from './utils/sendEmail.js';
+
 //backend for the project 
 const app = express();
 const server = http.createServer(app);
@@ -66,22 +70,23 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
 
 
 
-
-app.post("/", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await UserModel.findOne({ email, password });
-
-    if (user) {
-      res.json({ status: "exist", userId: user._id});
-    } else {
-      res.json("notexist");
+  app.post("/", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await UserModel.findOne({ email, password });
+  
+      if (user && user.verified) {
+        res.json({ status: "exist", userId: user._id });
+      } else if (user && !user.verified) {
+        res.json({ status: "notverified" });
+      } else {
+        res.json({ status: "notexist" });
+      }
+    } catch (e) {
+      res.json({ status: "notexist" });
     }
-  } catch (e) {
-    res.json("notexist");
-  }
-});
+  });
     
 
 
@@ -99,15 +104,14 @@ app.post("/signup", async (req, res) => {
     // Check if the email is in the correct format
 
 
-  else if (!email.includes("@gmail.com")) {
-    return res.json("wrongFormat")
-  }
+  //else if (!email.includes("@gmail.com")) {return res.json("wrongFormat")}
 
   const data = {
     email: email,
     password: password,
     fname: fname,
-    lname: lname
+    lname: lname,
+    verified: false,
   };
 
   try {
@@ -117,8 +121,14 @@ app.post("/signup", async (req, res) => {
       // If it already exists
       res.json("exist");
     } else {
-
       const newUser = await UserModel.create(data); // Create a new user and get the created user object
+      const token = await new TokenModel({
+        userId: newUser._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+      const url = `http://localhost:3000/${newUser._id}/verify/${token.token}`;
+      await sendEmail(newUser.email, "Verify Email", url);
+      console.log("Verification email sent successfully.");
 
       res.json({ status: "notexist", userId: newUser._id }); // Include the user ID in the response
 
@@ -147,6 +157,31 @@ app.post('/updatePhoneNumber', async (req, res) => {
     res.status(500).json({ success: false, message: 'Error updating phone number' });
   }
 });
+
+
+
+app.get("/:userId/verify/:token", async (req, res) => {
+  const { userId, token } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) return res.status(400).send({ message: "Invalid link" });
+
+    const verifyToken = await TokenModel.findOne({ userId: userId, token: token });
+    if (!verifyToken) return res.status(400).send({ message: "Invalid link" });
+
+    await UserModel.updateOne({ _id: userId }, { verified: true });
+    const deletedToken = await TokenModel.findOneAndDelete({ userId: userId, token: token });
+
+    res.status(200).send({ message: "Email verified successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+
+
+
 
 
 // Route to get all users inclduing current user
@@ -490,6 +525,34 @@ app.get('/getUsers/:userId', async (req, res) => {
   }
 });
 
+//Route to update a specific event
+app.patch('/events/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  if (!eventId) {
+    return res.status(400).json({ error: 'Event ID is required' });
+  }
+
+  const updatedEventData = req.body;
+
+  EventCardModel.findByIdAndUpdate(
+    eventId,
+    updatedEventData,
+    { new: true }
+  )
+    .then(updatedEvent => {
+      if (!updatedEvent) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      io.emit('eventUpdate');
+      res.json(updatedEvent);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
+
 
 // Route to update a specific user
 app.put('/users/:userId', (req, res) => {
@@ -631,7 +694,6 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
 
 
 app.post('/enroll/:eventId', async (req, res) => {
-
   const eventId = req.params.eventId;
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
@@ -642,21 +704,11 @@ app.post('/enroll/:eventId', async (req, res) => {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  /* Update spots in event */
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: -1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $addToSet: { enrolledEvents: event._id } },
-      { new: true }
-    ).exec();
-    
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
 
     const eventCreatorPhoneNumber = event.creatorPhoneNum;
     const creatorName = event.name;
@@ -669,16 +721,54 @@ app.post('/enroll/:eventId', async (req, res) => {
       body: smsMessage,
     });
 
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (event.spots > 0) {
+      // Enroll the user if spots are available
+      event.spots--;
+      await event.save();
+      user.enrolledEvents = user.enrolledEvents.push(eventId);
+
+      // Emit socket event to update all other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+      
+      console.log("Adding "+ user.fname +" to event...");
+
+      return res.json(event);
+    } else if (!event.waitlist.includes(userId)){
+      // Add user to the waitlist if event is full
+      event.waitlist.push(userId);
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Adding "+ user.fname +" to event waitlist...");
+
+      return res.json({ message: 'Added to waitlist.' });
+    } else {
+      // Remove user from waitlist if user is already in waitlist
+      event.waitlist = event.waitlist.filter((id) => id !== userId);
+      await EventCardModel.findByIdAndUpdate(eventId, { $pull: { waitlist: userId } });
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Deleting "+ user.fname +" from event waitlist...");
+
+      return res.json({ message: 'Removed from waitlist.' });
+    }
     res.json(event);
+    
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 
 app.post('/unenroll/:eventId', async (req, res) => {
   const eventId = req.params.eventId;
-
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
@@ -687,23 +777,52 @@ app.post('/unenroll/:eventId', async (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
-  /* Update spots in event */
+
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: 1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $pull: { enrolledEvents: eventId } },
-      { new: true }
-    ).exec();
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
-    res.json(event);
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Remove user from event
+    user.enrolledEvents = user.enrolledEvents.filter((id) => id !== eventId);
+    await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
+    io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+
+    // Check if there are users in the waitlist
+    if (event.waitlist.length > 0) {
+      const nextUserId = event.waitlist.shift();
+
+      const nextUser = await UserModel.findById(nextUserId);
+      if (!nextUser) {
+        return res.status(404).json({ error: 'Next user not found' });
+      }
+
+      nextUser.enrolledEvents = nextUser.enrolledEvents.push(eventId);
+      console.log("Enrolling from waitlist " + nextUser.fname);
+      io.emit('enrolledEventsUpdate', {userId: nextUserId, enrolledEvents: nextUser.enrolledEvents});
+
+      await event.save();
+
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('eventUpdate');
+
+      return res.json({ message: 'Unenrolled. Next person from waitlist enrolled' });
+    } else {
+      // Remove the user from enrolledEvents and update spots
+      event.spots++;
+      await event.save();
+
+      // Use socket to update other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      return res.json(event);
+    }
+
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 

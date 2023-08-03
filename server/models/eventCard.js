@@ -15,7 +15,8 @@ const eventCardSchema = new mongoose.Schema({
   eventDescription: String,
   eventDate: Date,
   themes: [String],
-  spots: Number
+  spots: Number,
+  waitlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserModel' }]
 }, {
   collection: 'Events'
 
