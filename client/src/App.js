@@ -28,8 +28,7 @@ const App = () => {
     location.pathname === "/select" ||
     location.pathname === "/selectEdit" ||
     location.pathname === "/loading" ||
-    location.pathname === "/pfp" ||
-    location.pathname === "/friend";
+    location.pathname === "/pfp";
 
   const PrivateRoute = ({ element, path }) => {
     return isLoggedIn ? (
