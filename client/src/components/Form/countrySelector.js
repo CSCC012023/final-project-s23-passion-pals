@@ -78,6 +78,7 @@ function CountrySelector({ postData, setPostData }) {
     return (
         <div className="locationSelector">
             <Select
+                className="dropdown"
                 options={countryOptions}
                 value={selectedCountry}
                 onChange={handleCountryChange}
@@ -85,6 +86,7 @@ function CountrySelector({ postData, setPostData }) {
             />
 
             <Select
+                className="dropdown"
                 options={stateOptions}
                 value={selectedRegion}
                 onChange={handleStateChange}
@@ -94,6 +96,7 @@ function CountrySelector({ postData, setPostData }) {
 
 
             <Select
+                className="dropdown"
                 options={cityOptions}
                 value={selectedCity}
                 onChange={handleCityChange}

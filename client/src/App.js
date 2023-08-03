@@ -47,7 +47,6 @@ const App = () => {
           path="/"
           element={<PrivateRoute element={<Signup />} path="/" />}
         />
-         <Route path="/:id/verify/:token" element={<EmailVerify />} />
         <Route
           path="/dash"
           element={<PrivateRoute element={<Dash />} path="/dash" />}
