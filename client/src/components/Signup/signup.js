@@ -80,7 +80,7 @@ function Signup() {
           localStorage.setItem("loggedIn", true);
           localStorage.setItem("email", emailSignup);
         console.log(localStorage);
-        loginHistory("/dash", { state: { id: userId } });
+        loginHistory("/pfp", { state: { id: userId } });
       } else if (response.data.status === "notexist") {
         alert("Please check your email or password");
       } else if (response.data.status === "notverified") {
