@@ -59,13 +59,13 @@
 .nav .onTab {
     background-color: #0fbd9a;
     border-radius: 30px;
-    width: 120%;
+    width: 110%;
 }
 
 .nav .onTab span {
     visibility: visible;
     opacity: 1;
-    transform: translate(10%, -50%);
+    transform: translate(0%, -50%);
 }
 
 
@@ -81,7 +81,7 @@
 .nav li:hover span {
     visibility: visible;
     opacity: 1;
-    transform: translate(10%, -50%);
+    transform: translate(0%, -50%);
     transition: all 0.2s ease-out;
 }
 
