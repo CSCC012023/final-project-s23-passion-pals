@@ -4,28 +4,26 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    width: 100%;
+    min-width: 100%;
     background-color: #212B38;
 }
 
 .nav {
     box-sizing: border-box;
-    width: 100%;
+    width: 100vw;
     margin: 0;
     background-color: #08C6AB;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    font-family: "Poppins", sans-serif;
     gap: 2rem;
-    padding: 0.5rem 1.65rem;
     border-radius: 0 0 30px 30px;
 }
 
 /* Styling for the site title */
 .site-title {
-    font-size: 2rem;
+    font-size: 1.3rem;
 }
 
 /* Styling for the unordered list */
@@ -34,7 +32,7 @@
     margin: 0;
     list-style: none;
     display: flex;
-    gap: 1rem;
+    flex: 1;
 }
 
 /* Styling for anchor links within the navigation bar */
@@ -42,21 +40,75 @@
     color: inherit;
     text-decoration: none;
     height: 100%;
-
-    /* Styling for the anchor link when hovered */
     display: flex;
     align-items: center;
-    padding: 0.75rem 1.25rem;
-    border-radius: 30px;
     position: relative;
+    transition: width 0.3s ease-out;
 }
 
-/* Styling for active list items */
-.nav li:active {
-    background-color: #555;
+.nav li {
+    height: 100%;
+    position: relative;
+    flex-grow: 1;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0px 0px 30px 30px;
 }
+
 
 /* Styling for hovered list items */
-.nav li:hover {
+.nav .onTab {
     background-color: #0fbd9a;
+    border-radius: 30px;
+    width: 120%;
+}
+
+.nav .onTab span {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(10%, -50%);
+}
+
+
+.nav li span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.nav li:hover span {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(10%, -50%);
+    transition: all 0.2s ease-out;
+}
+
+.icons {
+    cursor: pointer;
+    border: none;
+    color: white;
+    font-size: 34px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 1100px) {
+
+    /* Styling for the navigation bar container on small screens */
+    .nav li:hover span {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .nav .onTab span {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    /* ... Add other CSS rules for other elements that need changes on small screens ... */
 }
