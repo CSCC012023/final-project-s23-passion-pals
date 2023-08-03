@@ -32,7 +32,6 @@ export default function Profile() {
 
     try {
       // Update the user's locations array
-      console.log(selectedLocation)
       if (selectedLocation && !user.locations.includes(selectedLocation)) {
         await axios.post(`http://localhost:5000/addLocation/${userId}`, {
           location: selectedLocation,
@@ -129,7 +128,6 @@ export default function Profile() {
           onClose={() => setIsModalOpen(false)}
           onSave={(location, e) => {
             e.preventDefault();
-            console.log(location)
             setSelectedLocation(location);
           }}
           onDelete={handleDeleteLocation}

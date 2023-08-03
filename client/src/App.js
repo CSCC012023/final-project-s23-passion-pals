@@ -14,8 +14,8 @@ import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
-
 import Loading from "./components/Dashboard/LoadingPage";
+import './appWide.css'
 
 const App = () => {
   const isLoggedIn = localStorage.getItem("loggedIn") === "true";

@@ -16,6 +16,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s, visibility 0.3s;
+    font-family: Arial, sans-serif;
 }
 
 /* Styles for the open modal */
@@ -28,31 +29,60 @@
 
 /* Styles for the modal content */
 .modal-content {
-    background-color: #fff;
+    background-color: #37465B;
+    color: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    max-width: 50vw;
-    width: 40vw;
+    min-width: 500px;
+    max-width: 600px;
+    justify-content: center;
+    max-height: 580px;
+}
+
+.country-selector {
+    justify-content: center;
+}
+
+.modal-content h2 {
+    font-size: 20px;
+    font-weight: none;
+    margin-bottom: 5px;
+}
+
+.modal-content h3 {
+    padding-top: 3%;
+    font-size: 18px;
+    font-weight: none;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Styles for the modal buttons */
 .modal-buttons {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
+    justify-content: center;
 }
 
 /* Styles for the modal buttons */
-.modal-buttons button {
+.modal-content button {
     margin-left: 10px;
     padding: 10px 20px;
     border: none;
-    background-color: #007bff;
-    /* Blue color, you can change it to match your design */
-    color: #fff;
-    border-radius: 4px;
+    background-color: #08C6AB;
+    color: white;
+    border-radius: 10px;
     cursor: pointer;
+    width: 30%;
+    transition: all 0.2s ease-out;
+}
+
+/* Styles for the modal buttons */
+.modal-content button:hover {
+    background-color: #0eb190;
+    transition: all 0.2s ease-out;
 }
 
 .modal-buttons button.greyed-out {
@@ -60,4 +90,62 @@
     /* You can adjust the opacity to control the level of greying out */
     cursor: not-allowed;
     /* Add any additional styling you want for the disabled button */
+}
+
+.added-locations {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.added-locations-scrollable {
+    max-height: 361px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.added-locations li {
+    border-radius: 20px;
+    list-style-type: none;
+    padding: 10px;
+    background-color: #455163;
+    margin-bottom: 5px;
+    min-width: 450px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.added-locations button {
+    margin-left: 0px;
+    margin-right: 10px;
+    width: 20%;
+    border-radius: 15px;
+}
+
+.added-locations .location-text {
+    display: flex;
+    align-items: center;
+    padding-left: 25px;
+}
+
+.added-locations-scrollable::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    /* Set the width of the scrollbar */
+}
+
+/* Target the scrollbar thumb (the draggable part) */
+.added-locations-scrollable::-webkit-scrollbar-thumb {
+    background-color: #08C6AB;
+    /* Set the color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Add rounded corners to the thumb */
+}
+
+/* Target the scrollbar thumb on hover */
+.added-locations-scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #0eb190;
+    /* Set a different color for the thumb when hovered */
 }
