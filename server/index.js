@@ -77,7 +77,7 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
       const user = await UserModel.findOne({ email, password });
   
       if (user && user.verified) {
-        res.json({ status: "exist", userId: user._id });
+        res.json({ status: "exist", userId: user._id, userInit: user.initialized });
       } else if (user && !user.verified) {
         res.json({ status: "notverified" });
       } else {
@@ -147,6 +147,7 @@ app.post('/updatePhoneNumber', async (req, res) => {
     
     // Update the phone number field
     user.phoneNumber = phoneNumber;
+    user.initialized = true;
 
     // Save the changes to the database
     await user.save();

@@ -139,10 +139,7 @@ const Form = (event) => {
         } catch (error) {
           console.log("Error updating event: ", error);
         }
-      } else {
-        // Dispatch a create action with the postData
-        await dispatch(createPost(eventPostData));
-      }
+      } 
 
       try {
         // Make an HTTP POST request to save the conversation

@@ -76,11 +76,17 @@ function Signup() {
           // Handle different response scenarios
       if (response.data.status === "exist") {
           const userId = response.data.userId;
+          const initialized = response.data.userInit;
           localStorage.setItem("userId", userId);
           localStorage.setItem("loggedIn", true);
-          localStorage.setItem("email", emailSignup);
-        console.log(localStorage);
-        loginHistory("/pfp", { state: { id: userId } });
+          localStorage.setItem("email", emailLogin);
+          console.log(response);
+        if(initialized === true) {
+          loginHistory("/dash", { state: { id: userId } });
+        }
+        else {
+          loginHistory("/pfp", { state: { id: userId } });
+        }
       } else if (response.data.status === "notexist") {
         alert("Please check your email or password");
       } else if (response.data.status === "notverified") {

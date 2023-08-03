@@ -51,6 +51,7 @@ const Pfp = () => {
         userId,
         phoneNumber,
       });
+      
 
       // Navigate to the next page (choose interests page) after the profile picture is uploaded
       history('/dash');
