@@ -42,10 +42,12 @@
   
   .name {
     font-weight: bold;
+    color:white;
   }
   
   .email {
-    color: #888;
+    color: black;
+    font-size: small;
   }
   
   .button-container {
