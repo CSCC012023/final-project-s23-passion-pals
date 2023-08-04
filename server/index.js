@@ -1147,8 +1147,33 @@ app.post('/addSentRequest/:userId', async (req, res) => {
       return res.status(500).json({ error: 'Internal server error' });
     }
   });
-  
 
+  //Route to update a specific event
+app.patch('/events/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  if (!eventId) {
+    return res.status(400).json({ error: 'Event ID is required' });
+  }
+
+  const updatedEventData = req.body;
+
+  EventCardModel.findByIdAndUpdate(
+    eventId,
+    updatedEventData,
+    { new: true }
+  )
+    .then(updatedEvent => {
+      if (!updatedEvent) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      io.emit('eventUpdate');
+      res.json(updatedEvent);
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
 
 
 
