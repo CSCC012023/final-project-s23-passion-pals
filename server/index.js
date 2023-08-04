@@ -736,6 +736,7 @@ app.post('/enroll/:eventId', async (req, res) => {
       // Emit socket event to update all other clients
       io.emit('spotUpdate', { eventId, spots: event.spots });
       io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+      await UserModel.findByIdAndUpdate(user, { $push: { enrolledEvents: eventId } });
       
       console.log("Adding "+ user.fname +" to event...");
 
@@ -751,7 +752,7 @@ app.post('/enroll/:eventId', async (req, res) => {
       return res.json({ message: 'Added to waitlist.' });
     } else {
       // Remove user from waitlist if user is already in waitlist
-      event.waitlist = event.waitlist.filter((id) => id !== userId);
+      event.waitlist = event.waitlist.filter((id) => id != userId);
       await EventCardModel.findByIdAndUpdate(eventId, { $pull: { waitlist: userId } });
       await event.save();
       io.emit('eventUpdate');
@@ -789,7 +790,7 @@ app.post('/unenroll/:eventId', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     // Remove user from event
-    user.enrolledEvents = user.enrolledEvents.filter((id) => id !== eventId);
+    user.enrolledEvents = user.enrolledEvents.filter((id) => id != eventId);
     await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
     io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
 
@@ -805,6 +806,7 @@ app.post('/unenroll/:eventId', async (req, res) => {
       nextUser.enrolledEvents = nextUser.enrolledEvents.push(eventId);
       console.log("Enrolling from waitlist " + nextUser.fname);
       io.emit('enrolledEventsUpdate', {userId: nextUserId, enrolledEvents: nextUser.enrolledEvents});
+      await UserModel.findByIdAndUpdate(nextUserId, { $push: { enrolledEvents: eventId } });
 
       await event.save();
 
