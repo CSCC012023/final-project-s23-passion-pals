@@ -85,6 +85,8 @@ const FriendList = () => {
   
 
   return (
+    <div className="background-container">
+      <div className="friend-container">
         <div id="users">
           <ul id="users_ul">
             {data.map((item, index) => {
@@ -108,6 +110,8 @@ const FriendList = () => {
           </ul>
           <span>Number of friend requests: {data.length}</span>
         </div>
+      </div>
+    </div>
   );
 };
 

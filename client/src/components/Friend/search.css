@@ -14,6 +14,18 @@
   /* Adjust the height as needed */
 }
 
+.friend-container {
+  position: relative;
+  margin: auto;
+  top: 20%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  width: 1500px;
+  height: 500px;
+
+}
+
 .friend-container .search {
   position: absolute;
   margin: auto;
