@@ -32,6 +32,8 @@ const MyEvents = () => {
       });
   };
 
+
+  
   const handleDeleteEvent = (eventId) => {
     // Make a DELETE request to the server to remove the event from the database
     axios
@@ -44,6 +46,9 @@ const MyEvents = () => {
         console.log(error);
       });
   };
+
+
+
   return (
     <div className="event-card-container">
 

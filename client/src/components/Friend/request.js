@@ -47,28 +47,6 @@ const FriendList = () => {
     const checkConversationResponse = await axios.get(`/checkValidConversation/${currentUserId}/${userIdToAdd}`);
     const conversationExists = checkConversationResponse.data.hasValidConversation;
 
-        if (!conversationExists) {
-       
-          const conversationObject = {
-            members: [localStorage.getItem('userId'), userIdToAdd],
-            event: friendName, 
-          };
-
-          try {
-        
-            const conversationResponse = await axios.post(
-              "http://localhost:5000/createConversation",
-              conversationObject
-            );
-            console.log("Conversation created:", conversationResponse.data);
-        
-          } catch (error) {
-            console.error("Error creating conversation:", error);
-        
-          }
-        } else {
-          console.log('Conversation already exists with this friend.');
-        }
       } else {
         console.log('Error accepting friend request:', response.data);
       
