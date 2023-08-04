@@ -27,6 +27,7 @@ const App = () => {
     location.pathname === "/select" ||
     location.pathname === "/selectEdit" ||
     location.pathname === "/loading" ||
+    location.pathname === "/pfp" ||
     location.pathname === "/friend";
 
   const PrivateRoute = ({ element, path }) => {

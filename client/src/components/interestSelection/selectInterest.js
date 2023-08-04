@@ -36,11 +36,6 @@ const SelectInterest = () => {
       } catch (error) {
         // Handle the error if needed
       }
-  
-      // Add a delay of 600ms before navigating to "/dash"
-      setTimeout(() => {
-        history("/loading", { state: { id: userId } });
-      }, 600);
     };
 
   useEffect(() => {
@@ -70,7 +65,7 @@ const SelectInterest = () => {
   return (
     <div className='Interest'>
       <fieldset class="checkbox-group">
-        <legend class="checkbox-group-legend">Choose your favorites</legend>
+        <legend class="checkbox-group-legend"></legend>
         <div class="checkbox">
           <label class="checkbox-wrapper">
             <input type="checkbox" class="checkbox-input" value="Gaming" onChange={handleInterestChange} />
@@ -497,7 +492,7 @@ const SelectInterest = () => {
 
 
       </fieldset>
-      <button class="bubbly-button" onClick={handleSubmit} >Submit</button>
+      <button class="bubbly-button" onClick={handleSubmit} >Save!</button>
     </div>
   );
 };
