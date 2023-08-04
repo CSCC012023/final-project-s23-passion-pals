@@ -5,7 +5,7 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
   const [openPopups, setOpenPopups] = useState({});
   const userId = localStorage.getItem('userId');
   const [friendsList, setFriendsList] = useState([]);
-  let friendsInEvent = [];
+  const [friendsInEvent, setFriendsInEvent] = useState([]);
 
   // Get all events that the user is enrolled in
   useEffect(() => {
@@ -22,28 +22,41 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
       });
   }, [userId]);
 
-    //gets all events friends are enrolled in or created
   useEffect(() => {
-      if (friendsList.length > 0) {
-        const promises = friendsList.map(friendId =>
-          axios.get(`http://localhost:5000/getUsers/${friendId}`)
-        );
-        Promise.all(promises)
-          .then(responses => {
-            friendsInEvent = responses.map(response => {
+    if (friendsList.length > 0) {
+      const promises = friendsList.map(friendId =>
+        axios.get(`http://localhost:5000/getUsers/${friendId}`)
+          .catch(error => {
+            // Handle individual promise error here (optional)
+            console.log(`Error fetching user with ID ${friendId}: ${error}`);
+            return null; // Return a resolved promise with null to continue the Promise.all
+          })
+      );
+      Promise.all(promises)
+        .then(responses => {
+           setFriendsInEvent((responses.map(response => {
+            if (response) {
               const user = response.data;
               if (user.enrolledEvents.includes(event._id)) {
                 return user;
               }
-            })})
-          .catch(error => {
-            console.log(error);
-          });
-        }
-        console.log(`friendsInEvent for event ${event.eventName}: ${friendsInEvent}`);
-    }, [friendsList]);
+            }
+            return []; // Return an empty array for failed promises
+          })).filter(user => user.hasOwnProperty('fname')));
+          // console.log(friendsInEvent);
+          // const filteredFriends = friendsInEvent.filter(friend => friend.type === 'User');
+          // console.log(filteredFriends);
+          // setFriendsInEvent(filteredFriends);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, [friendsList]);
+    
 
   const handleOpenPopup = (eventId) => {
+    console.log(friendsInEvent.map(user => user.fname));
     setOpenPopups(prevOpenPopups => ({
       ...prevOpenPopups,
       [eventId]: true
@@ -129,8 +142,8 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
         <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
         <ul className="event-image-social-list">
           {friendsInEvent.slice(0, 2).map(user => (
-            <li className="event-image-social-list-item">
-              <img src={user.profilePicture} alt="profile picture" className="event-image-social-list-item-image" />
+            <li key={user._id} className="event-image-social-list-item">
+              <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="profile picture" className="event-image-social-list-item-image" />
             </li>
           ))}
           {friendsInEvent.length > 2 ? (
