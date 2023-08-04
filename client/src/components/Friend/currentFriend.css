@@ -1,0 +1,119 @@
+.right {
+    float: right;
+    position: relative;
+    top: 6px;
+  }
+  
+  .top {
+    margin-top: -30px;
+  }
+  /* for whole friend list */
+  #users {
+    background: rgb(255, 255, 255);
+    position: left;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: 280px;
+    width: 600px;
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: inset 1px 1px 0 white;
+    max-height: 450px;
+  }
+  #users ul {
+    margin: 0 auto;
+    padding: 0;
+    max-height: 390px;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 5px 0 5px;
+    border-left: none;
+    border-right: none;
+  }
+  /* borderof the card */
+  #users li{
+    list-style: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    background-image: 
+    linear-gradient(
+        90deg,
+        #786cfc,
+        #60fce4 10px,
+        #10c4ac 11px,
+        transparent 11px);
+    padding: 10px 15px 10px 25px;
+    border: 1px solid #CCC;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+    margin-bottom: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  #query {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 19px;
+    padding: 5px;
+    font-family: calibri light;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  #users span {
+    display: block;
+    position: absolute;
+    background: #786cfc;
+    bottom: -35px;
+    left: -1px;
+    width: 601px;
+    border-radius: 0 0 5px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  }
+  
+  #users select {
+    width: 120px;
+    margin-left: 230px;
+    margin-top: -45px;
+    border-radius: 0 3px 3px 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    padding: 7.5px;
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  #users select:focus, #query:focus {
+    border: 1px solid rgb(73, 162, 225);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
+    outline: none;
+  }
+  .button-container {
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  .add-button,
+  .remove-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .remove-button {
+    background-color: #f44336;
+    color: white;
+  }
+    

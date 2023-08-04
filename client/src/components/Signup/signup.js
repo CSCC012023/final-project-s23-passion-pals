@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import "./loginSignup.css";
 //In the above code, we have defined the Signup component which is responsible for handling user registration and login functionality. It consists of a form with input fields for first name, 
@@ -14,7 +14,6 @@ function Signup() {
     const [passwordSignup, setSignupPassword] = useState("");
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
     const [isRegistrationActive, setIsRegistrationActive] = useState(true);
   
     const [emailLogin, setLoginEmail] = useState("");
@@ -36,7 +35,6 @@ function Signup() {
         const response = await axios.post("/signup", {
           email: emailSignup,
           password: passwordSignup,
-          phoneNumber,
           fname,
           lname,
         });
@@ -50,7 +48,6 @@ function Signup() {
             setSignupPassword("");
             setFname("");
             setLname("");
-            setPhoneNumber("");
             // Show successful account creation alert
             alert("Successfully Created an account, email was sent please verify your account to login");
             // Navigate to the login page
@@ -63,7 +60,8 @@ function Signup() {
       } catch (error) {
         alert("Wrong details");
         console.log(error);
-
+      }
+    }
   
     // Function to handle the form submission for user login
     async function submitLogin(e) {
@@ -78,15 +76,22 @@ function Signup() {
           // Handle different response scenarios
       if (response.data.status === "exist") {
           const userId = response.data.userId;
+          const initialized = response.data.userInit;
           localStorage.setItem("userId", userId);
           localStorage.setItem("loggedIn", true);
-          localStorage.setItem("email", emailSignup);
-        console.log(localStorage);
-        loginHistory("/dash", { state: { id: userId } });
+          localStorage.setItem("email", emailLogin);
+          console.log(response);
+        if(initialized === true) {
+          loginHistory("/dash", { state: { id: userId } });
+        }
+        else {
+          loginHistory("/pfp", { state: { id: userId } });
+        }
       } else if (response.data.status === "notexist") {
         alert("Please check your email or password");
       } else if (response.data.status === "notverified") {
         alert("Account not verified. Please check your email for the verification link.");
+       
       }
     } catch (error) {
       alert("An error occurred while logging in");
@@ -126,25 +131,7 @@ function Signup() {
                 setSignupEmail(e.target.value);
               }}
             />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              onChange={(e) => {
-                // Remove any non-numeric characters from the input value
-                const phoneNumber = e.target.value.replace(/\D/g, "");
-                setPhoneNumber(phoneNumber);
-              }}
-              onKeyPress={(e) => {
-                // Allow only numeric characters and some special keys (e.g., Backspace, Enter)
-                const keyCode = e.keyCode || e.which;
-                const keyValue = String.fromCharCode(keyCode);
-                const numericRegex = /^[0-9]*$/;
-                if (!numericRegex.test(keyValue)) {
-                  e.preventDefault();
-                }
-              }}
-              required
-            />
+          
             <input
               type="password"
               placeholder="Password"

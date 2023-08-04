@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import twilio from 'twilio';
 import multer from 'multer'; // Import multer
 import postRoutes from './routes/posts.js';
 import UserModel from './models/Users.js';
@@ -10,7 +11,15 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
+// Twillo Credentials
+const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
+const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
+const twilioPhoneNumber = '+16672305883';
+// Create a Twilio client
+const twilioClient = twilio(accountSid, authToken);
+
 import ConversationModel from './models/Conversation.js';
+
 import TokenModel from "./models/token.js";
 import crypto from "crypto";
 import sendEmail from './utils/sendEmail.js';
@@ -68,7 +77,7 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
       const user = await UserModel.findOne({ email, password });
   
       if (user && user.verified) {
-        res.json({ status: "exist", userId: user._id });
+        res.json({ status: "exist", userId: user._id, userInit: user.initialized });
       } else if (user && !user.verified) {
         res.json({ status: "notverified" });
       } else {
@@ -83,10 +92,10 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
 
 //api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, phoneNumber, fname, lname } = req.body;
+  const { email, password, fname, lname } = req.body;
 
   // Check if the password is empty
-  if (!password || !email || !phoneNumber || !fname || !lname) {
+  if (!password || !email || !fname || !lname) {
     return res.json("emptyPassword");
   }
   //moch verification
@@ -100,7 +109,6 @@ app.post("/signup", async (req, res) => {
   const data = {
     email: email,
     password: password,
-    phoneNumber: phoneNumber,
     fname: fname,
     lname: lname,
     verified: false,
@@ -130,6 +138,26 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post('/updatePhoneNumber', async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await UserModel.findById(userId);
+    
+    // Update the phone number field
+    user.phoneNumber = phoneNumber;
+    user.initialized = true;
+
+    // Save the changes to the database
+    await user.save();
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error updating phone number' });
+  }
+});
 
 
 
@@ -324,11 +352,24 @@ app.post('/addFriendRequest/:userId', async (req, res) => {
       // Find the user who is receiving the friend request
 
       const recipientUser = await UserModel.findById(userId);
+      const senderUser = await UserModel.findById(senderId);
   
       // Check if the user is already in the request list (to avoid duplicates)
       if (!recipientUser.request.includes(senderId)) {
         recipientUser.request.push(senderId);
         await recipientUser.save();
+
+        const recipientPhoneNumber = recipientUser.phoneNumber;
+        const senderName = senderUser.fname;
+        const recipientName = recipientUser.fname;
+        const smsMessage = `Hi ${recipientName}, you've got a new friend request from ${senderName}! 🤝 Accept the request to connect and start sharing memories together!`;
+
+        // Use Twilio API to send SMS
+        await twilioClient.messages.create({
+          to: recipientPhoneNumber,
+          from: twilioPhoneNumber,
+          body: smsMessage,
+        });
   
         res.status(200).json({ success: true });
       } else {
@@ -654,7 +695,6 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
 
 
 app.post('/enroll/:eventId', async (req, res) => {
-
   const eventId = req.params.eventId;
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
@@ -665,53 +705,72 @@ app.post('/enroll/:eventId', async (req, res) => {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  /* Update spots in event */
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: -1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $addToSet: { enrolledEvents: event._id } },
-      { new: true }
-    ).exec();
-    
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
 
+    const eventCreatorPhoneNumber = event.creatorPhoneNum;
+    const creatorName = event.name;
+    const smsMessage = `Hi ${creatorName}, someone has joined your event: ${event.eventName}!`;
+
+    // Use Twilio API to send SMS
+    await twilioClient.messages.create({
+      to: eventCreatorPhoneNumber,
+      from: twilioPhoneNumber,
+      body: smsMessage,
+    });
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (event.spots > 0) {
+      // Enroll the user if spots are available
+      event.spots--;
+      await event.save();
+      user.enrolledEvents = user.enrolledEvents.push(eventId);
+
+      // Emit socket event to update all other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+      await UserModel.findByIdAndUpdate(user, { $push: { enrolledEvents: eventId } });
+      
+      console.log("Adding "+ user.fname +" to event...");
+
+      return res.json(event);
+    } else if (!event.waitlist.includes(userId)){
+      // Add user to the waitlist if event is full
+      event.waitlist.push(userId);
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Adding "+ user.fname +" to event waitlist...");
+
+      return res.json({ message: 'Added to waitlist.' });
+    } else {
+      // Remove user from waitlist if user is already in waitlist
+      event.waitlist = event.waitlist.filter((id) => id != userId);
+      await EventCardModel.findByIdAndUpdate(eventId, { $pull: { waitlist: userId } });
+      await event.save();
+      io.emit('eventUpdate');
+
+      console.log("Deleting "+ user.fname +" from event waitlist...");
+
+      return res.json({ message: 'Removed from waitlist.' });
+    }
     res.json(event);
+    
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-/* Update user enrolledEvents */
-/*
-UserModel.findByIdAndUpdate(
-  userId,
-  { $addToSet: { enrolledEvents: event._id } },
-  { new: true }
-)
-  .then(updatedUser => {
-    if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(event);
-  })
-  .catch(err => {
-    res.status(500).json({ error: 'Internal server error' });
-  });
-})
-.catch(err => {
-res.status(500).json({ error: 'Internal server error' });
-});
-*/
 
 app.post('/unenroll/:eventId', async (req, res) => {
   const eventId = req.params.eventId;
-
   if (!eventId) {
     return res.status(400).json({ error: 'Event ID is required' });
   }
@@ -720,23 +779,53 @@ app.post('/unenroll/:eventId', async (req, res) => {
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
-  /* Update spots in event */
+
   try {
-    const event = await EventCardModel.findByIdAndUpdate(
-      req.params.eventId,
-      { $inc: { spots: 1 } },
-      { new: true }
-    ).exec();
-    await UserModel.findByIdAndUpdate(
-      userId,
-      { $pull: { enrolledEvents: eventId } },
-      { new: true }
-    ).exec();
-    /* Use sockets to update all other clients */
-    io.emit('spotUpdate', { eventId, spots: event.spots});
-    res.json(event);
+    const event = await EventCardModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Remove user from event
+    user.enrolledEvents = user.enrolledEvents.filter((id) => id != eventId);
+    await UserModel.findByIdAndUpdate(userId, { $pull: { enrolledEvents: event._id } });
+    io.emit('enrolledEventsUpdate', {userId, enrolledEvents: user.enrolledEvents});
+
+    // Check if there are users in the waitlist
+    if (event.waitlist.length > 0) {
+      const nextUserId = event.waitlist.shift();
+
+      const nextUser = await UserModel.findById(nextUserId);
+      if (!nextUser) {
+        return res.status(404).json({ error: 'Next user not found' });
+      }
+
+      nextUser.enrolledEvents = nextUser.enrolledEvents.push(eventId);
+      console.log("Enrolling from waitlist " + nextUser.fname);
+      io.emit('enrolledEventsUpdate', {userId: nextUserId, enrolledEvents: nextUser.enrolledEvents});
+      await UserModel.findByIdAndUpdate(nextUserId, { $push: { enrolledEvents: eventId } });
+
+      await event.save();
+
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      io.emit('eventUpdate');
+
+      return res.json({ message: 'Unenrolled. Next person from waitlist enrolled' });
+    } else {
+      // Remove the user from enrolledEvents and update spots
+      event.spots++;
+      await event.save();
+
+      // Use socket to update other clients
+      io.emit('spotUpdate', { eventId, spots: event.spots });
+      return res.json(event);
+    }
+
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -862,6 +951,203 @@ app.put('/updateConversationMembers/:conversationId', async (req, res) => {
   });
   
 
+
+
+
+
+
+
+
+
+
+// Endpoint to check if a valid conversation exists between the current user and the user to add
+app.get('/checkValidConversation/:currentUserId/:userIdToAdd', async (req, res) => {
+    const currentUserId = req.params.currentUserId;
+    const userIdToAdd = req.params.userIdToAdd;
+  
+    try {
+      // Perform a database query to check if a valid conversation exists
+      const conversation = await ConversationModel.findOne({
+        members: { $all: [currentUserId, userIdToAdd] },
+        eventId: { $exists: false },
+      });
+  
+      // Return the result of the query to the front-end
+      res.json({ hasValidConversation: conversation !== null });
+    } catch (error) {
+      console.error('Error checking conversation:', error);
+      res.status(500).json({ error: 'Error checking conversation' });
+    }
+  });
+  
+
+
+
+// Route to handle friend request
+app.post('/addSentRequest/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { friendId } = req.body;
+  
+    try {
+      // Find the user who is sending the friend request
+      const senderUser = await UserModel.findById(userId);
+  
+      // Find the user who is receiving the friend request
+      const recipientUser = await UserModel.findById(friendId);
+  
+      // Check if both users exist in the database
+      if (!senderUser || !recipientUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the friend request has already been sent
+      if (senderUser.sentRequests.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend request already sent' });
+      }
+  
+      // Add the friendId to the sender's sentRequests array
+      senderUser.sentRequests.push(friendId);
+      await senderUser.save();
+  
+      // You can implement additional logic here, such as sending a notification to the recipientUser
+  
+      res.status(200).json({ success: true, message: 'Friend request sent successfully' });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: 'Error sending friend request' });
+    }
+  });
+
+
+
+  app.delete('/deleteConversation/:eventId', async (req, res) => {
+    const eventId = req.params.eventId;
+  
+    if (!eventId) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+  
+    try {
+      // First, find the conversation by eventId
+      const conversation = await ConversationModel.findOne({ eventId });
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      // Then, delete the conversation
+      await ConversationModel.deleteOne({ eventId });
+  
+      res.json({ message: 'Conversation deleted successfully' });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Error deleting conversation' }); // Include an informative error message
+    }
+  });
+
+
+
+  app.get('/getSentRequests/:userId', async (req, res) => {
+    try {
+      const { userId } = req.params;
+  
+      // Assuming you have a database where you store the user data, fetch the user by their ID
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Extract and return the sentRequests array from the user object
+      const sentRequests = user.sentRequests;
+      console.log(sentRequests);
+      return res.json(sentRequests);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+
+
+  
+
+  app.delete('/removeSentRequest/:senderId/:receiverId', async (req, res) => {
+    const { senderId, receiverId } = req.params;
+  
+    try {
+      // Find the sender and receiver users in the database
+      const senderUser = await UserModel.findById(senderId);
+      const receiverUser = await UserModel.findById(receiverId);
+  
+      if (!senderUser || !receiverUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Remove current user's ID from sender's sentRequest list
+      senderUser.sentRequests = senderUser.sentRequests.filter((id) => id.toString() !== receiverId);
+  
+      // Save the updated sender user to the database
+      const updatedSenderUser = await senderUser.save();
+
+  
+      return res.json({ success: true });
+    } catch (error) {
+      console.log('Error removing sent request:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+
+  app.get('/getFriends/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Fetch the user's data from the database
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Retrieve the user's friends list from the 'friends' field
+      const friends = user.friend;
+
+      return res.json(friends);
+    } catch (error) {
+      console.log('Error fetching friends:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
+
+  app.get('/getFriendList/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Fetch the user's data from the database
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Retrieve the user's friend list from the 'friend' field
+      const friends = user.friend;
+  
+      // Find the actual friend objects using the friend IDs
+      const friendObjects = await UserModel.find({ _id: { $in: friends } });
+  
+      return res.json(friendObjects);
+    } catch (error) {
+      console.log('Error fetching friend list:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 
 
 

@@ -14,7 +14,11 @@ import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
+
 import EmailVerify from './components/EmailVerify/index';
+
+
+import CurrentFriend from './components/Friend/currentFriend';
 
 import Loading from "./components/Dashboard/LoadingPage";
 
@@ -27,7 +31,9 @@ const App = () => {
     location.pathname === "/" ||
     location.pathname === "/select" ||
     location.pathname === "/selectEdit" ||
-    location.pathname === "/loading";
+    location.pathname === "/loading" ||
+    location.pathname === "/pfp" ||
+    location.pathname === "/friend";
 
   const PrivateRoute = ({ element, path }) => {
     return isLoggedIn ? (
@@ -98,6 +104,10 @@ const App = () => {
         <Route
           path="/request"
           element={<PrivateRoute element={<Request />} path="/request" />}
+        />
+        <Route
+          path="/currentFriend"
+          element={<PrivateRoute element={<CurrentFriend />} path="/currentFriend" />}
         />
       </Routes>
     </div>

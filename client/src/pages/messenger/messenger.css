@@ -13,14 +13,17 @@ body {
 .messenger {
   height: calc(100vh - 70px);
   display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
 }
 
 .chatMenu {
-  flex: 1; /* Adjust the width to take full width on smaller screens */
+  flex: 1;
+  /* Adjust the width to take full width on smaller screens */
   padding: 10px;
   background: linear-gradient(to bottom, #37465B, #0F1A2D);
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
   border: 10px solid;
   border-image: linear-gradient(to bottom, #08C6AB, #5AFFE7, #726EFF) 1;
 }
@@ -29,7 +32,7 @@ body {
   font-size: 25px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: white;
+  color: white !important;
   text-align: center;
 }
 
@@ -43,10 +46,10 @@ body {
 }
 
 .chatBox {
-  flex: 3; 
+  flex: 3;
   display: flex;
   flex-direction: column;
-  
+
 }
 
 .chatBoxWrapper {
@@ -89,7 +92,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 10px 10px; /* Add padding to the top and bottom of the chat box bottom */
+  padding: 10px 20px 10px 10px;
+  /* Add padding to the top and bottom of the chat box bottom */
 }
 
 .chatInputWrapper {
@@ -131,7 +135,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .chatSubmitButton:disabled {
@@ -156,8 +160,10 @@ body {
 }
 
 .robotImage {
-  width: 400px; /* Adjust the width as needed */
-  height: 400px; /* Adjust the height as needed */
+  width: 400px;
+  /* Adjust the width as needed */
+  height: 400px;
+  /* Adjust the height as needed */
 }
 
 
