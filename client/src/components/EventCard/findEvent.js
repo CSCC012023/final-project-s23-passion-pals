@@ -179,16 +179,28 @@ export default function FindEvent() {
     if (friends.length > 0) {
       const promises = friends.map(friendId =>
         axios.get(`http://localhost:5000/getUsers/${friendId}`)
+          .catch(error => {
+            // Handle individual promise error here (optional)
+            console.log(`Error fetching user with ID ${friendId}: ${error}`);
+            return null; // Return a resolved promise with null to continue the Promise.all
+          })
       );
       Promise.all(promises)
         .then(responses => {
           const friendEvents = responses.map(response => {
-            const user = response.data;
-            return user.enrolledEvents;
-          })
+            if (response) {
+              const user = response.data;
+              return user.enrolledEvents;
+            }
+            return []; // Return an empty array for failed promises
+          });
+
           const friendEmails = responses.map(response => {
-            const user = response.data;
-            return user.email;
+            if (response) {
+              const user = response.data;
+              return user.email;
+            }
+            return null; // Return null for failed promises
           });
           // Combine all the friend enrolled events into a single array
           const allFriendEvents = friendEvents.flat();
