@@ -15,10 +15,9 @@ import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
 
-import EmailVerify from './components/EmailVerify/index';
-
-
 import CurrentFriend from './components/Friend/currentFriend';
+
+import EmailVerify from './components/EmailVerify/index';
 
 import Loading from "./components/Dashboard/LoadingPage";
 
@@ -33,7 +32,7 @@ const App = () => {
     location.pathname === "/selectEdit" ||
     location.pathname === "/loading" ||
     location.pathname === "/pfp" ||
-    location.pathname === "/friend";
+    location.pathname.search("/verify") !== -1; /*ignore if /verify is in the path*/
 
   const PrivateRoute = ({ element, path }) => {
     return isLoggedIn ? (
@@ -51,7 +50,7 @@ const App = () => {
           path="/"
           element={<PrivateRoute element={<Signup />} path="/" />}
         />
-         <Route path="/:id/verify/:token" element={<EmailVerify />} />
+        <Route path="/:id/verify/:token" element={<EmailVerify />} />
         <Route
           path="/dash"
           element={<PrivateRoute element={<Dash />} path="/dash" />}
@@ -69,6 +68,7 @@ const App = () => {
           element={<PrivateRoute element={<SelectEdition />} path="/selectEdit" />}
         />
         <Route path="/signup" element={<Signup />} />
+        <Route path=":userid/verify/" element={<EmailVerify />} />
         <Route
           path="/createEvent"
           element={<PrivateRoute element={<Form />} path="/createEvent" />}

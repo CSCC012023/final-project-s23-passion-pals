@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import "./navBar.css"
-import uoft from '../../images/uoft.png';
+import uoft from '../../images/logo.png';
 
 export default function Navbar() {
     const logOut = async () => {
@@ -38,7 +38,7 @@ export default function Navbar() {
                             <div className={`icons  ${highlightedButton === 'home' ? '' : ''}`}> {/* if we want to add an effect to the title add it here*/}
                                 <img src={uoft} alt="Site Logo" style={{ width: '62px', height: '62px' }} />
                             </div>
-                            Passion Pals
+                            PassionPals
                         </Link>
                     </li>
                     <li>
