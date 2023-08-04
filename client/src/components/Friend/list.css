@@ -1,18 +1,11 @@
 /* Main container */
-.friend-container {
-    position: relative;
-    margin: 50px auto;
-    max-width: 800px;
-    padding: 20px;
-  }
   
   /* Background container */
   .background-container {
     background-color: #f5f5f5;
     min-height: 100vh;
+    flex-direction: column;
     display: flex;
-    justify-content: center;
-    align-items: center;
   }
   
   /* Profile picture */
@@ -21,6 +14,23 @@
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  .friend-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+  }
+
+  .request-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-content: center;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 100px;
   }
   
   /* User item */
@@ -85,10 +95,10 @@
   /* Friend list container */
   #users {
     background: rgb(255, 255, 255);
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 280px;
+    margin-top: 0px;
     width: 800px;
     padding: 15px;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -140,7 +150,7 @@
   #users select {
     width: 120px;
     margin-left: 230px;
-    margin-top: -45px;
+    margin-top: 0px;
     border-radius: 0 3px 3px 0;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-left: 1px solid rgba(0, 0, 0, 0.1);

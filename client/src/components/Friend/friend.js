@@ -141,78 +141,74 @@ const Friend = () => {
 
   return (
     <div className="background-container">
+      <div className='request-container'>
+        <FriendList/>
+      </div>
       <div className="friend-container">
-        <div className="left-container">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <div className="search"></div>
-            {query !== '' && (
-              <div id="users">
-                <ul id="users_ul">
-                  {filteredData.map((item, index) => {
-                    const { fname, lname, email, _id, profilePic } = item;
-                    const fullName = `${fname} ${lname}`;
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <div className="search"></div>
+          {query !== '' && (
+            <div id="users">
+              <ul id="users_ul">
+                {filteredData.map((item, index) => {
+                  const { fname, lname, email, _id, profilePic } = item;
+                  const fullName = `${fname} ${lname}`;
 
-                    const isRequested = requestedUsers.includes(_id);
-                    const isFriend = currentFriends.includes(_id);
+                  const isRequested = requestedUsers.includes(_id);
+                  const isFriend = currentFriends.includes(_id);
 
-                    return (
-                      <li key={index} className="user-item">
-                        <div className="profile-pic">
-                          <img
-                            src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
-                            alt={fullName}
-                          />
-                        </div>
-                        <div className="user-info">
-                          <div className="name">{fullName}</div>
-                          <div className="email">{email}</div>
-                        </div>
-                        <div className="button-container">
-                          {isFriend || isRequested ? (
-                            <button
-                              className={`requested-button ${
-                                isFriend || isRequested ? 'disabled' : ''
+                  return (
+                    <li key={index} className="user-item">
+                      <div className="profile-pic">
+                        <img
+                          src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
+                          alt={fullName}
+                        />
+                      </div>
+                      <div className="user-info">
+                        <div className="name">{fullName}</div>
+                        <div className="email">{email}</div>
+                      </div>
+                      <div className="button-container">
+                        {isFriend || isRequested ? (
+                          <button
+                            className={`requested-button ${isFriend || isRequested ? 'disabled' : ''
                               }`}
-                              disabled
-                            >
-                              {isFriend ? 'Added' : 'Request Sent'}
-                            </button>
-                          ) : (
-                            <button className="add-button" onClick={() => handleButtonClick(_id)}>
-                              Add
-                            </button>
-                          )}
+                            disabled
+                          >
+                            {isFriend ? 'Added' : 'Request Sent'}
+                          </button>
+                        ) : (
+                          <button className="add-button" onClick={() => handleButtonClick(_id)}>
+                            Add
+                          </button>
+                        )}
 
-                          {isRequested ? (
-                            <button className="requested-button" disabled>
-                              {/* Empty space for the requested button */}
-                            </button>
-                          ) : (
-                            <button
-                              className="remove-button"
-                              onClick={() => handleDeleteClick(_id)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="right-container">
-          {/* Use the FriendList component here */}
-          
+                        {isRequested ? (
+                          <button className="requested-button" disabled>
+                            {/* Empty space for the requested button */}
+                          </button>
+                        ) : (
+                          <button
+                            className="remove-button"
+                            onClick={() => handleDeleteClick(_id)}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
