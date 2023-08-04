@@ -101,8 +101,8 @@ const FriendList = () => {
 
                   <div className="button-container">
 
-                    <button onClick={() => handleAcceptRequest(_id)}>Accept</button>
-                    <button onClick={() => handleDeclineRequest(_id)}>Decline</button>
+                    <button className="add-button" onClick={() => handleAcceptRequest(_id)}>Accept</button>
+                    <button className="remove-button" onClick={() => handleDeclineRequest(_id)}>Decline</button>
                   </div>
                 </li>
               );

@@ -36,11 +36,11 @@
     list-style: none;
     background-color: rgba(0, 0, 0, 0.05);
     background-image: 
-      linear-gradient(
+    linear-gradient(
         90deg,
-      rgb(7, 139, 40),
-        #EEE 10px,
-        #EEE 11px,
+        #786cfc,
+        #60fce4 10px,
+        #10c4ac 11px,
         transparent 11px);
     padding: 10px 15px 10px 25px;
     border: 1px solid #CCC;
@@ -69,7 +69,7 @@
     background: #786cfc;
     bottom: -35px;
     left: -1px;
-    width: 350px;
+    width: 601px;
     border-radius: 0 0 5px 5px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 10px;
