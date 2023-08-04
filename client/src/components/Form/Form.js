@@ -178,7 +178,7 @@ const Form = () => {
     //  selecting event themes, which update the postData state based on the selected themes using the handleThemeChange function. The form is 
     //  styled using Material-UI components and custom CSS classes. The component also includes the necessary imports and utilizes React hooks such as 
     //  useState and useDispatch. Overall, this form provides a user-friendly interface for creating events and handles the necessary data submission.
-    <Container component="main">
+    <div className="form_container">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
           Create Event
@@ -215,7 +215,9 @@ const Form = () => {
           onChange={(e) => setPostData({ ...postData, eventDescription: e.target.value })}
         />
         <FormControl component="fieldset" fullWidth>
-          <Typography>Select Event Themes</Typography>
+          <Typography variant="h7" style={{ color: "white", fontWeight: "bold" }} >
+            Select Event Themes
+          </Typography>
           <div>
             <FormControlLabel
               control={
@@ -224,9 +226,11 @@ const Form = () => {
                   value="Gaming"
                   checked={postData.themes.includes("Gaming")}
                   onChange={(e) => handleThemeChange(e, "Gaming")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Gaming"
+              style = {{color: "white"}}
             />
 
             <FormControlLabel
@@ -236,9 +240,11 @@ const Form = () => {
                   value="Nature"
                   checked={postData.themes.includes("Nature")}
                   onChange={(e) => handleThemeChange(e, "Nature")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Nature"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -247,9 +253,11 @@ const Form = () => {
                   value="Creativity"
                   checked={postData.themes.includes("Creativity")}
                   onChange={(e) => handleThemeChange(e, "Creativity")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Creativity"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -258,9 +266,11 @@ const Form = () => {
                   value="Festivals"
                   checked={postData.themes.includes("Festivals")}
                   onChange={(e) => handleThemeChange(e, "Festivals")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Festivals"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -269,9 +279,11 @@ const Form = () => {
                   value="Sports"
                   checked={postData.themes.includes("Sports")}
                   onChange={(e) => handleThemeChange(e, "Sports")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Sports"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -280,9 +292,11 @@ const Form = () => {
                   value="Culinary"
                   checked={postData.themes.includes("Culinary")}
                   onChange={(e) => handleThemeChange(e, "Culinary")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Culinary"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -291,9 +305,11 @@ const Form = () => {
                   value="Adventure"
                   checked={postData.themes.includes("Adventure")}
                   onChange={(e) => handleThemeChange(e, "Adventure")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Adventure"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -302,18 +318,28 @@ const Form = () => {
                   value="Health"
                   checked={postData.themes.includes("Health")}
                   onChange={(e) => handleThemeChange(e, "Health")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Health"
+              style = {{color: "white"}}
             />
           </div>
         </FormControl>
-        <input
-          type="date"
-          id="eventDate"
-          value={postData.eventDate}
-          onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
-        />
+       {/* Move the Date field to the left */}
+       <FormControl fullWidth>
+          <Typography variant="h7" style={{ color: "white", fontWeight: "bold" }}>
+            Select Event Date
+          </Typography>
+          <br />
+          <input
+            type="date"
+            id="eventDate"
+            value={postData.eventDate}
+            onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
+          />
+        </FormControl>
+        <br />
         <input
           name="eventPrice"
           type="text"
@@ -325,9 +351,9 @@ const Form = () => {
           }
         />
 
-        <div>
-          <CountrySelector postData={postData} setPostData={setPostData} />
-        </div>
+        <br />
+  
+        <CountrySelector postData={postData} setPostData={setPostData} />
 
         <input
           name="eventAddress"
@@ -381,7 +407,7 @@ const Form = () => {
           Submit
         </Button>
       </form>
-    </Container>
+    </div>
   );
 };
 export default Form;
