@@ -115,23 +115,27 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
         </div>
         <div className="event-body-bottom event-body-bottom-reveal">
           <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
-          {onEdit ?
+          { onEdit ? 
             <div className="modify-event-buttons">
-              <button className="event-body-bottom-text float-right event-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
-              <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
+                <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
             </div>
-            : (enrolledEvents.includes(event._id) ?
+            : (enrolledEvents.includes(event._id) ? (
               <button className="event-body-bottom-text float-right event-button" onClick={() => handleUnenroll(event._id)}>Unenroll</button>
-              : (event.spots > 0 ? (
-                <button className="event-body-bottom-text float-right event-button" onClick={() => {
-                  handleEnroll();
-                  addUserToConversation(event._id); // Call the function here after successful enrollment
-                }}
-                  disabled={event.spots <= 0}
-                >Enroll Now</button>
-              ) : (<span className="event-body-bottom-text float-right">No Spots Available</span>
-              )))
-          }
+            ) : (
+              event.waitlist.includes(userId) ? (<button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Leave Waitlist</button>
+              ) : (
+                event.spots > 0 ? (
+                  <button className="event-body-bottom-text float-right event-button" onClick={() => {
+                    handleEnroll();
+                    addUserToConversation(event._id); // Call the function here after successful enrollment
+                  }}
+                  >Enroll</button>
+                ) : (
+                  <button className="event-body-bottom-text float-right event-button" onClick={handleEnroll}>Join Waitlist</button>
+                )
+              )
+            ))}
         </div>
       </div>
     </div>
