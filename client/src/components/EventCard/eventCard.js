@@ -1,9 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Popup from './eventPopup';
 import axios from 'axios';
 export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll, handleDeleteEvent, handleEditEvent }) {
   const [openPopups, setOpenPopups] = useState({});
   const userId = localStorage.getItem('userId');
+  const [friendsList, setFriendsList] = useState([]);
+  let friendsInEvent = [];
+
+  // Get all events that the user is enrolled in
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then(response => {
+        const user = response.data;
+        if (user) {
+          setFriendsList(user.friend);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [userId]);
+
+    //gets all events friends are enrolled in or created
+  useEffect(() => {
+      if (friendsList.length > 0) {
+        const promises = friendsList.map(friendId =>
+          axios.get(`http://localhost:5000/getUsers/${friendId}`)
+        );
+        Promise.all(promises)
+          .then(responses => {
+            friendsInEvent = responses.map(response => {
+              const user = response.data;
+              if (user.enrolledEvents.includes(event._id)) {
+                return user;
+              }
+            })})
+          .catch(error => {
+            console.log(error);
+          });
+        }
+    }, [friendsList]);
 
   const handleOpenPopup = (eventId) => {
     setOpenPopups(prevOpenPopups => ({
@@ -89,6 +126,18 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
     <div key={event._id} className="event-card">
       <div className="event-image-container">
         <div className="event-image" style={{ backgroundImage: `url(${event.eventImage})` }}></div>
+        <ul className="event-image-social-list">
+          {friendsInEvent.slice(0, 2).map(user => (
+            <li className="event-image-social-list-item">
+              <img src={user.profilePicture} alt="profile picture" className="event-image-social-list-item-image" />
+            </li>
+          ))}
+          {friendsInEvent.length > 2 ? (
+            <li className="event-image-social-list-item-additional">
+              <span>+{friendsInEvent.length - 2}</span>
+            </li>
+          ) : (null)}
+        </ul>
       </div>
       <div className="event-body">
         <div className="event-body-top">
@@ -101,7 +150,21 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
           <span className="event-description">{event.eventDescription}</span>
         </div>
         <Popup isOpen={openPopups[event._id]} onClose={() => handleClosePopup(event._id)}>
-          <p>{event.eventDescription}</p>
+          <span className="popup-title">{event.eventName}</span>
+          <div className="popup-metadata-container">
+            <span className="popup-location">
+              {event.eventCity}
+              {event.eventCity && event.eventRegion && ', '}
+              {event.eventRegion}
+              {(event.eventCity || event.eventRegion) && event.eventCountry && ', '}
+              {event.eventCountry}
+            </span>
+            <span className="popup-event-creator float-right">{event.eventCreator.split("@")[0]}</span>
+            <br></br>
+            <a className="popup-event-link float-right">{event.eventLink}</a>
+            <span className="popup-friend-names">Friends Joined: {friendsInEvent.map(user => user.fname).join(', ')}</span>
+          </div>
+          <p className="popup-event-description">{event.eventDescription}</p>
         </Popup>
         <div className="event-body-bottom">
           <span className="event-location event-body-bottom-text subtle-styled-text">
@@ -117,8 +180,8 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
           <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
           { onEdit ? 
             <div className="modify-event-buttons">
-                <button className="event-body-bottom-text float-right event-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
-                <button className="event-body-bottom-text float-right event-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
+                <button className="event-body-bottom-text float-right event-button edit-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
+                <button className="event-body-bottom-text float-right event-button delete-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
             </div>
             : (enrolledEvents.includes(event._id) ? (
               <button className="event-body-bottom-text float-right event-button" onClick={() => handleUnenroll(event._id)}>Unenroll</button>
