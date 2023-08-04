@@ -14,6 +14,9 @@ import MyEvents from "./components/UserEvents/myEvents";
 import ProfilePic from "./components/ProfilePicture/pfp";
 import Messenger from "./pages/messenger/Messenger";
 import Request from './components/Friend/request';
+
+import CurrentFriend from './components/Friend/currentFriend';
+
 import EmailVerify from './components/EmailVerify/index';
 
 import Loading from "./components/Dashboard/LoadingPage";
@@ -101,6 +104,10 @@ const App = () => {
         <Route
           path="/request"
           element={<PrivateRoute element={<Request />} path="/request" />}
+        />
+        <Route
+          path="/currentFriend"
+          element={<PrivateRoute element={<CurrentFriend />} path="/currentFriend" />}
         />
       </Routes>
     </div>
