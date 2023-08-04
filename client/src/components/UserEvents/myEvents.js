@@ -6,6 +6,7 @@ import EventCard from '../EventCard/eventCard';
 import Popup from '../EventCard/eventPopup';
 import Form from '../Form/Form';
 import '../EventCard/eventCard.css';
+import io from 'socket.io-client';
 
 const MyEvents = () => {
   const [user, setUser] = useState(null);
@@ -13,6 +14,8 @@ const MyEvents = () => {
   const userId = localStorage.getItem('userId');
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const socket = io('http://localhost:5000');
+
 
   const handleOpenEditForm = (event) => {
     setSelectedEvent(event);
@@ -41,6 +44,27 @@ const MyEvents = () => {
         console.log(error);
       });
   };
+
+  // Listen for eventUpdate event
+  useEffect(() => {
+    socket.on('eventUpdate', () => {
+      //put fetch user events here!
+      axios
+      .get(`http://localhost:5000/getUsers/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+        fetchUserEvents(response.data.email); // Fetch events using the user's email
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('eventUpdate');
+    };
+  }, []);
 // Function to delete the conversation associated with the event
 const deleteConversation = async (eventId) => {
     try {
