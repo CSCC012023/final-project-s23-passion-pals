@@ -162,6 +162,36 @@ export default function FindEvent() {
     };
   }, []);
 
+  // Listen for enrolledEventsUpdate event
+  useEffect(() => {
+    // Listen for 'enrolledEventsUpdate' event
+    socket.on('enrolledEventsUpdate', handleEnrolledEventsUpdate);
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('enrolledEventsUpdate', handleEnrolledEventsUpdate);
+    };
+  }, []);
+
+  const handleEnrolledEventsUpdate = (data) => {
+    if (data.userId === userId) {
+      setEnrolledEvents(data.enrolledEvents);
+    }
+  };
+
+  // Listen for eventUpdate event
+  useEffect(() => {
+    socket.on('eventUpdate', () => {
+      showFilterResults(filters);
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.off('eventUpdate');
+    };
+  }, []);
+
+
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
   const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
 
@@ -285,11 +315,6 @@ export default function FindEvent() {
       // Unenroll from the event
       axios
         .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents =>
-            prevEnrolledEvents.filter(id => id !== eventId)
-          );
-        })
         .catch(error => {
           console.log(error);
         });
@@ -297,9 +322,6 @@ export default function FindEvent() {
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents(prevEnrolledEvents => [...prevEnrolledEvents, eventId]);
-        })
         .catch(error => {
           console.log(error);
         });
