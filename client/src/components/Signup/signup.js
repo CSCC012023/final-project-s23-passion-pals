@@ -190,7 +190,7 @@ function Signup() {
                 <br />
                 make mistakes
               </h1>
-              <p>get messy</p>
+              <p></p>
               <button className="ghost" id="register" onClick={handleRegClick}>
                 Register
                 <i className="right arrow register">&rarr;</i>
