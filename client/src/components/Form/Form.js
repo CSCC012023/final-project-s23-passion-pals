@@ -88,6 +88,8 @@ const Form = () => {
     const eventPostData = {
         ...postData,
         eventCreator: user.email,
+        creatorPhoneNum: user.phoneNumber,
+
         };
 
         // Dispatch the createPost action with the updated postData
@@ -98,6 +100,7 @@ const Form = () => {
         members: [userId], // Add the current user's ID to the members array
         event: postData.eventName, // Set the event name as the "event" field
         eventId: postId,
+
       };
 
       try {

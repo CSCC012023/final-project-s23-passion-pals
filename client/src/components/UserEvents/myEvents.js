@@ -31,19 +31,34 @@ const MyEvents = () => {
         console.log(error);
       });
   };
-
+// Function to delete the conversation associated with the event
+const deleteConversation = async (eventId) => {
+    try {
+      const conversationResponse = await axios.delete(`http://localhost:5000/deleteConversation/${eventId}`);
+      console.log('Conversation deleted:', conversationResponse.data);
+    } catch (error) {
+      console.log('Error deleting conversation:', error);
+    }
+  };
   const handleDeleteEvent = (eventId) => {
     // Make a DELETE request to the server to remove the event from the database
     axios
       .delete(`http://localhost:5000/deleteEvent/${eventId}`)
-      .then(() => {
+      .then(async () => {
         // If the delete request is successful, remove the event from the userEvents state
         setUserEvents((prevUserEvents) => prevUserEvents.filter((event) => event._id !== eventId));
+
+
+        await deleteConversation(eventId);
       })
+      
       .catch((error) => {
         console.log(error);
       });
   };
+
+
+  
   return (
     <div className="event-card-container">
 

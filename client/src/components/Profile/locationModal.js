@@ -53,7 +53,11 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
                         className={isSaveButtonDisabled ? "greyed-out" : ""}>
                         Save
                     </button>
-                    <button onClick={onClose}>Cancel</button>
+                    <button onClick={onClose}
+                        disabled={user && user.locations && user.locations.length === 0}
+                        className={user && user.locations && user.locations.length === 0 ? "greyed-out" : ""}>
+                        Cancel
+                    </button>
                 </div>
 
                 {/* Added section to display the user's added locations */}
