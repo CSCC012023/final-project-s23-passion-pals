@@ -20,6 +20,10 @@ const twilioClient = twilio(accountSid, authToken);
 
 import ConversationModel from './models/Conversation.js';
 
+import TokenModel from "./models/token.js";
+import crypto from "crypto";
+import sendEmail from './utils/sendEmail.js';
+
 //backend for the project 
 const app = express();
 const server = http.createServer(app);
@@ -67,67 +71,92 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
 
 
 
-app.post("/", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await UserModel.findOne({ email, password });
-
-    if (user) {
-      res.json({ status: "exist", userId: user._id});
-    } else {
-      res.json("notexist");
+  app.post("/", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await UserModel.findOne({ email, password });
+  
+      if (user && user.verified) {
+        res.json({ status: "exist", userId: user._id, userInit: user.initialized });
+      } else if (user && !user.verified) {
+        res.json({ status: "notverified" });
+      } else {
+        res.json({ status: "notexist" });
+      }
+    } catch (e) {
+      res.json({ status: "notexist" });
     }
-  } catch (e) {
-    res.json("notexist");
-  }
-});
+  });
     
 
 
 //api call  for backend signup
 app.post("/signup", async (req, res) => {
-  const { email, password, fname, lname } = req.body;
-
-  // Check if the password is empty
-  if (!password || !email || !fname || !lname) {
-    return res.json("emptyPassword");
-  }
-  //moch verification
-
-
-    // Check if the email is in the correct format
-
-
-  else if (!email.includes("@gmail.com")) {
-    return res.json("wrongFormat")
-  }
-
-  const data = {
-    email: email,
-    password: password,
-    fname: fname,
-    lname: lname
-  };
-
-  try {
-    const check = await UserModel.findOne({ email: email });
-
-    if (check) {
-      // If it already exists
-      res.json("exist");
-    } else {
-
-      const newUser = await UserModel.create(data); // Create a new user and get the created user object
-
-      res.json({ status: "notexist", userId: newUser._id }); // Include the user ID in the response
-
+    const { email, password, fname, lname } = req.body;
+  
+    // Check if the password is empty
+    if (!password || !email || !fname || !lname) {
+      return res.json("emptyPassword");
     }
-  } catch (e) {
-    res.json("notexist");
-  }
-});
-
+    //moch verification
+  
+  
+      // Check if the email is in the correct format
+  
+  
+    //else if (!email.includes("@gmail.com")) {return res.json("wrongFormat")}
+  
+    const data = {
+      email: email,
+      password: password,
+      fname: fname,
+      lname: lname,
+      verified: false,
+    };
+  
+    try {
+      const check = await UserModel.findOne({ email: email });
+  
+      if (check) {
+        // If it already exists
+        res.json("exist");
+      } else {
+        const newUser = await UserModel.create(data); // Create a new user and get the created user object
+        const token = await new TokenModel({
+          userId: newUser._id,
+          token: crypto.randomBytes(32).toString("hex"),
+        }).save();
+        const url = `http://localhost:3000/${newUser._id}/verify/${token.token}`;
+        await sendEmail(newUser.email, "Verify Email", url);
+        console.log("Verification email sent successfully.");
+  
+        res.json({ status: "notexist", userId: newUser._id }); // Include the user ID in the response
+  
+      }
+    } catch (e) {
+      res.json("notexist");
+    }
+  });
+  
+  app.get("/:userId/verify/:token", async (req, res) => {
+    const { userId, token } = req.params;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) return res.status(400).send({ message: "Invalid link" });
+  
+      const verifyToken = await TokenModel.findOne({ userId: userId, token: token });
+      if (!verifyToken) return res.status(400).send({ message: "Invalid link" });
+  
+      await UserModel.updateOne({ _id: userId }, { verified: true });
+      const deletedToken = await TokenModel.findOneAndDelete({ userId: userId, token: token });
+  
+      res.status(200).send({ message: "Email verified successfully" });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  });
 app.post('/updatePhoneNumber', async (req, res) => {
   const { userId, phoneNumber } = req.body;
 

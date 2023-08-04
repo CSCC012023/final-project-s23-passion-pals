@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
   enrolledEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCard' }],
   locations: [String],
   sentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
-  verified: Boolean
+  verified: Boolean,
+  initialized: Boolean
 }, {
   collection: 'Users'
 });
