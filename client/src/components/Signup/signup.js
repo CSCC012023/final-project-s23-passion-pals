@@ -6,6 +6,7 @@ import "./loginSignup.css";
 //In the above code, we have defined the Signup component which is responsible for handling user registration and login functionality. It consists of a form with input fields for first name, 
 //last name, email, and password. The form submission is handled by the 
 function Signup() {
+
     const signInHistory = useNavigate();
     const loginHistory = useNavigate();
   
@@ -17,6 +18,7 @@ function Signup() {
   
     const [emailLogin, setLoginEmail] = useState("");
     const [passwordLogin, setLoginPassword] = useState("");
+
   
     const handleRegClick = (event) => {
       setIsRegistrationActive(false);
@@ -26,12 +28,11 @@ function Signup() {
       setIsRegistrationActive(true);
     };
   
-    // Function to handle the form submission for user signup
     async function submitSignup(e) {
       e.preventDefault();
   
       try {
-        const response = await axios.post("http://localhost:5000/signup", {
+        const response = await axios.post("/signup", {
           email: emailSignup,
           password: passwordSignup,
           fname,
@@ -42,9 +43,15 @@ function Signup() {
         if (response.data === "exist") {
           alert("User already exists");
         } else if (response.data.status === "notexist") {
-          const userId = response.data.userId;
-          localStorage.setItem("userId", userId);
-          signInHistory("/pfp", { state: { id: userId } });
+            // Reset input fields after successful account creation
+            setSignupEmail("");
+            setSignupPassword("");
+            setFname("");
+            setLname("");
+            // Show successful account creation alert
+            alert("Successfully Created an account, email was sent please verify your account to login");
+            // Navigate to the login page
+            handleSignClick();
         } else if (response.data === "emptyPassword") {
           alert("Email and password cannot be empty");
         } else if (response.data === "wrongFormat") {
@@ -66,20 +73,31 @@ function Signup() {
           password: passwordLogin,
         });
   
-        // Handle different response scenarios
-        if (response.data.status === "exist") {
+          // Handle different response scenarios
+      if (response.data.status === "exist") {
           const userId = response.data.userId;
+          const initialized = response.data.userInit;
           localStorage.setItem("userId", userId);
-          console.log(localStorage);
+          localStorage.setItem("loggedIn", true);
+          localStorage.setItem("email", emailLogin);
+          console.log(response);
+        if(initialized === true) {
           loginHistory("/dash", { state: { id: userId } });
-        } else if (response.data === "notexist") {
-          alert("Please check your email or password");
         }
-      } catch (error) {
-        alert("An error occurred while logging in");
-        console.log(error);
+        else {
+          loginHistory("/pfp", { state: { id: userId } });
+        }
+      } else if (response.data.status === "notexist") {
+        alert("Please check your email or password");
+      } else if (response.data.status === "notverified") {
+        alert("Account not verified. Please check your email for the verification link.");
+       
       }
+    } catch (error) {
+      alert("An error occurred while logging in");
+      console.log(error);
     }
+  }
 
 
   return (
@@ -113,6 +131,7 @@ function Signup() {
                 setSignupEmail(e.target.value);
               }}
             />
+          
             <input
               type="password"
               placeholder="Password"
@@ -171,7 +190,7 @@ function Signup() {
                 <br />
                 make mistakes
               </h1>
-              <p>get messy</p>
+              <p></p>
               <button className="ghost" id="register" onClick={handleRegClick}>
                 Register
                 <i className="right arrow register">&rarr;</i>

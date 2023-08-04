@@ -1,54 +1,102 @@
 /* Styling for the profile container */
 .profile-container {
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  margin-left: 50px;
+  flex-direction: row;
   align-items: center;
-  height: 100vh;
-  background-color: #f6f6f6;
+  height: 35vh;
+  margin-top: 15px;
+  background-color: #212B38;
 }
 
+
+/* Styling for the card container wrapper */
+.card-container-wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: #212B38;
+  padding: 20px;
+}
+
+.button-container{
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  align-items: left;
+  max-width: 500px;
+  background-color: #212B38;
+  margin-left: 225px;
+}
+
+
+/* Styling for individual card containers */
+.card-container {
+  flex: 1;
+  min-width: 0; /* Ensure flex items can shrink below their content's width */
+  max-width: 40%; /* Divide the width equally for both card containers */
+  background-color: #212B38;
+  border-radius: 15px;
+  margin: 0 10px; /* Adjust margin between the card containers */
+  padding: 10px; /* Add padding to the card container */
+  color: white; /* Text color for content in the card container */
+  overflow: hidden; /* Hide any overflowing content */
+}
 /* Styling for the profile section */
 .profile {
-  width: 400px;
-  padding: 20px;
-  background-color: #ffffff;
+  width: 100%;
+  padding: 10px;
+  background-color: #212B38;
   border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  color:white;
+  display:flex;
+  flex-direction:row;
 }
 
-/* Styling for the profile picture */
 .profile-picture {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 120px;
-  height: 120px;
+  width: 250px; /* Increase the width to make it bigger */
+  height: 250px; /* Increase the height to make it bigger */
   border-radius: 50%;
-  background-color: #ff8080;
-  margin: 0 auto 20px;
+  margin-top: 20px;
+  margin-left: 200px;
+  border: solid white 2px;
 }
 
 .profile-picture img {
-  width: 100px;
-  height: 100px;
+  width: 100%; /* Ensure the image takes the full width of the container */
+  height: 100%; /* Ensure the image takes the full height of the container */
   border-radius: 50%;
 }
-
 /* Styling for the profile details */
 .profile-details {
-  text-align: center;
+  margin-left: 50px;
+  margin-top: 30px;
+  text-align: left;
   margin-bottom: 20px;
+  color: white;
+  align-content: right;
+  width: auto;
 }
 
 .profile-details h2 {
-  font-size: 24px;
-  color: #333333;
+  font-size: 100px;
+  color: white;
   margin-bottom: 5px;
 }
 
+.card-container h1 {
+  font-size: 30px;
+  color: white;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
 .profile-details p {
-  font-size: 14px;
-  color: #777777;
+  font-size: 30px !important;
+  color: white !important;
 }
 
 .profile-details p strong {
@@ -57,21 +105,28 @@
 
 .profile-details p.email {
   font-size: 12px;
+  color: white;
 }
 
 /* Styling for the edit button */
 .edit-button {
+  background-color: #08C6AB;
+  color: #fff;
   display: block;
-  width: 95%;
   text-align: center;
-  padding: 10px;
-  background-color: #ff8080;
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50%;
+  font-size: 30px;
+  cursor: pointer;
+  text-decoration: none; /* Remove text underline */
+  margin: 10px;
 }
 
 .edit-button:hover {
-  background-color: #ff6666;
+  background-color: #37465B;
+}
+
+.edit-button:focus {
+  outline: none;
 }

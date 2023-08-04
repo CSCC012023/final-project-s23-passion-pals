@@ -6,6 +6,7 @@ import axios from 'axios';
 import { io } from "socket.io-client";
 import send from '../../images/send.png';
 import img1 from "../../images/user-circle.png";
+import robo from "../../images/robot.gif";
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -13,41 +14,38 @@ export default function Messenger() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [chatMembers, setChatMembers] = useState([]);
   const socket = useRef();
   const user = localStorage.getItem('userId');
 
   const scrollRef = useRef();
 
-  const [profilePics, setProfilePics] = useState({});
-
- useEffect(() => {
+  useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
-      setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
-        createdAt: Date.now(),
-      });
+      // Check if the received message is sent by the current user
+      if (data.senderId !== user) {
+        setArrivalMessage({
+          sender: data.senderId,
+          text: data.text,
+          createdAt: Date.now(),
+        });
+      }
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
-      setMessages((prevMessages) => {
-        return prevMessages.some((msg) => msg._id === arrivalMessage._id)
-          ? prevMessages
-          : [...prevMessages, arrivalMessage];
-      });
+      setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
     socket.current.emit("addUser", user);
     socket.current.on("getUsers", (users) => {
+      // handle getUsers event if needed
     });
   }, [user]);
-
-
 
   useEffect(() => {
     const getConversations = async () => {
@@ -61,42 +59,50 @@ export default function Messenger() {
     getConversations();
   }, [user]);
 
-  useEffect(() => {
-    const fetchProfilePics = async () => {
-      try {
-        const users = conversations.flatMap(conversation => conversation.members);
-        const uniqueUsers = [...new Set(users)];
-        const profiles = await Promise.all(
-          uniqueUsers.map(userId => axios.get(`http://localhost:5000/getUsers/${userId}`))
-        );
-        const picMap = profiles.reduce((map, { data }) => {
-          if (data?._id) {
-            map[data._id] = data.profilePic || img1;
-          }
-          return map;
-        }, {});
-        setProfilePics(picMap);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProfilePics();
-  }, [conversations]);
+  const handleSelectConversation = async (conversation) => {
+    setCurrentChat(conversation);
 
-  useEffect(() => {
-    const getMessages = async () => {
-      try {
-        if (currentChat) {
-          const res = await axios.get("/messages/" + currentChat._id);
-          setMessages(res.data);
-          scrollToBottom();
-        }
-      } catch (err) {
-        console.log(err);
+    // Join the room (conversation) for the current user
+    socket.current.emit("joinRoom", conversation._id);
+
+    // Join the room (conversation) for all other members
+    conversation.members.forEach((memberId) => {
+      if (memberId !== user) {
+        socket.current.emit("joinRoom", memberId);
       }
-    };
-    getMessages();
-  }, [currentChat]);
+    });
+
+    try {
+      const res = await axios.get(`/messages/${conversation._id}`);
+      setMessages(res.data);
+
+      const memberPromises = conversation.members.map(async (memberId) => {
+        // Fetch data for all members, including the current user
+        const res = await axios.get(`http://localhost:5000/getUsers/${memberId}`);
+        return res.data;
+      });
+
+
+      const memberUsers = await Promise.all(memberPromises);
+      setChatMembers(memberUsers.filter(member => member)); // Filter out null or undefined values
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleLeaveConversation = () => {
+    if (currentChat) {
+      // Leave the room (conversation) for the current user
+      socket.current.emit("leaveRoom", currentChat._id);
+      // Leave the room (conversation) for all other members
+      currentChat.members.forEach((memberId) => {
+        if (memberId !== user) {
+          socket.current.emit("leaveRoom", memberId);
+        }
+      });
+      setCurrentChat(null); // Reset the currentChat state
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,12 +114,14 @@ export default function Messenger() {
       text: newMessage,
       conversationId: currentChat._id,
     };
-    const receiverId = currentChat.members.find((member) => member !== user);
+
+    // Emit the message to the server with the conversation ID as the room name
     socket.current.emit("sendMessage", {
       senderId: user,
-      receiverId,
+      roomId: currentChat._id, // Use the conversation ID as the room name
       text: newMessage,
     });
+
     try {
       const res = await axios.post("/messages", message);
       setMessages((prevMessages) => [...prevMessages, res.data]);
@@ -130,7 +138,7 @@ export default function Messenger() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, currentChat]);
 
   return (
     <>
@@ -139,7 +147,7 @@ export default function Messenger() {
           <div className='chatMenuWrapper'>
             <h2>Conversations</h2>
             {conversations.map((c) => (
-              <div key={c._id} onClick={() => setCurrentChat(c)}>
+              <div key={c._id} onClick={() => handleSelectConversation(c)}>
                 <Conversation conversation={c} currentUser={user} />
               </div>
             ))}
@@ -150,15 +158,25 @@ export default function Messenger() {
             {currentChat ? (
               <>
                 <div className="chatBoxTop">
-                  {messages.map((m) => (
-                    <div ref={scrollRef} key={m._id}>
+                  {messages.map((m) => {
+                    const member = chatMembers.find((member) => member._id === m.sender);
+                    const profilePic = member?.profilePic;
+                    const firstName = member?.fname || 'Unknown';
+                    const lastName = member?.lname || '';
+
+                    return (
                       <Message
+                        key={m._id}
                         message={m}
                         own={m.sender === user}
-                        profilePic={profilePics[m.sender]}
+                        profilePic={profilePic}
+                        firstName={firstName}
+                        lastName={lastName}
+                        conversation={currentChat}
                       />
-                    </div>
-                  ))}
+                    );
+                  })}
+                  <div ref={scrollRef} />
                 </div>
                 <div className='chatBoxBottom'>
                   <div className="chatInputWrapper">
@@ -179,7 +197,10 @@ export default function Messenger() {
                 </div>
               </>
             ) : (
-              <span className="noConversationText">Open a conversation to start a chat.</span>
+              <span className="noConversationText">
+                <img className="robotImage" src={robo} alt="Robot" />
+                Open a conversation to start messaging.
+              </span>
             )}
           </div>
         </div>

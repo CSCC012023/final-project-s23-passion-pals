@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
-import { Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+
 import {
   Button,
   Typography,
-  Paper,
   Container,
   FormControl,
   FormControlLabel,
@@ -20,7 +18,9 @@ import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
 import { State } from "country-state-city";
 //intilizing the filds for the databse
-const Form = () => {
+const Form = (event) => {
+  console.log('eventData:', event);
+  const eventData = event.hasOwnProperty('event') ? event : null;
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
     name: "",
@@ -35,8 +35,27 @@ const Form = () => {
     eventCountry: "",
     eventRegion: "",
     eventAddress: "",
-    spots: null,
+    spots: undefined,
   });
+  useEffect(() => {
+    if (eventData) {
+      setPostData({
+        name: eventData.event.name,
+        eventName: eventData.event.eventName,
+        eventLink: eventData.event.eventLink,
+        eventDescription: eventData.event.eventDescription,
+        eventImage: eventData.event.eventImage,
+        themes: eventData.event.themes,
+        eventDate: eventData.event.eventDate,
+        eventPrice: eventData.event.eventPrice,
+        eventCity: eventData.event.eventCity,
+        eventCountry: eventData.event.eventCountry,
+        eventRegion: eventData.event.eventRegion,
+        eventAddress: eventData.event.eventAddress,
+        spots: eventData.event.spots,
+      });
+    }
+  }, [eventData]);
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const [isError, setIsError] = useState(false); // State for error handling
   const [user, setUser] = useState(null);
@@ -77,40 +96,67 @@ const Form = () => {
       postData.spots <= 0
     ) {
       setIsError(true);
-      console.log(postData.eventCity)
-      console.log(postData.eventCountry)
-      console.log(postData.eventRegion)
-      console.log(State.getStatesOfCountry(postData.eventRegion).length)
+      console.log(postData.eventCity);
+      console.log(postData.eventCountry);
+      console.log(postData.eventRegion);
+      console.log(State.getStatesOfCountry(postData.eventRegion).length);
       return;
     }
+
     // Check if user state is available (user data is fetched)
     if (user) {
-      // Use user.email as the eventCreator in postData
+    // Use user.email as the eventCreator in postData
       const eventPostData = {
         ...postData,
         eventCreator: user.email,
+        creatorPhoneNum: user.phoneNumber,
       };
 
-      // Dispatch the createPost action with the updated postData
-      await dispatch(createPost(eventPostData));
+      if (eventData) {
+        try {
+          await axios.patch(`http://localhost:5000/events/${eventData.event._id}`, eventPostData);
+          console.log('updated Data:', eventPostData);
+        } catch (error) {
+          console.log("Error updating event: ", error);
+        }
+      } else {
+        // Dispatch a create action with the postData
+        const createdPostData = await dispatch(createPost(eventPostData));
+        const postId = createdPostData._id;
+        // Create the conversation object to be posted
+        const conversationObject = {
+          members: [userId], // Add the current user's ID to the members array
+          event: postData.eventName, // Set the event name as the "event" field
+          eventId: postId,
+        };
+      
+        try {
+          // Make an HTTP POST request to save the conversation
+          const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
+          console.log("Conversation created:", response.data);
 
-      setIsEventCreated(true);
-      setPostData({
-        name: "",
-        eventName: "",
-        eventLink: "",
-        eventDescription: "",
-        eventImage: "",
-        themes: [],
-        eventDate: "",
-        eventPrice: "",
-        eventAddress: "",
-        spots: 0,
-      });
+          setIsEventCreated(true);
+          setPostData({
+            name: "",
+            eventName: "",
+            eventLink: "",
+            eventDescription: "",
+            eventImage: "",
+            themes: [],
+            eventDate: "",
+            eventPrice: "",
+            eventAddress: "",
+            spots: 0,
+          });
 
-      setTimeout(() => {
-        setIsEventCreated(false);
-      }, 2000);
+          setTimeout(() => {
+            setIsEventCreated(false);
+          }, 2000);
+        } catch (error) {
+          console.error("Error creating conversation:", error);
+          // Handle error if the conversation creation fails
+        }
+      }
     } else {
       // If user state is not available, show an error or handle accordingly
       console.log("User data not available");
@@ -158,10 +204,10 @@ const Form = () => {
     //  selecting event themes, which update the postData state based on the selected themes using the handleThemeChange function. The form is 
     //  styled using Material-UI components and custom CSS classes. The component also includes the necessary imports and utilizes React hooks such as 
     //  useState and useDispatch. Overall, this form provides a user-friendly interface for creating events and handles the necessary data submission.
-    <Container component="main">
+    <div className="form_container">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
-          Create Event
+          {eventData ? "Edit Event" : "Create Event"}        
         </Typography>
         <input
           name="name"
@@ -195,7 +241,9 @@ const Form = () => {
           onChange={(e) => setPostData({ ...postData, eventDescription: e.target.value })}
         />
         <FormControl component="fieldset" fullWidth>
-          <Typography>Select Event Themes</Typography>
+          <Typography variant="h7" style={{ color: "white", fontWeight: "bold" }} >
+            Select Event Themes
+          </Typography>
           <div>
             <FormControlLabel
               control={
@@ -204,9 +252,11 @@ const Form = () => {
                   value="Gaming"
                   checked={postData.themes.includes("Gaming")}
                   onChange={(e) => handleThemeChange(e, "Gaming")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Gaming"
+              style = {{color: "white"}}
             />
 
             <FormControlLabel
@@ -216,9 +266,11 @@ const Form = () => {
                   value="Nature"
                   checked={postData.themes.includes("Nature")}
                   onChange={(e) => handleThemeChange(e, "Nature")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Nature"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -227,9 +279,11 @@ const Form = () => {
                   value="Creativity"
                   checked={postData.themes.includes("Creativity")}
                   onChange={(e) => handleThemeChange(e, "Creativity")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Creativity"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -238,9 +292,11 @@ const Form = () => {
                   value="Festivals"
                   checked={postData.themes.includes("Festivals")}
                   onChange={(e) => handleThemeChange(e, "Festivals")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Festivals"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -249,9 +305,11 @@ const Form = () => {
                   value="Sports"
                   checked={postData.themes.includes("Sports")}
                   onChange={(e) => handleThemeChange(e, "Sports")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Sports"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -260,9 +318,11 @@ const Form = () => {
                   value="Culinary"
                   checked={postData.themes.includes("Culinary")}
                   onChange={(e) => handleThemeChange(e, "Culinary")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Culinary"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -271,9 +331,11 @@ const Form = () => {
                   value="Adventure"
                   checked={postData.themes.includes("Adventure")}
                   onChange={(e) => handleThemeChange(e, "Adventure")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Adventure"
+              style = {{color: "white"}}
             />
             <FormControlLabel
               control={
@@ -282,18 +344,28 @@ const Form = () => {
                   value="Health"
                   checked={postData.themes.includes("Health")}
                   onChange={(e) => handleThemeChange(e, "Health")}
+                  style={{ color: "#0BC6AB" }}
                 />
               }
               label="Health"
+              style = {{color: "white"}}
             />
           </div>
         </FormControl>
-        <input
-          type="date"
-          id="eventDate"
-          value={postData.eventDate}
-          onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
-        />
+       {/* Move the Date field to the left */}
+       <FormControl fullWidth>
+          <Typography variant="h7" style={{ color: "white", fontWeight: "bold" }}>
+            Select Event Date
+          </Typography>
+          <br />
+          <input
+            type="date"
+            id="eventDate"
+            value={postData.eventDate}
+            onChange={(e) => setPostData({ ...postData, eventDate: e.target.value })}
+          />
+        </FormControl>
+        <br />
         <input
           name="eventPrice"
           type="text"
@@ -305,9 +377,9 @@ const Form = () => {
           }
         />
 
-        <div>
-          <CountrySelector postData={postData} setPostData={setPostData} />
-        </div>
+        <br />
+  
+        <CountrySelector postData={postData} setPostData={setPostData} />
 
         <input
           name="eventAddress"
@@ -323,7 +395,7 @@ const Form = () => {
           type="number"
           className="input"
           placeholder="Enter available spots"
-          value={postData.spots}
+          value={postData.spots || ""}          
           onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
@@ -340,7 +412,7 @@ const Form = () => {
         )}
         {isEventCreated && (
           <Alert severity="success" className="alert">
-            Event created successfully!
+            {eventData ? "Event Updated!" : "Event created successfully!"}
           </Alert>
         )}
         <Button
@@ -361,7 +433,7 @@ const Form = () => {
           Submit
         </Button>
       </form>
-    </Container>
+    </div>
   );
 };
 export default Form;

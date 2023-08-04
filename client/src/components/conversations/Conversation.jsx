@@ -22,17 +22,30 @@ export default function Conversation({ conversation, currentUser }) {
     getUser();
   }, [currentUser, conversation]);
 
+  console.log("****************************");
+  console.log(conversation);
+  const hasEventId = conversation.hasOwnProperty('eventId');
+  console.log(hasEventId);
+  console.log("****************************");
+
+  // Determine the chat name based on the number of members and the event field
+  const hasEvent = conversation.hasOwnProperty('event');
+
+  const isGroupChat =  hasEventId;
+  const groupChatName = isGroupChat ? conversation.event : user ? `${user.fname} ${user.lname}` : "Loading...";
+  const imageSrc = isGroupChat ? "https://cdn.vectorstock.com/i/preview-1x/26/58/chatting-group-icon-black-graphics-vector-38952658.jpg" : user && user.profilePic ? `data:image/jpeg;base64,${user.profilePic}` : img1;
+
+
   return (
     <div className="conversation">
       {user && (
         <>
-          <img className='conversationImg' 
-          src={
-            user.profilePic
-                ? user.profilePic
-                : img1
-          } />
-          <span className="conversationName">{user.fname}</span>
+          <img
+            className='conversationImg'
+            src={imageSrc}
+            alt="User Profile"
+          />
+          <span className="conversationName">{groupChatName}</span>
         </>
       )}
     </div>

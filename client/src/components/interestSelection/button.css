@@ -12,8 +12,10 @@
   display: inline-block;
   font-size: 1em;
   padding: 1em 2em;
-  margin-top: 100px;
-  margin-bottom: 60px;
+  margin-top: 25px;
+  margin-left: 900px;
+  margin-right: -50px;
+  position: relative; /* Set the position to relative to contain the pseudo-elements */
   -webkit-appearance: none;
   appearance: none;
   background-color: var(--button-bg);
@@ -21,8 +23,6 @@
   border-radius: 4px;
   border: none;
   cursor: pointer;
-  position: relative;
-  bottom: -190px;
   /* Adjust the top value to change the vertical position */
   left: -50%;
   /* Adjust the left value to change the horizontal position */
@@ -40,7 +40,8 @@
     display: block;
     width: 140%; /* Set the width of the pseudo-elements */
     height: 100%; /* Set the height of the pseudo-elements */
-    left: -20%; /* Position the pseudo-elements to the left of the button */
+   
+    left: -50%; /* Move the pseudo-elements 20% from the left */
     z-index: -1000; /* Set a low z-index value to position the pseudo-elements behind the button */
     transition: all ease-in-out 0.5s; /* Apply a smooth transition to all properties */
     background-repeat: no-repeat; /* Prevent the background image from repeating */

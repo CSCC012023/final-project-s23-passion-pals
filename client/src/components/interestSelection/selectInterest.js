@@ -5,43 +5,38 @@ import './button.css';
 import { useNavigate, Link } from "react-router-dom"
 
 const SelectInterest = () => {
-    const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
-    const history = useNavigate(); // Navigation hook for handling history
-  
-    const handleInterestChange = (event) => {
-      const value = event.target.value; // Get the value of the selected interest
-      const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
-  
-      if (isChecked) {
-        // If the checkbox is checked, add the interest to the selectedInterests state
-        setSelectedInterests((prevInterests) => [...prevInterests, value]);
-      } else {
-        // If the checkbox is unchecked, remove the interest from the selectedInterests state
-        setSelectedInterests((prevInterests) =>
-          prevInterests.filter((interest) => interest !== value)
-        );
-      }
-    };
-  
-    const handleSubmit = async () => {
-      const userId = localStorage.getItem("userId"); // Retrieve the userId from local storage
-  
-      try {
-        // Send a POST request to the server with the userId and selectedInterests
-        const response = await axios.post('http://localhost:5000/select', {
-          userId: userId,
-          interests: selectedInterests,
-        });
-        // Handle the response if needed
-      } catch (error) {
-        // Handle the error if needed
-      }
-  
-      // Add a delay of 600ms before navigating to "/dash"
-      setTimeout(() => {
-        history("/dash", { state: { id: userId } });
-      }, 600);
-    };
+  const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
+  const history = useNavigate(); // Navigation hook for handling history
+
+  const handleInterestChange = (event) => {
+    const value = event.target.value; // Get the value of the selected interest
+    const isChecked = event.target.checked; // Check if the checkbox is checked or unchecked
+
+    if (isChecked) {
+      // If the checkbox is checked, add the interest to the selectedInterests state
+      setSelectedInterests((prevInterests) => [...prevInterests, value]);
+    } else {
+      // If the checkbox is unchecked, remove the interest from the selectedInterests state
+      setSelectedInterests((prevInterests) =>
+        prevInterests.filter((interest) => interest !== value)
+      );
+    }
+  };
+
+  const handleSubmit = async () => {
+    const userId = localStorage.getItem("userId"); // Retrieve the userId from local storage
+
+    try {
+      // Send a POST request to the server with the userId and selectedInterests
+      const response = await axios.post('http://localhost:5000/select', {
+        userId: userId,
+        interests: selectedInterests,
+      });
+      // Handle the response if needed
+    } catch (error) {
+      // Handle the error if needed
+    }
+  };
 
   useEffect(() => {
     const animateButton = function (e) {
@@ -70,7 +65,7 @@ const SelectInterest = () => {
   return (
     <div className='Interest'>
       <fieldset class="checkbox-group">
-        <legend class="checkbox-group-legend">Choose your favorites</legend>
+        <legend class="checkbox-group-legend"></legend>
         <div class="checkbox">
           <label class="checkbox-wrapper">
             <input type="checkbox" class="checkbox-input" value="Gaming" onChange={handleInterestChange} />
@@ -239,14 +234,14 @@ const SelectInterest = () => {
         </div>
         <div class="checkbox">
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" value="Festivals " onChange={handleInterestChange} />
+            <input type="checkbox" class="checkbox-input" value="Festivals" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="298.000000pt" height="297.000000pt" viewBox="15 0 258.000000 258.000000"
-                    preserveAspectRatio="xMidYMid meet">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="298.000000pt" height="297.000000pt" viewBox="15 0 258.000000 258.000000"
+                  preserveAspectRatio="xMidYMid meet">
 
-                    <g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
+                  <g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M1635 2759 c-228 -196 -587 -369 -917 -443 -163 -36 -235 -46 -402
                     -56 -131 -7 -151 -10 -169 -29 -17 -17 -19 -26 -11 -48 7 -22 18 -30 49 -37
@@ -278,8 +273,8 @@ const SelectInterest = () => {
                     -64 1 -174 -94 -138 -19 8 -45 55 -45 84 0 30 53 80 83 80 14 0 39 -12 56 -26z"/>
                     <path d="M134 587 c-2 -7 -3 -91 -2 -187 l3 -175 1303 -3 1302 -2 0 190 0 190
                     -1300 0 c-1050 0 -1302 -2 -1306 -13z"/>
-                    </g>
-                    </svg>
+                  </g>
+                </svg>
 
 
               </span>
@@ -309,18 +304,18 @@ const SelectInterest = () => {
             <input type="checkbox" class="checkbox-input" value="Culinary" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                preserveAspectRatio="xMidYMid meet">
-                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                fill="currentcolor" stroke="none">
-                <path d="M1192 4540 c-48 -30 -72 -75 -72 -140 0 -100 60 -160 160 -160 100 0
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+                  preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                    fill="currentcolor" stroke="none">
+                    <path d="M1192 4540 c-48 -30 -72 -75 -72 -140 0 -100 60 -160 160 -160 100 0
                 160 60 160 160 0 100 -60 160 -160 160 -37 0 -66 -6 -88 -20z"/>
-                <path d="M1556 4069 c-114 -143 -196 -319 -196 -421 l0 -48 84 0 83 0 6 53 c9
+                    <path d="M1556 4069 c-114 -143 -196 -319 -196 -421 l0 -48 84 0 83 0 6 53 c9
                 71 81 215 152 301 l57 68 -58 59 c-32 32 -61 59 -65 59 -3 0 -32 -32 -63 -71z"/>
-                <path d="M632 3980 c-48 -30 -72 -75 -72 -140 0 -100 60 -160 160 -160 100 0
+                    <path d="M632 3980 c-48 -30 -72 -75 -72 -140 0 -100 60 -160 160 -160 100 0
                 160 60 160 160 0 100 -60 160 -160 160 -37 0 -66 -6 -88 -20z"/>
-                <path d="M4400 3580 c-217 -100 -511 -233 -653 -298 -151 -68 -275 -131 -297
+                    <path d="M4400 3580 c-217 -100 -511 -233 -653 -298 -151 -68 -275 -131 -297
                 -150 -21 -18 -51 -57 -65 -86 -23 -46 -26 -65 -24 -135 1 -45 0 -84 -3 -86 -3
                 -3 -25 2 -49 11 -121 43 -395 58 -614 34 -322 -36 -746 -137 -1113 -265 -74
                 -26 -136 -44 -140 -41 -3 4 -8 43 -10 89 -7 130 33 257 115 364 l35 46 -58 58
@@ -352,13 +347,13 @@ const SelectInterest = () => {
                 119 16 0 38 -9 49 -20z m-2757 -862 c14 -24 49 -70 78 -102 l54 -59 -45 7
                 c-25 3 -70 19 -100 34 -45 22 -56 32 -58 56 -4 29 25 106 39 106 4 0 18 -19
                 32 -42z"/>
-                <path d="M641 1842 l-84 -3 7 -44 c12 -89 88 -203 193 -290 37 -30 70 -55 75
+                    <path d="M641 1842 l-84 -3 7 -44 c12 -89 88 -203 193 -290 37 -30 70 -55 75
                 -55 4 0 28 30 52 66 l44 66 -88 87 c-69 67 -91 96 -102 131 l-13 45 -84 -3z"/>
-                <path d="M1440 2000 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z"/>
-                <path d="M160 3520 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z"/>
-                <path d="M1040 3440 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z"/>
-                <path d="M960 2720 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z"/>
-                </g>
+                    <path d="M1440 2000 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z" />
+                    <path d="M160 3520 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z" />
+                    <path d="M1040 3440 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z" />
+                    <path d="M960 2720 l0 -80 80 0 80 0 0 80 0 80 -80 0 -80 0 0 -80z" />
+                  </g>
                 </svg>
               </span>
               <span class="checkbox-label" style={{ marginLeft: '14px' }} >Culinary</span>
@@ -370,10 +365,10 @@ const SelectInterest = () => {
             <input type="checkbox" class="checkbox-input" value="Adventures" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                    width="820.000000pt" height="760.000000pt" viewBox="20 50 700.000000 700.000000"
-                    preserveAspectRatio="xMidYMid meet">
-                    <g transform="translate(0.000000,760.000000) scale(0.100000,-0.100000)"
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="820.000000pt" height="760.000000pt" viewBox="20 50 700.000000 700.000000"
+                  preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,760.000000) scale(0.100000,-0.100000)"
                     fill="currentcolor" stroke="none">
                     <path d="M1650 7184 c-76 -21 -158 -63 -250 -129 -80 -58 -141 -115 -124 -115
                     5 0 82 20 169 45 88 25 163 45 168 45 4 0 7 -83 7 -185 l0 -185 -63 0 c-77 0
@@ -444,8 +439,8 @@ const SelectInterest = () => {
                     -245 295 -547 574 -850 785 -2 1 13 31 33 67 l36 66 -23 14 c-29 18 -403 239
                     -478 282 -30 17 -155 91 -278 163 -123 73 -226 132 -230 132 -4 0 -28 -40 -53
                     -88z"/>
-                    </g>
-                    </svg>
+                  </g>
+                </svg>
               </span>
               <span class="checkbox-label" style={{ marginLeft: '14px' }} >Adventures</span>
             </span>
@@ -456,31 +451,31 @@ const SelectInterest = () => {
             <input type="checkbox" class="checkbox-input" value="Health" onChange={handleInterestChange} />
             <span class="checkbox-tile">
               <span class="checkbox-icon">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                width="227.000000pt" height="222.000000pt" viewBox="0 0 227.000000 222.000000"
-                preserveAspectRatio="xMidYMid meet">
-                <g transform="translate(0.000000,222.000000) scale(0.100000,-0.100000)"
-                fill="currentcolor" stroke="none">
-                <path d="M1691 2209 c-72 -14 -131 -49 -211 -125 l-75 -72 -74 70 c-42 41 -97
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="227.000000pt" height="222.000000pt" viewBox="0 0 227.000000 222.000000"
+                  preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,222.000000) scale(0.100000,-0.100000)"
+                    fill="currentcolor" stroke="none">
+                    <path d="M1691 2209 c-72 -14 -131 -49 -211 -125 l-75 -72 -74 70 c-42 41 -97
                 81 -129 97 -51 23 -69 26 -167 26 -100 0 -115 -3 -166 -28 -75 -36 -140 -107
                 -168 -183 -19 -49 -22 -73 -18 -144 5 -102 27 -169 82 -258 l40 -67 110 -3
                 110 -2 43 70 44 71 17 -23 c10 -13 41 -58 70 -100 28 -43 54 -78 56 -78 3 0
                 36 63 75 140 39 77 72 140 75 140 3 0 32 -55 66 -122 34 -67 68 -133 77 -146
                 l15 -23 37 36 37 36 183 -1 184 -2 45 59 c114 151 134 295 59 436 -54 101
                 -157 174 -278 197 -60 11 -77 11 -139 -1z"/>
-                <path d="M1337 1414 l-68 -136 -76 111 -75 110 -22 -32 c-21 -31 -23 -32 -113
+                    <path d="M1337 1414 l-68 -136 -76 111 -75 110 -22 -32 c-21 -31 -23 -32 -113
                 -37 l-92 -5 37 -44 c50 -60 472 -453 483 -449 15 5 499 479 499 489 0 5 -52 9
                 -117 9 l-117 0 -69 -67 c-38 -38 -71 -63 -73 -58 -3 6 -33 63 -67 127 l-63
                 117 -67 -135z"/>
-                <path d="M0 610 l0 -430 175 0 175 0 0 430 0 430 -175 0 -175 0 0 -430z"/>
-                <path d="M450 617 l0 -362 194 -102 c230 -121 306 -147 426 -147 117 0 171 19
+                    <path d="M0 610 l0 -430 175 0 175 0 0 430 0 430 -175 0 -175 0 0 -430z" />
+                    <path d="M450 617 l0 -362 194 -102 c230 -121 306 -147 426 -147 117 0 171 19
                 410 140 240 122 400 215 600 351 123 83 148 105 168 143 28 56 28 84 0 140
                 -17 33 -35 51 -68 68 -75 39 -116 29 -337 -81 -187 -94 -190 -96 -206 -139
                 -25 -66 -71 -114 -141 -148 -55 -27 -78 -32 -196 -41 -73 -6 -139 -8 -146 -5
                 -7 3 -20 16 -30 30 -15 24 -15 28 0 51 16 24 19 25 139 25 146 0 200 15 258
                 70 31 29 39 44 39 71 0 85 -53 109 -234 109 l-137 0 -78 45 c-211 122 -292
                 145 -505 145 l-156 0 0 -363z"/>
-                </g>
+                  </g>
                 </svg>
               </span>
               <span class="checkbox-label" style={{ marginLeft: '14px' }} >Health</span>
@@ -497,7 +492,7 @@ const SelectInterest = () => {
 
 
       </fieldset>
-      <button class="bubbly-button" onClick={handleSubmit} >Submit</button>
+      <button class="bubbly-button" onClick={handleSubmit} >Save!</button>
     </div>
   );
 };

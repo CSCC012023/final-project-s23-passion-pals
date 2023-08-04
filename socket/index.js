@@ -1,3 +1,4 @@
+// socket.js
 const io = require("socket.io")(8900, {
   cors: {
     origin: "http://localhost:3000",
@@ -20,32 +21,35 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  
-  console.log("a user connected.");
+  console.log("A user connected.");
 
-  
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
     io.emit("getUsers", users);
   });
 
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
+  socket.on("joinRoom", (roomId) => {
+    socket.join(roomId);
+  });
+
+  socket.on("leaveRoom", (roomId) => {
+    socket.leave(roomId);
+  });
+
+  socket.on("sendMessage", ({ senderId, roomId, text }) => {
+    const user = getUser(senderId);
     if (user) {
-      io.to(user.socketId).emit("getMessage", {
+      io.to(roomId).emit("getMessage", {
         senderId,
         text,
       });
     } else {
-
-      console.log(`User with userId ${receiverId} not found.`);
-     
+      console.log(`User with userId ${senderId} not found.`);
     }
   });
-  
 
   socket.on("disconnect", () => {
-    console.log("a user disconnected!");
+    console.log("A user disconnected!");
     removeUser(socket.id);
     io.emit("getUsers", users);
   });
