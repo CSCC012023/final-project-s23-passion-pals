@@ -13,7 +13,7 @@
   }
   
 .friend-container {
-  position: absolute;
+  position: relative;
   margin: auto;
   top: 20%;
   transform: translateY(-50%);

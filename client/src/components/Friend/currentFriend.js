@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import './currentFriend.css';
 import './search.css';
 
 const CurrentFriendList = () => {
   const [friends, setFriends] = useState([]);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -38,6 +40,9 @@ const CurrentFriendList = () => {
       } else {
         console.log('Conversation already exists with this friend.');
       }
+
+      // Redirect to the messenger page regardless of whether the conversation exists or was just created
+      navigate(`/messenger?friendId=${friendId}`);
     } catch (error) {
       console.error('Error creating or checking conversation:', error);
     }
@@ -57,7 +62,10 @@ const CurrentFriendList = () => {
                   <div className="name">{fullName}</div>
                   <div className="email">{email}</div>
                   <div className="button-container">
-                    <button className="add-button" onClick={() => handleSendMessage(_id, fullName)}>Message</button>
+                    {/* Pass the selected conversation ID in the URL */}
+                    <button className="add-button" onClick={() => handleSendMessage(_id, fullName)}>
+                      Message
+                    </button>
                   </div>
                 </li>
               );
