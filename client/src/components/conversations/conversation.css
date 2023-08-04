@@ -1,17 +1,17 @@
-.conversation{
+.conversation {
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
     margin-top: 20px;
-    
+
 }
 
-.conversation:hover{
+.conversation:hover {
     background-color: rgb(231, 231, 231);
 }
 
-.conversationImg{
+.conversationImg {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -19,6 +19,7 @@
     margin-right: 20px;
 }
 
-.conversationName{
+.conversationName {
     font-weight: 500;
+
 }

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { io } from "socket.io-client";
 import send from '../../images/send.png';
 import img1 from "../../images/user-circle.png";
-import uoft from "../../images/uoft.png";
+import robo from "../../images/robot.gif";
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -23,13 +23,16 @@ export default function Messenger() {
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
-      setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
-        createdAt: Date.now(),
-      });
+      // Check if the received message is sent by the current user
+      if (data.senderId !== user) {
+        setArrivalMessage({
+          sender: data.senderId,
+          text: data.text,
+          createdAt: Date.now(),
+        });
+      }
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     arrivalMessage &&
@@ -78,6 +81,7 @@ export default function Messenger() {
         const res = await axios.get(`http://localhost:5000/getUsers/${memberId}`);
         return res.data;
       });
+
 
       const memberUsers = await Promise.all(memberPromises);
       setChatMembers(memberUsers.filter(member => member)); // Filter out null or undefined values
@@ -194,7 +198,7 @@ export default function Messenger() {
               </>
             ) : (
               <span className="noConversationText">
-                <img className="robotImage" src={uoft} alt="Robot" />
+                <img className="robotImage" src={robo} alt="Robot" />
                 Open a conversation to start messaging.
               </span>
             )}

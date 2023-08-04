@@ -13,22 +13,27 @@ body {
 .messenger {
   height: calc(100vh - 70px);
   display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
 }
 
 .chatMenu {
-  flex: 1; /* Adjust the width to take full width on smaller screens */
+  flex: 1;
+  /* Adjust the width to take full width on smaller screens */
   padding: 10px;
-  background-color: #f7f7f7;
-  border-right: 1px solid #ccc;
+  background: linear-gradient(to bottom, #37465B, #0F1A2D);
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  border: 10px solid;
+  border-image: linear-gradient(to bottom, #08C6AB, #5AFFE7, #726EFF) 1;
 }
 
 .chatMenu h2 {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #333;
-  text-align: left;
+  color: white !important;
+  text-align: center;
 }
 
 
@@ -41,19 +46,21 @@ body {
 }
 
 .chatBox {
-  flex: 3; /* Adjust the width to take full width on smaller screens */
-  padding: 10px;
+  flex: 3;
   display: flex;
   flex-direction: column;
+
 }
 
 .chatBoxWrapper {
   flex: 1;
   position: relative;
   overflow: hidden;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 10px solid;
+  border-image: linear-gradient(to bottom, #08C6AB, #5AFFE7, #726EFF) 1;
+  border-left: 0;
   padding-bottom: 80px;
+  background: linear-gradient(to bottom, #37465B, #0F1A2D);
 }
 
 .chatBoxTop {
@@ -82,10 +89,11 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px 10px 10px;
+  /* Add padding to the top and bottom of the chat box bottom */
 }
 
 .chatInputWrapper {
@@ -107,6 +115,7 @@ body {
   position: relative;
   box-sizing: border-box;
   padding-right: 60px;
+  padding-top: 15px;
 }
 
 .chatSubmitButton {
@@ -119,14 +128,14 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #0078FF;
+  background-color: #212B38;
   color: white;
   outline: none;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .chatSubmitButton:disabled {
@@ -141,13 +150,23 @@ body {
 
 .noConversationText {
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #555;
+  font-size: 26px;
+  color: white;
+  background: linear-gradient(to bottom, #37465B, #0F1A2D);
+  height: 700px;
 }
+
+.robotImage {
+  width: 400px;
+  /* Adjust the width as needed */
+  height: 400px;
+  /* Adjust the height as needed */
+}
+
+
 
 @media screen and (max-width: 768px) {
   .messenger-container {
