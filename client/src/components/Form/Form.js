@@ -18,7 +18,9 @@ import FileBase from "react-file-base64";
 import Alert from "@material-ui/lab/Alert";
 import { State } from "country-state-city";
 //intilizing the filds for the databse
-const Form = () => {
+const Form = (event) => {
+  console.log('eventData:', event);
+  const eventData = event.hasOwnProperty('event') ? event : null;
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
     name: "",
@@ -33,8 +35,27 @@ const Form = () => {
     eventCountry: "",
     eventRegion: "",
     eventAddress: "",
-    spots: null,
+    spots: undefined,
   });
+  useEffect(() => {
+    if (eventData) {
+      setPostData({
+        name: eventData.event.name,
+        eventName: eventData.event.eventName,
+        eventLink: eventData.event.eventLink,
+        eventDescription: eventData.event.eventDescription,
+        eventImage: eventData.event.eventImage,
+        themes: eventData.event.themes,
+        eventDate: eventData.event.eventDate,
+        eventPrice: eventData.event.eventPrice,
+        eventCity: eventData.event.eventCity,
+        eventCountry: eventData.event.eventCountry,
+        eventRegion: eventData.event.eventRegion,
+        eventAddress: eventData.event.eventAddress,
+        spots: eventData.event.spots,
+      });
+    }
+  }, [eventData]);
   const [isEventCreated, setIsEventCreated] = useState(false); // State for displaying the success message
   const [isError, setIsError] = useState(false); // State for error handling
   const [user, setUser] = useState(null);
@@ -85,51 +106,56 @@ const Form = () => {
     // Check if user state is available (user data is fetched)
     if (user) {
     // Use user.email as the eventCreator in postData
-    const eventPostData = {
+      const eventPostData = {
         ...postData,
         eventCreator: user.email,
         creatorPhoneNum: user.phoneNumber,
-
-        };
-
-        // Dispatch the createPost action with the updated postData
-    const createdPostData = await dispatch(createPost(eventPostData));
-    const postId = createdPostData._id;
-      // Create the conversation object to be posted
-      const conversationObject = {
-        members: [userId], // Add the current user's ID to the members array
-        event: postData.eventName, // Set the event name as the "event" field
-        eventId: postId,
-
       };
 
-      try {
-        // Make an HTTP POST request to save the conversation
-        const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
-        console.log("Conversation created:", response.data);
+      if (eventData) {
+        try {
+          await axios.patch(`http://localhost:5000/events/${eventData.event._id}`, eventPostData);
+          console.log('updated Data:', eventPostData);
+        } catch (error) {
+          console.log("Error updating event: ", error);
+        }
+      } else {
+        // Dispatch a create action with the postData
+        const createdPostData = await dispatch(createPost(eventPostData));
+        const postId = createdPostData._id;
+        // Create the conversation object to be posted
+        const conversationObject = {
+          members: [userId], // Add the current user's ID to the members array
+          event: postData.eventName, // Set the event name as the "event" field
+          eventId: postId,
+        };
+      
+        try {
+          // Make an HTTP POST request to save the conversation
+          const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
+          console.log("Conversation created:", response.data);
 
+          setIsEventCreated(true);
+          setPostData({
+            name: "",
+            eventName: "",
+            eventLink: "",
+            eventDescription: "",
+            eventImage: "",
+            themes: [],
+            eventDate: "",
+            eventPrice: "",
+            eventAddress: "",
+            spots: 0,
+          });
 
-
-        setIsEventCreated(true);
-        setPostData({
-          name: "",
-          eventName: "",
-          eventLink: "",
-          eventDescription: "",
-          eventImage: "",
-          themes: [],
-          eventDate: "",
-          eventPrice: "",
-          eventAddress: "",
-          spots: 0,
-        });
-
-        setTimeout(() => {
-          setIsEventCreated(false);
-        }, 2000);
-      } catch (error) {
-        console.error("Error creating conversation:", error);
-        // Handle error if the conversation creation fails
+          setTimeout(() => {
+            setIsEventCreated(false);
+          }, 2000);
+        } catch (error) {
+          console.error("Error creating conversation:", error);
+          // Handle error if the conversation creation fails
+        }
       }
     } else {
       // If user state is not available, show an error or handle accordingly
@@ -181,7 +207,7 @@ const Form = () => {
     <Container component="main">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
-          Create Event
+          {eventData ? "Edit Event" : "Create Event"}        
         </Typography>
         <input
           name="name"
@@ -343,7 +369,7 @@ const Form = () => {
           type="number"
           className="input"
           placeholder="Enter available spots"
-          value={postData.spots}
+          value={postData.spots || ""}          
           onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
@@ -360,7 +386,7 @@ const Form = () => {
         )}
         {isEventCreated && (
           <Alert severity="success" className="alert">
-            Event created successfully!
+            {eventData ? "Event Updated!" : "Event created successfully!"}
           </Alert>
         )}
         <Button
