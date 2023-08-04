@@ -25,11 +25,12 @@ body {
   overflow-y: auto;
   /* Enable vertical scrolling */
   border: 10px solid;
-  border-image: linear-gradient(to bottom, #08C6AB, #5AFFE7, #726EFF) 1;
+  border-image: linear-gradient(to top, #08C6AB, #5AFFE7, #726EFF) 1;
+
 }
 
 .chatMenu h2 {
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 10px;
   color: white !important;
@@ -57,7 +58,7 @@ body {
   position: relative;
   overflow: hidden;
   border: 10px solid;
-  border-image: linear-gradient(to bottom, #08C6AB, #5AFFE7, #726EFF) 1;
+  border-image: linear-gradient(to top, #08C6AB, #5AFFE7, #726EFF) 1;
   border-left: 0;
   padding-bottom: 80px;
   background: linear-gradient(to bottom, #37465B, #0F1A2D);
@@ -156,7 +157,7 @@ body {
   font-size: 26px;
   color: white;
   background: linear-gradient(to bottom, #37465B, #0F1A2D);
-  height: 700px;
+  height: 900px;
 }
 
 .robotImage {
