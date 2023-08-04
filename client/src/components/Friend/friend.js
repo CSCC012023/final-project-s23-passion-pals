@@ -3,6 +3,8 @@ import axios from 'axios';
 import './list.css';
 import './search.css';
 import img1 from '../../images/user-circle.png';
+import FriendList from './request';
+
 
 const Friend = () => {
   const [data, setData] = useState([]);
