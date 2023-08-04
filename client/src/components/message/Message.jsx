@@ -5,7 +5,7 @@ import { format } from "timeago.js";
 
 export default function Message({ message, own, profilePic, firstName, lastName, conversation }) {
 
-   const showName = conversation.members.length > 2;
+   const showName = conversation.hasOwnProperty('eventId');
 
   const handleImageError = (event) => {
     event.target.src = img1;

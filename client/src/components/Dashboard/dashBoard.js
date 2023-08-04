@@ -153,12 +153,6 @@ export default function Dashboard() {
       // Unenroll from the event
       axios
         .post(`http://localhost:5000/unenroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents((prevEnrolledEvents) =>
-            prevEnrolledEvents.filter((id) => id !== eventId)
-          );
-        })
-
         .catch((error) => {
           console.log(error);
         });
@@ -166,9 +160,6 @@ export default function Dashboard() {
       // Enroll in the event
       axios
         .post(`http://localhost:5000/enroll/${eventId}`, { userId })
-        .then(() => {
-          setEnrolledEvents((prevEnrolledEvents) => [...prevEnrolledEvents, eventId]);
-        })
         .catch((error) => {
           console.log(error);
         });

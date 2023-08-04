@@ -11,7 +11,7 @@ body {
 
 .loginSignup {
     display: flex;
-    background-color: aliceblue;
+    background-color: #212B38;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -25,6 +25,7 @@ body {
     letter-spacing: -1.5px;
     margin: 0;
     margin-bottom: 15px;
+    color: white !important;
 }
 
 .loginSignup h1.title {
@@ -32,6 +33,7 @@ body {
     line-height: 45px;
     margin: 0;
     text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+    
 }
 
 .loginSignup p {
@@ -41,6 +43,7 @@ body {
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
     text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+    color: white !important;
 }
 
 .loginSignup span {
@@ -93,8 +96,8 @@ body {
 .loginSignup button {
     position: relative;
     border-radius: 20px;
-    border: 1px solid #ff8080;
-    background-color: #ff8080;
+    border: 1px solid #0BC6AB;
+    background-color: #0BC6AB;
     color: #fff;
     /*text color*/
     font-size: 15px;
@@ -158,7 +161,7 @@ body {
 }
 
 .loginSignup form {
-    background-color: #fff;
+    background-color: #37465B;
     display: flex;
     align-items: center;
     justify-content: center;
