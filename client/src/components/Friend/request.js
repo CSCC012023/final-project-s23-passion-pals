@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './list.css';
+import './request.css';
 import './search.css';
 
 const FriendList = () => {

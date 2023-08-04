@@ -3,8 +3,6 @@ import axios from 'axios';
 import './list.css';
 import './search.css';
 import img1 from '../../images/user-circle.png';
-import FriendList from './request';
-
 
 const Friend = () => {
   const [data, setData] = useState([]);
@@ -158,9 +156,10 @@ const Friend = () => {
                     const { fname, lname, email, _id, profilePic } = item;
                     const fullName = `${fname} ${lname}`;
 
+                    // Check if the user ID is in the requestedUsers array
                     const isRequested = requestedUsers.includes(_id);
                     const isFriend = currentFriends.includes(_id);
-
+       
                     return (
                       <li key={index} className="user-item">
                         <div className="profile-pic">
@@ -174,14 +173,9 @@ const Friend = () => {
                           <div className="email">{email}</div>
                         </div>
                         <div className="button-container">
-                          {isFriend || isRequested ? (
-                            <button
-                              className={`requested-button ${
-                                isFriend || isRequested ? 'disabled' : ''
-                              }`}
-                              disabled
-                            >
-                              {isFriend ? 'Added' : 'Request Sent'}
+                        {isFriend || isRequested ? (
+                            <button className={`requested-button ${isFriend || isRequested ? 'disabled' : ''}`} disabled>
+                                {isFriend ? 'Added' : 'Request Sent'}
                             </button>
                           ) : (
                             <button className="add-button" onClick={() => handleButtonClick(_id)}>
@@ -189,18 +183,17 @@ const Friend = () => {
                             </button>
                           )}
 
+                          
                           {isRequested ? (
                             <button className="requested-button" disabled>
-                              {/* Empty space for the requested button */}
+                              
                             </button>
                           ) : (
-                            <button
-                              className="remove-button"
-                              onClick={() => handleDeleteClick(_id)}
-                            >
+                            <button className="remove-button" onClick={() => handleDeleteClick(_id)}>
                               Remove
                             </button>
                           )}
+
                         </div>
                       </li>
                     );
@@ -209,10 +202,6 @@ const Friend = () => {
               </div>
             )}
           </div>
-        </div>
-        <div className="right-container">
-          {/* Use the FriendList component here */}
-          
         </div>
       </div>
     </div>
