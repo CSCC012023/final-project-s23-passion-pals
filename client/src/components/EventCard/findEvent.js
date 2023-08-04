@@ -13,7 +13,7 @@ export default function FindEvent() {
     return storedPage ? parseInt(storedPage) : 0; // get stored page or default to 0
   });
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 3; // set to 3 for demo purposes
+  const itemsPerPage = 6; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
@@ -25,6 +25,7 @@ export default function FindEvent() {
   const [isFilterChange, setIsFilterChange] = useState(false);
   const [friends, setFriends] = useState([]);
   const [friendEnrolledEvents, setFriendEnrolledEvents] = useState([]);
+  const [themes, setThemes] = useState([]);
 
   // Save current page to local storage
   useEffect(() => {
@@ -52,6 +53,7 @@ export default function FindEvent() {
           setEnrolledEvents(user.enrolledEvents);
           setPreferredLocations(user.locations);
           setFriends(user.friend);
+          setThemes(user.interest);
         }
       })
       .catch(error => {
@@ -164,6 +166,7 @@ export default function FindEvent() {
 
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
   const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
+  const [isRecommendedOn, setisRecommendedOn] = useState(false);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
@@ -174,6 +177,12 @@ export default function FindEvent() {
     setIsFriendFilterOn((prev) => !prev);
     setIsFilterChange(true);
   };
+
+  const handleToggleRecommendedFilter = () => {
+    setisRecommendedOn((prev) => !prev);
+    setIsFilterChange(true);
+  };
+
   //gets all events friends are enrolled in or created
   useEffect(() => {
     if (friends.length > 0) {
@@ -260,20 +269,69 @@ export default function FindEvent() {
     });
   };
 
-  const filterEventByFriends = () => {
-    const finalEvents = isUserLocationFilterOn
-      ? filteredData.filter((event) => friendEnrolledEvents.some(friendEvent => event._id === friendEvent._id))
-      : events.filter((event) => friendEnrolledEvents.some(friendEvent => event._id === friendEvent._id));
-    return finalEvents;
+  const filterRecommended = () => {
+    if (preferredLocations && themes) {
+      // Parse the user's preferred locations from local storage
+      const locationObjects = preferredLocations.map((location) => {
+        const parts = location.split(', ');
+
+        let eventCity = '';
+        let eventCountry = '';
+        let eventRegion = '';
+
+        if (parts.length === 3) {
+          [eventCity, eventRegion, eventCountry] = parts;
+        } else if (parts.length === 2) {
+          [eventRegion, eventCountry] = parts;
+        } else if (parts.length === 1) {
+          [eventCountry] = parts;
+        }
+
+        return { eventCity, eventCountry, eventRegion };
+      });
+
+      const locationFiltered = events.filter((event) => {
+        // Check if the event matches any of the locationObjects
+        return locationObjects.some((locationObject) => {
+          return (
+            event.eventCountry &&
+            event.eventCountry.toLowerCase() ===
+            locationObject.eventCountry.toLowerCase() &&
+            event.eventRegion.toLowerCase() ===
+            locationObject.eventRegion.toLowerCase() &&
+            event.eventCity.toLowerCase() ===
+            locationObject.eventCity.toLowerCase()
+          );
+        });
+      });
+
+      // Filter events based on themes
+      const themeFiltered = locationFiltered.filter((event) => {
+        return (
+          event.themes &&
+          event.themes.some((theme) => themes.includes(theme))
+        );
+      });
+
+      // Filter user's own events and events they have enrolled inr
+      const userFiltered = themeFiltered.filter((event) => {
+        return event.eventCreator !== localStorage.getItem('email') && !enrolledEvents.includes(event._id);
+      });
+      return userFiltered
+    }
   };
 
   useEffect(() => {
     let finalEvents = [];
 
-    if (isUserLocationFilterOn && preferredLocations.length > 0) {
-      finalEvents = filterEventsByLocationObjects(events, preferredLocations);
+    if (isRecommendedOn) {
+      finalEvents = filterRecommended();
     } else {
       finalEvents = [...events];
+    }
+
+    if (isUserLocationFilterOn && preferredLocations.length > 0) {
+      finalEvents = filterEventsByLocationObjects(finalEvents, preferredLocations);
     }
 
     if (isFriendFilterOn && friendEnrolledEvents.length > 0) {
@@ -282,11 +340,12 @@ export default function FindEvent() {
       );
       finalEvents = friendFilteredEvents;
     }
+    console.log(finalEvents);
 
     setFilteredData(finalEvents);
     setTotalPages(Math.ceil(finalEvents.length / itemsPerPage));
     setQuery('');
-  }, [isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
+  }, [isRecommendedOn, isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
 
 
 
@@ -359,6 +418,10 @@ export default function FindEvent() {
 
         <button onClick={handleToggleFriendFilter} className='toggle-button'>
           {isFriendFilterOn ? 'Show All Events' : 'Your friends are in'}
+        </button>
+
+        <button onClick={handleToggleRecommendedFilter} className='toggle-button'>
+          {isRecommendedOn ? 'Show All Events' : 'We Recommend'}
         </button>
 
       </div>
