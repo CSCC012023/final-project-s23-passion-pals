@@ -18,6 +18,7 @@
     z-index: 1000;
     width: 50%;
     height: auto;
+    overflow: scroll;
   }
   
   .popup-close-button {

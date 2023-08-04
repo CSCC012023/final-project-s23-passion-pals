@@ -40,6 +40,7 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
             console.log(error);
           });
         }
+        console.log(`friendsInEvent for event ${event.eventName}: ${friendsInEvent}`);
     }, [friendsList]);
 
   const handleOpenPopup = (eventId) => {
@@ -180,8 +181,8 @@ export default function EventCard({ event, onEdit, enrolledEvents, handleEnroll,
           <span className="event-theme event-body-bottom-text subtle-styled-text">{event.themes ? event.themes.map(theme => `#${theme}`).join(' ') : ""}</span>
           { onEdit ? 
             <div className="modify-event-buttons">
-                <button className="event-body-bottom-text float-right event-button edit-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
-                <button className="event-body-bottom-text float-right event-button delete-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
+                <button className="event-body-bottom-text float-right event-button modification-button" onClick={() => handleEditEvent(event._id)}>Edit</button>
+                <button className="event-body-bottom-text float-right event-button delete-button modification-button" onClick={() => handleDeleteEvent(event._id)}>Delete</button>
             </div>
             : (enrolledEvents.includes(event._id) ? (
               <button className="event-body-bottom-text float-right event-button" onClick={() => handleUnenroll(event._id)}>Unenroll</button>

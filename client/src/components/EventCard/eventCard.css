@@ -182,12 +182,20 @@
   border: none;
 }
 
-.edit-button {
-  /* margin-right: 10px; */
+.delete-button {
+  margin-right: 10px;
 }
 
-.delete-button {
-  /* margin-left: 10px; */
+.event-button {
+  padding: 0em 1em;
+}
+
+.event-button:hover {
+  background-color: #f85454;
+}
+
+.event-button:focus {
+  outline: none;
 }
 
 .popup-title {

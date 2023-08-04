@@ -100,3 +100,8 @@
   flex-direction: row;
   padding-bottom: 5%;
 }
+
+#eventDate {
+  min-height: 2em;
+  margin-bottom: 0.5em;
+}
