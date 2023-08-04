@@ -53,7 +53,7 @@ const App = () => {
         <Route path="/:id/verify/:token" element={<EmailVerify />} />
         <Route
           path="/dash"
-          element={<PrivateRoute element={<Dash />} path="/dash" />}
+          element={<PrivateRoute element={<FindEvent />} path="/dash" />}
         />
         <Route
           path="/friend"
