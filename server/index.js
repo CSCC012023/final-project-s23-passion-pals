@@ -868,6 +868,32 @@ app.post('/addSentRequest/:userId', async (req, res) => {
 
 
 
+  app.delete('/deleteConversation/:eventId', async (req, res) => {
+    const eventId = req.params.eventId;
+  
+    if (!eventId) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+  
+    try {
+      // First, find the conversation by eventId
+      const conversation = await ConversationModel.findOne({ eventId });
+  
+      if (!conversation) {
+        return res.status(404).json({ error: 'Conversation not found' });
+      }
+  
+      // Then, delete the conversation
+      await ConversationModel.deleteOne({ eventId });
+  
+      res.json({ message: 'Conversation deleted successfully' });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Error deleting conversation' }); // Include an informative error message
+    }
+  });
+
+
 
   app.get('/getSentRequests/:userId', async (req, res) => {
     try {
@@ -946,7 +972,30 @@ app.post('/addSentRequest/:userId', async (req, res) => {
 
 
 
-
+  app.get('/getFriendList/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Fetch the user's data from the database
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Retrieve the user's friend list from the 'friend' field
+      const friends = user.friend;
+  
+      // Find the actual friend objects using the friend IDs
+      const friendObjects = await UserModel.find({ _id: { $in: friends } });
+  
+      return res.json(friendObjects);
+    } catch (error) {
+      console.log('Error fetching friend list:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 
 
 
