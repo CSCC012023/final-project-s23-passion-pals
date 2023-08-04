@@ -26,19 +26,22 @@ export default function Profile() {
       .catch((error) => {
         console.log(error);
       });
-  }, [selectedLocation]);
+  }, [userId]);
 
   const handleSubmit = async () => {
 
     try {
       // Update the user's locations array
-      console.log(selectedLocation)
       if (selectedLocation && !user.locations.includes(selectedLocation)) {
         await axios.post(`http://localhost:5000/addLocation/${userId}`, {
           location: selectedLocation,
         });
         console.log('Location added successfully');
         setSelectedLocation('')
+        setUser((prevUser) => ({
+          ...prevUser,
+          locations: [...prevUser.locations, selectedLocation],
+        }));
       } else {
         setIsError(true);
         console.log('error')
@@ -62,7 +65,7 @@ export default function Profile() {
 
   useEffect(() => {
     // Only call the handleSubmit function when selectedLocation is not empty
-    if (selectedLocation) {
+    if (selectedLocation.length) {
       handleSubmit();
     }
   }, [selectedLocation]);
@@ -86,6 +89,12 @@ export default function Profile() {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (user.locations.length > 0) {
+      setIsModalOpen(false);
     }
   };
 
@@ -119,7 +128,6 @@ export default function Profile() {
         <Link to="/myEvents" className="edit-button">
           My Created Events
         </Link>
-
         <br />
         {/* Button to open the modal */}
         <button onClick={() => setIsModalOpen(true)} className='edit-button'>Update Preferred Locations</button>
@@ -127,10 +135,9 @@ export default function Profile() {
         {/* Render the modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleCloseModal}
           onSave={(location, e) => {
             e.preventDefault();
-            console.log(location)
             setSelectedLocation(location);
           }}
           onDelete={handleDeleteLocation}

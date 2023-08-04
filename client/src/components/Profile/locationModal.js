@@ -43,8 +43,10 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
     return (
         <div className={`modal ${isOpen ? "open" : ""}`} onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <h2>Select Country, Region, and City</h2>
-                <CountrySelector postData={selectedLocation} setPostData={setSelectedLocation} />
+                <h2>Add Locations</h2>
+                <div className="country-selector">
+                    <CountrySelector postData={selectedLocation} setPostData={setSelectedLocation} />
+                </div>
 
                 <div className="modal-buttons">
                     <button
@@ -53,23 +55,29 @@ function Modal({ isOpen, onClose, onSave, onDelete, user }) {
                         className={isSaveButtonDisabled ? "greyed-out" : ""}>
                         Save
                     </button>
-                    <button onClick={onClose}>Cancel</button>
+                    <button onClick={onClose}
+                        disabled={user && user.locations && user.locations.length === 0}
+                        className={user && user.locations && user.locations.length === 0 ? "greyed-out" : ""}>
+                        Cancel
+                    </button>
                 </div>
 
                 {/* Added section to display the user's added locations */}
+                <h3>Your Locations</h3>
                 <div className="added-locations">
-                    <h3>Added Locations:</h3>
-                    {user && user.locations && user.locations.length > 0 ? (
-                        <ul>
-                            {user.locations.map((location, index) => (
-                                <li key={index}>{location}
-                                    <button onClick={() => handleDeleteLocation(index)}>Delete</button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No locations added yet.</p>
-                    )}
+                    <div className="added-locations-scrollable">
+                        {user && user.locations && user.locations.length > 0 ? (
+                            <ul>
+                                {user.locations.map((location, index) => (
+                                    <li key={index} className="location-text">{location}
+                                        <button onClick={() => handleDeleteLocation(index)}>Delete</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>None</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
