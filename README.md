@@ -48,8 +48,6 @@ cd socket
 npm install
 npm start
 ```
-## Interface
-[Figma](https://www.figma.com/file/5X8kNjNZow7qge6qZ3DFnq/Passion-Pals?type=design&node-id=0%3A1&t=IG5yICnf9MKBLTPQ-1)
 
 ## Contribution
 We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch, development branch, and deployment branch. We are not using any ticketing or issue website. We will be using pull requests.
