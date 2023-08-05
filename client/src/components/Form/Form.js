@@ -116,6 +116,7 @@ const Form = (event) => {
         try {
           await axios.patch(`http://localhost:5000/events/${eventData.event._id}`, eventPostData);
           console.log('updated Data:', eventPostData);
+          window.location.reload();
         } catch (error) {
           console.log("Error updating event: ", error);
         }
