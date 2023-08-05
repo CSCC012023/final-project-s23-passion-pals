@@ -75,7 +75,7 @@ We have decided to differentiate between the previous sprint’s work and the de
 #### Goals and tasks
 We will likely be adding tasks as we go for this sprint if we notice changes we want to make, or given time permits us to add more.
 
-Order of importance is rough - includes added tasks throughou sprint
+Order of importance is rough - includes added tasks throughout sprint
 * Quiz 4 SMS on event join or friend request - Amitoz
   * Adding phone numbers for user
   * Actual SMS notifications
@@ -94,8 +94,8 @@ Order of importance is rough - includes added tasks throughou sprint
 * Location selector UI - Roger
 * findEvents UI - Roger
 * Profile UI - Darren
-* Recommended Tweaks - Roger
-* Minor tweaks to findEvent - Roger
+* Recommended modification - Roger
+* Minor modificatins/fixes to findEvent - Roger
 
 
 
