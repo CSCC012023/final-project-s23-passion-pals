@@ -1,5 +1,5 @@
 ## User Stories
-* [PP-50] - As a user I'd like to be notified through sms when people join my event,  and friends requests so that I can stay informed without checking the app
+* As a user I'd like to be notified through sms when people join my event,  and friends requests so that I can stay informed without checking the app
   * [PP-55] - SMS Notifications
   * [PP-50] - Adding user phone number
 * [PP-25] - As a user, I would like to send messages directly, in group chats, so that I can actively participate in discussions, and engage in real-time conversations related to the event
