@@ -4,6 +4,7 @@
 
  * When: July 27
  * Where: Online
+ * Everyone is here
 
 ## Process - Reflection
 
