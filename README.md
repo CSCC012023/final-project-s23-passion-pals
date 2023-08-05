@@ -50,7 +50,7 @@ npm start
 ```
 
 ## Contribution
-We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch, development branch, and deployment branch. We are not using any ticketing or issue website. We will be using pull requests.
+We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch and development. We are not using any public ticketing or issue website. We will be using pull requests.
 
 ## Acknowledgements
 - [Amitoz Jatana](https://github.com/A-Jatana)
