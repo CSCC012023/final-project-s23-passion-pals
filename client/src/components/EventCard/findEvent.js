@@ -91,13 +91,22 @@ export default function FindEvent() {
 
   // Filter events based on the search query and update the filteredData state
   useEffect(() => {
+    if (query.length > 0) {
+      setisRecommendedOn(false);
+      setIsFriendFilterOn(false);
+      setIsUserLocationFilterOn(false);
+    }
     const filteredData = filterEvents(events, query);
     setFilteredData(filteredData);
     setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
     // Update the 'filteredData' state based on the search query
     if (query.length > 0) {
       setIsFilterChange(true);
+      setisRecommendedOn(false);
+      setIsFriendFilterOn(false);
+      setIsUserLocationFilterOn(false);
     }
+    //two ifs at different spots to make sure the events happen in the correct sequence
   }, [events, query]);
 
   const userId = localStorage.getItem('userId');
@@ -166,20 +175,23 @@ export default function FindEvent() {
 
   const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
   const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
-  const [isRecommendedOn, setisRecommendedOn] = useState(false);
+  const [isRecommendedOn, setisRecommendedOn] = useState(true);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
+    setQuery('');
     setIsFilterChange(true);
   };
 
   const handleToggleFriendFilter = () => {
     setIsFriendFilterOn((prev) => !prev);
+    setQuery('');
     setIsFilterChange(true);
   };
 
   const handleToggleRecommendedFilter = () => {
     setisRecommendedOn((prev) => !prev);
+    setQuery('');
     setIsFilterChange(true);
   };
 
@@ -322,29 +334,30 @@ export default function FindEvent() {
   };
 
   useEffect(() => {
-    let finalEvents = [];
+    if (query === '') {
+      let finalEvents = [];
 
-    if (isRecommendedOn) {
-      finalEvents = filterRecommended();
-    } else {
-      finalEvents = [...events];
+      if (isRecommendedOn) {
+        finalEvents = filterRecommended();
+      } else {
+        finalEvents = [...events];
+      }
+
+      if (isUserLocationFilterOn && preferredLocations.length > 0) {
+        finalEvents = filterEventsByLocationObjects(finalEvents, preferredLocations);
+      }
+
+      if (isFriendFilterOn && friendEnrolledEvents.length > 0) {
+        const friendFilteredEvents = finalEvents.filter((event) =>
+          friendEnrolledEvents.some((friendEvent) => event._id === friendEvent._id)
+        );
+        finalEvents = friendFilteredEvents;
+      }
+      console.log(finalEvents);
+
+      setFilteredData(finalEvents);
+      setTotalPages(Math.ceil(finalEvents.length / itemsPerPage));
     }
-
-    if (isUserLocationFilterOn && preferredLocations.length > 0) {
-      finalEvents = filterEventsByLocationObjects(finalEvents, preferredLocations);
-    }
-
-    if (isFriendFilterOn && friendEnrolledEvents.length > 0) {
-      const friendFilteredEvents = finalEvents.filter((event) =>
-        friendEnrolledEvents.some((friendEvent) => event._id === friendEvent._id)
-      );
-      finalEvents = friendFilteredEvents;
-    }
-    console.log(finalEvents);
-
-    setFilteredData(finalEvents);
-    setTotalPages(Math.ceil(finalEvents.length / itemsPerPage));
-    setQuery('');
   }, [isRecommendedOn, isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
 
 
@@ -400,48 +413,61 @@ export default function FindEvent() {
   // Show all events displayed as cards. Each card has an image, name, location, date, price, description, spots, and a button to enroll or unenroll from the event
   // Cards generated from data in the database
   return (
-    <div className="event-card-container">
-      <div className="filter-and-search-container">
-        <input
-          type="text"
-          className="search_input"
-          placeholder="Search..."
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+    <div className='page-container'>
+      <div className="findEvent-sidebar">
+
+        {/* Toggle button for recommended events */}
+        <button onClick={handleToggleRecommendedFilter} className={`toggle-button ${isRecommendedOn ? 'button-on' : 'button-off'}`}>
+          Recommended
+        </button>
+
+        {/* Toggle button for events user's friends are in */}
+        <button onClick={handleToggleFriendFilter} className={`toggle-button ${isFriendFilterOn ? 'button-on' : 'button-off'}`}>
+          Your friends are in
+        </button>
 
         {/* Toggle button for user's preferred locations */}
-        <button onClick={handleToggleUserLocationFilter} className='toggle-button'>
-          {isUserLocationFilterOn ? 'Show All Events' : 'Filter by Preferred Locations'}
+        <button onClick={handleToggleUserLocationFilter} className={`toggle-button ${isUserLocationFilterOn ? 'button-on' : 'button-off'}`}>
+          Your locations
         </button>
 
-        <button onClick={handleToggleFriendFilter} className='toggle-button'>
-          {isFriendFilterOn ? 'Show All Events' : 'Your friends are in'}
-        </button>
-
-        <button onClick={handleToggleRecommendedFilter} className='toggle-button'>
-          {isRecommendedOn ? 'Show All Events' : 'We Recommend'}
-        </button>
-
+        <div className="filter-container">
+          <span className='filter-label'>Filter by Themes</span>
+          <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+        </div>
       </div>
-      {currentEvents.map(event => (
-        // add event card here
-        <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
-      ))}
-      {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
-        <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div> // ghost element and css should be applied even though event-card isn't in findEvent.css
-      ))}
-      <ReactPaginate
-        pageCount={totalPages}
-        onPageChange={({ selected }) => handlePageChange(selected)}
-        forcePage={currentPage}
-        previousLabel={'<'}
-        nextLabel={'>'}
-        breakLabel={'...'}
-        containerClassName={'pagination-container'}
-        activeClassName={'active-page'}
-      />
+      <div className="findEvent-container"> {/*I won't lie this isn't necessary but moving the css breaks the layout so just leave this lol*/}
+        <div className="event-card-container">
+          <div className="search-container">
+            <input
+              type="text"
+              className="search_input"
+              placeholder="Search..."
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          </div>
+          <div className='event-cards-body'>
+            {currentEvents.map(event => (
+              // add event card here
+              <EventCard key={event._id} event={event} onEdit={false} enrolledEvents={enrolledEvents} handleEnroll={() => handleEnroll(event._id)} handleDeleteEvent={null} handleEditEvent={null} />
+            ))}
+            {currentEvents.length < itemsPerPage && [...Array(itemsPerPage - currentEvents.length)].map((_, index) => (
+              <div key={index} className="event-card" style={{ visibility: 'hidden' }}></div> // ghost element and css should be applied even though event-card isn't in findEvent.css
+            ))}
+          </div>
+          <ReactPaginate
+            pageCount={totalPages}
+            onPageChange={({ selected }) => handlePageChange(selected)}
+            forcePage={currentPage}
+            previousLabel={'<'}
+            nextLabel={'>'}
+            breakLabel={'...'}
+            containerClassName={'pagination-container'}
+            activeClassName={'active-page'}
+          />
+        </div>
+      </div>
     </div>
   );
 }

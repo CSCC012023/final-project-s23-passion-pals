@@ -1,6 +1,90 @@
+/*whole page*/
+.page-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 90vh;
+}
+
+/*sidebar*/
+/* CSS for the sidebar */
+.findEvent-sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #37465B;
+  align-items: vertical;
+  margin-right: 10px;
+  max-height: fit-content;
+  border-radius: 15px;
+}
+
+/*the buttons*/
+.toggle-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  margin-bottom: 10px;
+}
+
+/*button toggle on and off and hold color shenanigans*/
+.button-off {
+  background-color: #08C6AB;
+}
+
+.button-off:active {
+  background-color: #119b7f;
+}
+
+.button-on {
+  background-color: #119b7f;
+  /*box-shadow: inset -1px 2px 1px 0px black;*/
+}
+
+.button-on:active {
+  background-color: #08C6AB;
+}
+
+.filter-label {
+  display: flex;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  /*box-shadow: 2px 0px 2px 0px black;*/
+}
+
+/*end of sidebar css*/
+
+
+/*body with event cards*/
+/*general container*/
+.findEvent-container {
+  width: 90vw;
+  max-width: 1000px;
+  /* Optional: Set a maximum width for the container */
+  display: flex;
+  flex-direction: row;
+  /* Display children in a row */
+}
+
+/* CSS for the event-card-container */
 .event-card-container {
-  margin: 50px auto 0;
-  width: 700px;
+  flex: 1;
+  max-width: 1200px;
 }
 
 .pagination-container {
@@ -9,24 +93,39 @@
   padding: 0;
   overflow: hidden;
   text-align: center;
+  color: white;
 }
 
 .pagination-container li {
   display: inline-block;
   margin: 0 5px;
+  cursor: pointer;
 }
 
+/* Style for the active number in pagination */
 .active-page {
-  color: #41C1F2;
-  font-weight: bold;
+  background-color: #08C6AB;
+  color: #fff;
+  padding: 5px 5px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.filter-and-search-container {
+.search-container {
   display: flex;
   align-items: center;
   /* Align items vertically */
   margin-bottom: 10px;
   /* Optional margin for spacing */
+}
+
+/* Style for the search input */
+.search_input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .search_input {
@@ -38,16 +137,4 @@
   font-size: 16px;
   margin-bottom: 20px;
   font-family: Arial, sans-serif;
-}
-
-.toggle-button {
-  display: block;
-  width: 30%;
-  text-align: center;
-  padding: 10px;
-  background-color: #4caf50;
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
 }
