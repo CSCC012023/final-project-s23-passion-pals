@@ -31,7 +31,7 @@ export default function Navbar() {
                 <ul>
                     {/* Site logo and title */}
                     <li>
-                        <Link to="/dash"
+                        <Link to="/findEvent"
                             className="site-title link-style"
                             onMouseEnter={() => handleButtonHighlight('home')}
                             onMouseLeave={() => handleButtonHighlight(null)}>
@@ -60,9 +60,21 @@ export default function Navbar() {
                             onMouseEnter={() => handleButtonHighlight('friend')}
                             onMouseLeave={() => handleButtonHighlight(null)}>
                             <div className={`icons  ${highlightedButton === 'friend' ? 'fa-beat' : ''}`}>
-                                <i className="fa-solid fa-users"></i>
+                                <i className="fa-solid fa-user-plus"></i>
                             </div>
-                            <span className="button-text">Friends</span>
+                            <span className="button-text">Add Friends</span>
+                        </Link>
+                    </li>
+                    <li>
+                        {/* Profile link */}
+                        <Link to="/currentFriend"
+                            className={`link-style ${isActive('/currentFriend') ? 'onTab' : ''}`}
+                            onMouseEnter={() => handleButtonHighlight('currentFriend')}
+                            onMouseLeave={() => handleButtonHighlight(null)}>
+                            <div className={`icons  ${highlightedButton === 'currentFriend' ? 'fa-beat' : ''}`}>
+                                <i className="fa-solid fa-user-group"></i>
+                            </div>
+                            <span className="button-text">Current Friends</span>
                         </Link>
                     </li>
                     <li>

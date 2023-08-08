@@ -27,24 +27,30 @@ git clone https://github.com/CSCC012023/final-project-s23-passion-pals.git
 ```
 cd final-project-s23-passion-pals
 ```
-3. Open two terminals. 
+3. Open three terminals. 
 4. Using one navigate to the server package and initialize the backend
 ```
 cd server
 npm install
+npm install socket.io
 npm start
 ```
-5. In the other, navigate to the client package and initialize the frontend
+5. In the second, navigate to the client package and initialize the frontend
 ```
 cd client
 npm install
+npm install socket.io-client timeago.js react-paginate
 npm start
 ```
-## Interface
-[Figma](https://www.figma.com/file/5X8kNjNZow7qge6qZ3DFnq/Passion-Pals?type=design&node-id=0%3A1&t=IG5yICnf9MKBLTPQ-1)
+6. In the last one, navigate to the socket package and initialize the socket
+```
+cd socket
+npm install
+npm start
+```
 
 ## Contribution
-We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch, development branch, and deployment branch. We are not using any ticketing or issue website. We will be using pull requests.
+We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch and development. We are not using any public ticketing or issue website. We will be using pull requests.
 
 ## Acknowledgements
 - [Amitoz Jatana](https://github.com/A-Jatana)

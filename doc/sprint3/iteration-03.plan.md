@@ -1,36 +1,41 @@
-Sprint 2 feature implementation:
-
 # Passion Pals
-## Iteration 02
 
- * Start date: June 30, 2023
- * End date: June 8, 2023
+## Iteration 03
+
+ * Start date: July 11
+ * End date: July 21
 
 ## Process
 
 #### Changes from previous iteration
 
-* Manage Jira and user stories better since we lost a lot of marks for it. Our success metric will be not losing the marks for it going forward
-* More effective and disciplined branching and pull requests so that we be more organized in who is doing what as the project gets more complex. The success metric will again be based on our mark for it as we also lost a bit on it for sprint 1.
+* In the previous sprint our goal was to be more active on Jira which was true to an extent, but due to our self imposed shorter timeline most of our stories were finished in the final days and the burndown chart did not look ideal. This sprint we will continue to improve our Jira usage and aim to have a better burndown chart. Same success metric
+
+* We will switch from 1-10 scoring to Fibonacci for user story estimates as it is closer to industry standard and we believe it will be more simple. No applicable success metric
 
 #### Roles & responsibilities
-* Amitoz: Finishing Create event 
-* Roger: Navigation bar and Homepage
-* Nic: Event page
-* Nishu: Event page category filter
-* Mustafa: Event Categories
-* Event enrolment and availability for users - Darren
+
+Describe the different roles on the team and the responsibilities associated with each role.
+* Location stuff for events and users & Recommend Algorithm - Roger
+* Chat - Nishu
+* Event front end stuff (ie. pagination) - Nic
+* Waitlist & live updating event availability - Darren
+* Also Chat & Friends - Mustafa
+* Pfp, Associating users to the events they create, delete event, search bar - Amitoz
 
 #### Events
 
-Standup Meetings
+* Standup Meetings
 
-We will try to have an online standup meeting every day of the sprint just to have a brief check-in with team members, discuss any blockers or challenges, and ensure everyone is on track for their goals.
+We will try to have an online standup meeting every 2-3 days of the sprint just to have a brief check-in with team members, discuss any blockers or challenges, and ensure everyone is on track for their goals.
 
-Code Reviews
+* Mid-sprint meeting
 
-We will hold a code review on July 4th at 2 pm to review code changes made by team members, provide feedback, identify potential issues, and ensure code quality and consistency.
+We will hold an online meeting halfway through the sprint to evaluate where everyone is at and possibly make changes.
 
+* Code Reviews
+
+If we need in smaller groups we may get on a call online together to work on shared issues
 
 #### Artifacts
 
@@ -54,21 +59,28 @@ For branch names going forward, they will have the ticket numbers associated at 
 We have decided to differentiate between the previous sprint’s work and the development branch so that we can revert to the previous sprint in case something new added breaks something that was supposed to be working. Naming convention is based on the marking scheme from sprint 1 and an additional name so that we won’t need to constantly be referring to Jira for ticket numbers.
 
 
-## Product
 
+## Product
 
 #### Goals and tasks
 
-The main priority for this sprint is finishing creating events, getting all the main pages set up and navigation between them, and getting started on the functionality and frontend for those pages.
-The tasks and associated user stories/task number on Jira are as follows:
-* Finishing Create event (30) - Amitoz
-* Navigation bar (36) - Roger
-* Event Page (14/40) - Nishu & Nic
-* Event categories (9/12) - Mustafa
-* Event enrolment and availability for users (20/22) - Darren
-* Dashboard/Homepage (13) - Roger
 
-We are prioritizing functionality over pretty UI so that we can work on other user stories going forward. We will likely update the UI in later sprints.
+The priority for this sprint is getting a majority of the main functionality done. For the final sprint we will clean up the UI for everything and add any non-crucial functionality.
+Order of importance is rough: 
+* Associate created event w/ user (39) - Amitoz
+* Delete event (19) - Amitoz
+* Searching for event (21) - Amitoz
+* Waitlist (23) - Darren
+* Event details page (17) - Nic
+* Locations for users and events (15) - Roger
+* Individual chat (24) - Nishu
+* Friends (48) - Mustafa
+* Group Chat (25) - Mustafa
+* Event recommendation (32) - Roger
+* Pagination on event page (46) - Nic
+* Real time enroll counter (47) - Darren
+* Profile Pic (PFP) (8) - Amitoz
+* Event card front end (45) - Nic
 
 #### Artifacts
 
