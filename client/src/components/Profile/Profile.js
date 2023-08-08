@@ -222,12 +222,16 @@ export default function Profile() {
     <div>
       <div className="profile-container">
         <div className="profile">
-          <div className="profile-picture">
-            {/* Use the profile picture data from the server */}
-            {user && user.profilePic && (
-              <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
-            )}
-          </div>
+         {/* Use the profile picture data from the server */}
+          {user && (
+            <div className="profile-picture">
+              {user.uploadedPfp ? (
+                <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
+              ) : (
+                <img src={user.profilePic} alt="Profile" />
+              )}
+            </div>
+          )}
 
           <div className="profile-details">
             {user && (

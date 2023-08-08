@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
   locations: [String],
   sentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
   verified: Boolean,
-  initialized: Boolean
+  initialized: Boolean,
+  uploadedPfp: Boolean
 }, {
   collection: 'Users'
 });
