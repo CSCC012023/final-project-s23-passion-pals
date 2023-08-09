@@ -3,16 +3,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50px; /* Rounded edges */
-  min-height: 100vh; /* Set a minimum height to ensure the form is always visible */
+  border-radius: 50px;
+  /* Rounded edges */
+  min-height: calc(100vh - 84px);
+  /* Set a minimum height to ensure the form is always visible */
   font-family: Arial, sans-serif;
+  min-width: 650px;
 }
 
 
 /* Styles for the paper container */
 .paper {
-  width: 90%; /* Make the form container responsive */
-  max-width: 500px; /* Set a maximum width to avoid excessive expansion on larger screens */
+  width: 90%;
+  /* Make the form container responsive */
+  max-width: 500px;
+  /* Set a maximum width to avoid excessive expansion on larger screens */
   padding: 20px;
   background-color: #0BC6AB;
   border-radius: 10px;
@@ -28,12 +33,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
-  border-radius: 30px; /* Rounded edges */
-  height: 100%; /* Use height: 100% to fill the entire container */
+
+  border-radius: 30px;
+  /* Rounded edges */
+  height: 100%;
+  /* Use height: 100% to fill the entire container */
   background: #37465B;
   font-family: Arial, sans-serif;
-  padding: 20px; /* Add some padding to the form container */
+  padding: 20px;
+  /* Add some padding to the form container */
 }
 
 /* Styles for the heading */
@@ -116,10 +124,13 @@
 .locationSelector .dropdown {
   width: 200px;
 }
+
 /* Media query for smaller screens */
 @media (max-width: 768px) {
   .paper {
-    width: 90%; /* Make the form container responsive */
-    max-width: 100%; /* Allow the form to occupy the full width on smaller screens */
+    width: 90%;
+    /* Make the form container responsive */
+    max-width: 100%;
+    /* Allow the form to occupy the full width on smaller screens */
   }
 }
