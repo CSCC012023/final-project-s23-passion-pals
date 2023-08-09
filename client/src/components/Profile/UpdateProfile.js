@@ -18,10 +18,13 @@ function UpdateProfile() {
         .get(`http://localhost:5000/getUsers/${userId}`)
         .then((response) => {
           const user = response.data;
-          setFirstName(user.fname); // Set the initial first name value
-          setLastName(user.lname); // Set the initial last name value
-          setEmail(user.email); // Set the initial email value
-          setPhoneNumber(user.phoneNumber); // Set the initial phone number value
+          setFirstName(user.fname);
+          setLastName(user.lname);
+          setEmail(user.email);
+  
+          // Remove the "+1" prefix when displaying phone number on the form
+          const userPhoneNumber = user.phoneNumber.startsWith("+1") ? user.phoneNumber.substring(2) : user.phoneNumber;
+          setPhoneNumber(userPhoneNumber);
         })
         .catch((error) => {
           console.log(error);
@@ -40,13 +43,15 @@ function UpdateProfile() {
           // Send a POST request to the server to upload the profile picture
           await axios.post(`http://localhost:5000/upload-profile-pic/${userId}`, formData);
         }
-  
+        // Add the "+1" prefix to the phone number before sending to the database
+        const phoneNumberWithPrefix = "+1" + phoneNumber;
+
         // Update the user's profile details (first name, last name, and email)
         await axios.put(`http://localhost:5000/users/${userId}`, {
           fname: firstName,
           lname: lastName,
           email: email,
-          phoneNumber: phoneNumber,
+          phoneNumber: phoneNumberWithPrefix,
         });
   
         console.log('Profile updated successfully');
@@ -55,6 +60,7 @@ function UpdateProfile() {
         console.error('Error updating profile:', error);
       }
     };
+
     // In the above code, we define the JSX structure for the profile update form. It consists of a div container with the class name 
     //"update-container". Inside the container, we have a form element with the class name "update-form". The form contains multiple div elements with the class name 
     //"form-group", each representing a form input field.
@@ -98,13 +104,16 @@ function UpdateProfile() {
         </div>
         <div className="form-group">
           <label>Phone Number:</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
+          <div className="uphone-input-group">
+            <span className="uphone-prefix">+1</span>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
         </div>
         <div className="form-group">
           <label>Update Profile Picture:</label>
@@ -113,7 +122,7 @@ function UpdateProfile() {
             onChange={(e) => setSelectedProfilePic(e.target.files[0])}
           />
         </div>
-        <button type="submit" className="update-button">Update Profile</button>
+        <button type="submit" className="update-button">Update Profile Details</button>
       </form>
     </div>
   );

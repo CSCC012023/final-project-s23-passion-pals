@@ -402,6 +402,33 @@ app.get('/friendRequests/:userId', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+
+// Route to upload a default profile picture for a user
+app.post('/upload-default-pic/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const { profilePic } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await UserModel.findById(userId);
+
+    // If the user is not found, respond with an error
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the user's profilePic field
+    user.profilePic = profilePic; 
+    user.uploadedPfp = false;
+
+    await user.save();
+
+    res.json({ status: 'success', message: 'Phone number and profile picture updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Route to upload a profile picture for a user
 app.post('/upload-profile-pic/:userId', upload.single('profilePic'), async (req, res) => {
   const userId = req.params.userId;
@@ -428,6 +455,7 @@ app.post('/upload-profile-pic/:userId', upload.single('profilePic'), async (req,
 
     // Update the user's profilePic field with the Base64-encoded data
     user.profilePic = profilePicData;
+    user.uploadedPfp = true;
     await user.save();
 
     res.json({ status: 'success', message: 'Profile picture uploaded successfully' });
