@@ -65,8 +65,8 @@ export default function Navbar() {
                             <span className="button-text">Add Friends</span>
                         </Link>
                     </li>
-                    <li>
-                        {/* Profile link */}
+                    {/* <li>
+                        {/* Profile link *
                         <Link to="/currentFriend"
                             className={`link-style ${isActive('/currentFriend') ? 'onTab' : ''}`}
                             onMouseEnter={() => handleButtonHighlight('currentFriend')}
@@ -76,7 +76,7 @@ export default function Navbar() {
                             </div>
                             <span className="button-text">Current Friends</span>
                         </Link>
-                    </li>
+                    </li> */}
                     <li>
                         {/* Create Event link */}
                         <Link to="/createEvent"

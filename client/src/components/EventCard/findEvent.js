@@ -357,7 +357,8 @@ export default function FindEvent() {
 
       // Filter user's own events and events they have enrolled inr
       const userFiltered = themeFiltered.filter((event) => {
-        return event.eventCreator !== localStorage.getItem('email') && !enrolledEvents.includes(event._id);
+        return event.eventCreator !== localStorage.getItem('email');
+        {/* && !enrolledEvents.includes(event._id);     excludes user's enrolled events*/ }
       });
       return userFiltered
     }
