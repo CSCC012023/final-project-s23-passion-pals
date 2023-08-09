@@ -5,6 +5,7 @@ import CheckBox from '../checkbox';
 import EventCard from './eventCard';
 import './findEvent.css';
 import io from 'socket.io-client';
+import PopupNotification from '../Dashboard/PopupNotification';
 
 
 export default function FindEvent() {
@@ -26,6 +27,11 @@ export default function FindEvent() {
   const [friends, setFriends] = useState([]);
   const [friendEnrolledEvents, setFriendEnrolledEvents] = useState([]);
   const [themes, setThemes] = useState([]);
+  const userId = localStorage.getItem('userId');
+  const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
+  const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
+  const [isRecommendedOn, setisRecommendedOn] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
 
   // Save current page to local storage
   useEffect(() => {
@@ -43,7 +49,7 @@ export default function FindEvent() {
 
   const socket = io('http://localhost:5000');
 
-  // Get all events that the user is enrolled in
+  // Get various data about the user
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getUsers/${userId}`)
@@ -54,12 +60,15 @@ export default function FindEvent() {
           setPreferredLocations(user.locations);
           setFriends(user.friend);
           setThemes(user.interest);
+          if (response.data.request && response.data.request.length > 0) {
+            setShowNotification(true);
+          }
         }
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }, [userId]);
 
   // Get all events
   useEffect(() => {
@@ -109,7 +118,7 @@ export default function FindEvent() {
     //two ifs at different spots to make sure the events happen in the correct sequence
   }, [events, query]);
 
-  const userId = localStorage.getItem('userId');
+
 
   useEffect(() => {
     const storedFilters = localStorage.getItem('filters');
@@ -201,11 +210,6 @@ export default function FindEvent() {
       socket.off('eventUpdate');
     };
   }, []);
-
-
-  const [isUserLocationFilterOn, setIsUserLocationFilterOn] = useState(false);
-  const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
-  const [isRecommendedOn, setisRecommendedOn] = useState(true);
 
   const handleToggleUserLocationFilter = () => {
     setIsUserLocationFilterOn((prev) => !prev);
@@ -437,6 +441,7 @@ export default function FindEvent() {
   // Cards generated from data in the database
   return (
     <div className='page-container'>
+      {showNotification && <PopupNotification />}
       <div className="findEvent-sidebar">
 
         {/* Toggle button for recommended events */}
