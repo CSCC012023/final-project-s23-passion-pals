@@ -1,68 +1,65 @@
-/* Styling for the profile container */
+.body{
+  min-width: 1200px;
+}
 .profile-container {
   display: flex;
   justify-content: left;
-  margin-left: 50px;
+  margin-left: 20px;
   flex-direction: row;
   align-items: center;
-  height: 35vh;
+  height: 25vh;
   margin-top: 15px;
-  background-color: #212B38;
+  margin-bottom: 25px;
 }
 
-
-/* Styling for the card container wrapper */
 .card-container-wrapper {
   display: flex;
   justify-content: center;
   background-color: #212B38;
   padding: 20px;
+  border-top: 6px solid #08C6AB;
 }
 
-.button-container{
+.button-container {
   display: flex;
-  justify-content: left;
-  flex-direction: row;
-  align-items: left;
-  max-width: 500px;
-  background-color: #212B38;
-  margin-left: 225px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 10px;
 }
 
-
-/* Styling for individual card containers */
 .card-container {
   flex: 1;
-  min-width: 0; /* Ensure flex items can shrink below their content's width */
-  max-width: 40%; /* Divide the width equally for both card containers */
+  min-width: 0;
+  max-width: 100%;
   background-color: #212B38;
   border-radius: 15px;
-  margin: 0 10px; /* Adjust margin between the card containers */
-  padding: 10px; /* Add padding to the card container */
-  color: white; /* Text color for content in the card container */
-  overflow: hidden; /* Hide any overflowing content */
+  margin: 0 10px;
+  padding: 10px;
+  color: white;
+
 }
+
 /* Styling for the profile section */
 .profile {
   width: 100%;
   padding: 10px;
-  background-color: #212B38;
   border-radius: 8px;
-  color:white;
-  display:flex;
-  flex-direction:row;
+  display: flex;
+  flex-direction: row;
+  color: white;
 }
 
+/* Styling for the profile picture */
 .profile-picture {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 250px; /* Increase the width to make it bigger */
-  height: 250px; /* Increase the height to make it bigger */
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   margin-top: 20px;
-  margin-left: 200px;
-  border: solid white 2px;
+  margin-left: 20px;
+  border: solid #08C6AB 6px;
 }
 
 .profile-picture img {
@@ -72,18 +69,16 @@
 }
 /* Styling for the profile details */
 .profile-details {
-  margin-left: 50px;
+  margin-left: 25px;
   margin-top: 30px;
   text-align: left;
   margin-bottom: 20px;
   color: white;
-  align-content: right;
   width: auto;
 }
 
 .profile-details h2 {
-  font-size: 100px;
-  color: white;
+  font-size: 80px;
   margin-bottom: 5px;
 }
 
@@ -96,7 +91,7 @@
 
 .profile-details p {
   font-size: 30px !important;
-  color: white !important;
+  
 }
 
 .profile-details p strong {
@@ -105,22 +100,24 @@
 
 .profile-details p.email {
   font-size: 12px;
-  color: white;
+  color: white !important;
 }
 
-/* Styling for the edit button */
 .edit-button {
   background-color: #08C6AB;
   color: #fff;
-  display: block;
+  display: flex; /* Change display to flex to align items */
+  align-items: center; /* Vertically center the icon and text */
   text-align: center;
   padding: 8px 16px;
   border: none;
-  border-radius: 50%;
+  border-radius: 10px;
   font-size: 30px;
   cursor: pointer;
-  text-decoration: none; /* Remove text underline */
-  margin: 10px;
+  text-decoration: none;
+  margin-right: 10px; /* Add a margin to separate buttons */
+  margin-top: 10px;
+  
 }
 
 .edit-button:hover {
@@ -129,4 +126,40 @@
 
 .edit-button:focus {
   outline: none;
+}
+
+
+.hover-container:hover .edit-button {
+  background-color: #212B38;
+}
+
+.edit-button .icon-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+  border-radius: 10px;
+  padding: 5px 10px;
+  
+}
+
+.edit-button .icon-container i {
+  margin-right: 2px;
+  margin-left: 5px;
+}
+
+.edit-button .icon-text {
+  display: none;
+  font-size: 14px;
+  color: white;
+}
+
+.hover-container:hover .edit-button .icon-text {
+  display: inline-block;
+}
+
+.header-container {
+  background-color: #37465B;
+  padding: 20px;
+  
 }

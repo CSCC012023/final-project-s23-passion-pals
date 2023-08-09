@@ -220,53 +220,65 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="profile-container">
-        <div className="profile">
-         {/* Use the profile picture data from the server */}
-          {user && (
-            <div className="profile-picture">
-              {user.uploadedPfp ? (
-                <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
-              ) : (
-                <img src={user.profilePic} alt="Profile" />
-              )}
-            </div>
-          )}
-
-          <div className="profile-details">
-            {user && (
-              <>
-                <h2>{user.fname} {user.lname}</h2>
-                <p className="email">{user.email}</p>
-              </>
-            )}
-          </div>
-
-        </div>
+      <div className="header-container">
+  <div className="profile-container">
+    <div className="profile">
+      <div className="profile-picture">
+        {/* Use the profile picture data from the server */}
+        {user && user.profilePic && (
+          <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
+        )}
       </div>
-      <div className='button-container'>
-          <Link to="/updateProfile" className="edit-button">
-            <i class='bx bxs-edit-alt' ></i>
-          </Link>
-          <br />
-          <Link to="/selectEdit" className="edit-button">
-            <i class='bx bxs-book-bookmark' ></i>
-          </Link>
-          <br />
-          {/* Button to open the modal */}
-          <button onClick={() => setIsModalOpen(true)} className='edit-button'><i class='bx bxs-edit-location'></i></button>
 
-          {/* Render the modal */}
-          <Modal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onSave={(location, e) => {
-              e.preventDefault();
-              setSelectedLocation(location);
-            }}
-            onDelete={handleDeleteLocation}
-            user={user}
-          />
+      <div className="profile-details">
+        {user && (
+          <>
+            <h2>{user.fname} {user.lname}</h2>
+            <p className="email">{user.email}</p>
+            <div className="button-container">
+              <div className="hover-container">
+                <Link to="/updateProfile" className="edit-button">
+                  <div className="icon-container">
+                    <i className="fas fa-user-edit"></i>
+                    <span className="icon-text">Edit Profile</span>
+                  </div>
+                </Link>
+              </div>
+              <div className="hover-container">
+                <Link to="/selectEdit" className="edit-button">
+                  <div className="icon-container">
+                    <i className='bx bxs-edit-alt'></i>
+                    <span className="icon-text">Edit Themes</span>
+                  </div>
+                </Link>
+              </div>
+              <div className="hover-container">
+                <button onClick={() => setIsModalOpen(true)} className='edit-button'>
+                  <div className="icon-container">
+                    <i className='bx bxs-edit-location'></i>
+                    <span className="icon-text">Edit Location</span>
+                  </div>
+                </button>
+              </div>
+              {/* Render the modal */}
+              <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                onSave={(location, e) => {
+                  e.preventDefault();
+                  setSelectedLocation(location);
+                }}
+                onDelete={handleDeleteLocation}
+                user={user}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+
+
         </div>
       <div className='card-container-wrapper'>
         <div className='card-container'>
