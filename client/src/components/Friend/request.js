@@ -78,7 +78,7 @@ const FriendList = () => {
 
 
   return (
-    <div className='friend-container'>
+    <div className='friend-request-container'>
       <div id="users">
         <ul id="users_ul">
           {data.map((item, index) => {

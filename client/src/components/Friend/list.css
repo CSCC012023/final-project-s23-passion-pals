@@ -65,7 +65,7 @@
 
 
 /* Actually being used */
-.friend-container {
+.friend-request-container {
   gap: 10px;
   flex-direction: row;
   padding-bottom: 2%;
