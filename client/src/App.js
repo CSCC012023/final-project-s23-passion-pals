@@ -101,10 +101,10 @@ const App = () => {
           path="/loading"
           element={<PrivateRoute element={<Loading />} path="/loading" />}
         />
-        <Route
+        {/* <Route
           path="/request"
           element={<PrivateRoute element={<Request />} path="/request" />}
-        />
+        /> */}
         <Route
           path="/currentFriend"
           element={<PrivateRoute element={<CurrentFriend />} path="/currentFriend" />}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Checkbox } from 'antd';
 import { Button } from 'antd';
 import { FilterOutlined } from '@ant-design/icons'; // Import the FilterOutlined icon
-import './checkbox.css'; 
+import './checkbox.css';
 
 const categories = [
   { _id: 'Gaming', name: 'Gaming' },
@@ -17,7 +17,7 @@ const categories = [
 
 export default function CheckBoxComponent(props) {
   const [checked, setChecked] = useState([]);
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const [showCheckboxes, setShowCheckboxes] = useState(true);
 
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
@@ -44,7 +44,7 @@ export default function CheckBoxComponent(props) {
           onChange={() => handleToggle(value._id)}
           type="checkbox"
           checked={checked.indexOf(value._id) !== -1}
-          className="checkbox" 
+          className="checkbox"
         />
         <span>{value.name}</span>
       </label>
@@ -52,9 +52,11 @@ export default function CheckBoxComponent(props) {
 
   return (
     <div className="checkbox-container">
+      {/* No longer need the toggle given the UI, but I don't want to fully delete it
       <Button onClick={toggleCheckboxes} icon={<FilterOutlined />} className="filter-button">
         Filter
       </Button>
+  */}
       {showCheckboxes && (
         <div className="checkbox-list-container">
           {renderCheckboxes()}
