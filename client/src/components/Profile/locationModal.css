@@ -18,9 +18,11 @@
     transition: opacity 0.3s, visibility 0.3s;
     font-family: Arial, sans-serif;
 }
+
 .modal p {
     color: white !important;
 }
+
 /* Styles for the open modal */
 .modal.open {
     opacity: 1;
@@ -50,6 +52,9 @@
     font-size: 20px;
     font-weight: none;
     margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .modal-content h3 {
@@ -155,44 +160,55 @@
 /* Add these responsive styles for the location popup */
 @media screen and (max-width: 768px) {
     .modal-content {
-      min-width: auto;
-      max-width: 90%; /* Adjust the maximum width as needed */
-      padding: 10px; /* Add padding for better spacing */
+        min-width: auto;
+        max-width: 90%;
+        /* Adjust the maximum width as needed */
+        padding: 10px;
+        /* Add padding for better spacing */
     }
-    
+
     .added-locations li {
-      min-width: auto;
+        min-width: auto;
     }
-  
+
     .added-locations li button {
-      width: 25%; /* Adjust the button width as needed */
-      padding: 6px; /* Adjust the padding for better text alignment */
-      font-size: 14px; /* Adjust the font size for better visibility */
+        width: 25%;
+        /* Adjust the button width as needed */
+        padding: 6px;
+        /* Adjust the padding for better text alignment */
+        font-size: 14px;
+        /* Adjust the font size for better visibility */
     }
-    
+
     .added-locations .location-text {
-      padding-left: 15px; /* Adjust the padding for better alignment */
+        padding-left: 15px;
+        /* Adjust the padding for better alignment */
     }
-  
+
     .modal-content h3 {
-      padding-top: 10px; /* Adjust the padding-top value as needed */
-      font-size: 18px; /* Adjust the font size for better visibility */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+        padding-top: 10px;
+        /* Adjust the padding-top value as needed */
+        font-size: 18px;
+        /* Adjust the font size for better visibility */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
-  
+
     .country-selector {
-      width: 100%; /* Make the select box fit within the container */
-      display: flex;
-      justify-content: center;
+        width: 100%;
+        /* Make the select box fit within the container */
+        display: flex;
+        justify-content: center;
     }
-    
+
     .country-selector select {
-      max-width: 100%; /* Make the select box fit within the container */
-      font-size: 14px; /* Adjust the font size for better visibility */
-      padding: 6px; /* Adjust padding for better spacing */
+        max-width: 100%;
+        /* Make the select box fit within the container */
+        font-size: 14px;
+        /* Adjust the font size for better visibility */
+        padding: 6px;
+        /* Adjust padding for better spacing */
     }
-  }
-  
+}

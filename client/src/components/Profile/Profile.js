@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
+import InterestModal from '../interestSelection/interestPopup';
 import Modal from './locationModal'
 import EventCard from '../EventCard/eventCard';
 import Popup from '../EventCard/eventPopup';
@@ -16,6 +17,7 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInterestsModalOpen, setIsInterestsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
   const [events, setEvents] = useState([]);
@@ -157,7 +159,7 @@ export default function Profile() {
 
         await deleteConversation(eventId);
       })
-      
+
       .catch((error) => {
         console.log(error);
       });
@@ -200,6 +202,10 @@ export default function Profile() {
     }
   };
 
+  const handleCloseInterestsModal = () => {
+    setIsInterestsModalOpen(false);
+  };
+
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -221,65 +227,69 @@ export default function Profile() {
   return (
     <div>
       <div className="header-container">
-  <div className="profile-container">
-    <div className="profile">
-      <div className="profile-picture">
-        {/* Use the profile picture data from the server */}
-        {user && user.profilePic && (
-          <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
-        )}
-      </div>
-
-      <div className="profile-details">
-        {user && (
-          <>
-            <h2>{user.fname} {user.lname}</h2>
-            <p className="email">{user.email}</p>
-            <div className="button-container">
-              <div className="hover-container">
-                <Link to="/updateProfile" className="edit-button">
-                  <div className="icon-container">
-                    <i className="fas fa-user-edit"></i>
-                    <span className="icon-text">Edit Profile</span>
-                  </div>
-                </Link>
-              </div>
-              <div className="hover-container">
-                <Link to="/selectEdit" className="edit-button">
-                  <div className="icon-container">
-                    <i className='bx bxs-edit-alt'></i>
-                    <span className="icon-text">Edit Themes</span>
-                  </div>
-                </Link>
-              </div>
-              <div className="hover-container">
-                <button onClick={() => setIsModalOpen(true)} className='edit-button'>
-                  <div className="icon-container">
-                    <i className='bx bxs-edit-location'></i>
-                    <span className="icon-text">Edit Location</span>
-                  </div>
-                </button>
-              </div>
-              {/* Render the modal */}
-              <Modal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                onSave={(location, e) => {
-                  e.preventDefault();
-                  setSelectedLocation(location);
-                }}
-                onDelete={handleDeleteLocation}
-                user={user}
-              />
+        <div className="profile-container">
+          <div className="profile">
+            <div className="profile-picture">
+              {/* Use the profile picture data from the server */}
+              {user && user.profilePic && (
+                <img src={`data:image/jpeg;base64,${user.profilePic}`} alt="Profile" />
+              )}
             </div>
-          </>
-        )}
-      </div>
-    </div>
-  </div>
 
-
+            <div className="profile-details">
+              {user && (
+                <>
+                  <h2>{user.fname} {user.lname}</h2>
+                  <p className="email">{user.email}</p>
+                  <div className="button-container">
+                    <div className="hover-container">
+                      <Link to="/updateProfile" className="edit-button">
+                        <div className="icon-container">
+                          <i className="fas fa-user-edit"></i>
+                          <span className="icon-text">Edit Profile</span>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="hover-container">
+                      <button onClick={() => setIsInterestsModalOpen(true)} className="edit-button">
+                        <div className="icon-container">
+                          <i className='bx bxs-edit-alt'></i>
+                          <span className="icon-text">Edit Themes</span>
+                        </div>
+                      </button>
+                    </div>
+                    <div className="hover-container">
+                      <button onClick={() => setIsModalOpen(true)} className='edit-button'>
+                        <div className="icon-container">
+                          <i className='bx bxs-edit-location'></i>
+                          <span className="icon-text">Edit Location</span>
+                        </div>
+                      </button>
+                    </div>
+                    {/* Render the modal */}
+                    <Modal
+                      isOpen={isModalOpen}
+                      onClose={handleCloseModal}
+                      onSave={(location, e) => {
+                        e.preventDefault();
+                        setSelectedLocation(location);
+                      }}
+                      onDelete={handleDeleteLocation}
+                      user={user}
+                    />
+                    <InterestModal
+                      isOpen={isInterestsModalOpen}
+                      onClose={handleCloseInterestsModal}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
+
+
+      </div>
       <div className='card-container-wrapper'>
         <div className='card-container'>
           <h1>Enrolled Events</h1>
@@ -304,21 +314,21 @@ export default function Profile() {
         <div className="card-container">
           <h1>Created Events</h1>
           <div className='event-card-container'>
-              {userEvents.map((event) => (
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onEdit={true}
-                  enrolledEvents={enrolledEvents}
-                  handleEnroll={() => handleEnroll(event._id)}
-                  handleDeleteEvent={() => handleDeleteEvent(event._id)}
-                  handleEditEvent={() => handleOpenEditForm(event)}
-                />
-              ))}
+            {userEvents.map((event) => (
+              <EventCard
+                key={event._id}
+                event={event}
+                onEdit={true}
+                enrolledEvents={enrolledEvents}
+                handleEnroll={() => handleEnroll(event._id)}
+                handleDeleteEvent={() => handleDeleteEvent(event._id)}
+                handleEditEvent={() => handleOpenEditForm(event)}
+              />
+            ))}
             <Popup isOpen={openEditForm} onClose={() => setOpenEditForm(false)}>
               <Form event={selectedEvent} />
             </Popup>
-            </div>
+          </div>
         </div>
       </div>
     </div>

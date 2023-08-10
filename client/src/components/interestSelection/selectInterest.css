@@ -11,45 +11,52 @@
 /* Apply box-sizing border-box to all elements for consistent box model calculations */
 
 .Interest {
-  font-family: "Inter", sans-serif; /* Use the Inter font for the .Interest class */
-  line-height: 1.5; /* Set the line height for better readability */
-
+  display: flex;
+  font-family: "Inter", sans-serif;
+  /* Use the Inter font for the .Interest class */
+  line-height: 1.5;
+  /* Set the line height for better readability */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f9f8f800; /* Set the background color of the .Interest class */
+  background-color: #37465B;
+  /* Set the background color of the .Interest class */
   /* background-image: url('https://wallpaperaccess.com/full/1812936.jpg'); */
   /* Uncomment and provide a valid image URL to set a background image */
   /* background-repeat: repeat;
   background-size: contain;
   background-position: relative; */
-  
+
 }
 
 .checkbox-group {
-  display: flex; /* Use flexbox to create a flexible container for the checkboxes */
-  flex-wrap: wrap; /* Allow the checkboxes to wrap to the next line if necessary */
-  justify-content: center; /* Center the checkboxes horizontally within the container */
-  width: 90%; /* Set the width of the checkbox group to 90% of its parent container */
-  margin-left: auto; /* Automatically calculate the left margin for centering the group */
-  margin-right: auto; /* Automatically calculate the right margin for centering the group */
-  max-width: 600px; /* Set a maximum width for the checkbox group */
-  -webkit-user-select: none; /* Disable text selection on the checkbox group */
+  display: flex;
+  /* Use flexbox to create a flexible container for the checkboxes */
+  flex-wrap: wrap;
+  /* Allow the checkboxes to wrap to the next line if necessary */
+  justify-content: center;
+  /* Center the checkboxes horizontally within the container */
+  width: 90%;
+  /* Set the width of the checkbox group to 90% of its parent container */
+  max-width: 600px;
+  /* Set a maximum width for the checkbox group */
+  -webkit-user-select: none;
+  /* Disable text selection on the checkbox group */
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-.checkbox-group > * {
+.checkbox-group>* {
   margin: 0.5rem 0.5rem;
 }
 
 .checkbox-group-legend {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #9c9c9c;
+  color: white;
   text-align: center;
   line-height: 1.125;
-  margin-bottom: 1.25rem;
 }
 
 .checkbox-input {
@@ -62,28 +69,28 @@
   white-space: nowrap;
   width: 1px;
 }
-.checkbox-input:checked + .checkbox-tile {
-  border-color: #2260ff;
+
+.checkbox-input:checked+.checkbox-tile {
+  border-color: #37465B;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  color: #2260ff;
+  color: #37465B;
 }
-.checkbox-input:checked + .checkbox-tile:before {
+
+.checkbox-input:checked+.checkbox-tile:before {
   transform: scale(1);
   opacity: 1;
-  background-color: #2260ff;
-  border-color: #2260ff;
+  background-color: #37465B;
+  border-color: #37465B;
 }
-.checkbox-input:checked + .checkbox-tile .checkbox-icon,
-.checkbox-input:checked + .checkbox-tile .checkbox-label {
-  color: #2260ff;
+
+.checkbox-input:checked+.checkbox-tile .checkbox-icon,
+.checkbox-input:checked+.checkbox-tile .checkbox-label {
+  color: #37465B;
 }
-.checkbox-input:focus + .checkbox-tile {
-  border-color: #2260ff;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
-}
-.checkbox-input:focus + .checkbox-tile:before {
-  transform: scale(1);
-  opacity: 1;
+
+.checkbox-input:focus+.checkbox-tile {
+  border-color: #37465B;
+  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #212B38; */
 }
 
 .checkbox-tile {
@@ -94,21 +101,22 @@
   width: 7rem;
   min-height: 7rem;
   border-radius: 0.5rem;
-  border: 2px solid #b5bfd9;
-  background-color: #fff;
+  border: 2px solid #08C6AB;
+  background-color: #08C6AB;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   transition: 0.15s ease;
   cursor: pointer;
   position: relative;
 }
+
 .checkbox-tile:before {
   content: "";
   position: absolute;
   display: block;
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid #b5bfd9;
-  background-color: #fff;
+  border: 2px solid #08C6AB;
+  background-color: #08C6AB;
   border-radius: 50%;
   top: 0.25rem;
   left: 0.25rem;
@@ -120,9 +128,11 @@
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
+
 .checkbox-tile:hover {
-  border-color: #2260ff;
+  border-color: #37465B;
 }
+
 .checkbox-tile:hover:before {
   transform: scale(1);
   opacity: 1;
@@ -130,8 +140,9 @@
 
 .checkbox-icon {
   transition: 0.375s ease;
-  color: #494949;
+  color: white;
 }
+
 .checkbox-icon svg {
   width: 3rem;
   height: 3rem;
@@ -141,5 +152,12 @@
   color: #707070;
   transition: 0.375s ease;
   text-align: center;
-  
+
+}
+
+fieldset {
+  border: 3px solid #212B38;
+  padding: 0;
+  margin: 0;
+  border-radius: 5px;
 }

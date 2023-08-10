@@ -3,7 +3,7 @@ import axios from 'axios';
 import './selectInterest.css';
 import './button.css';
 import { useNavigate } from 'react-router-dom';
-const SelectInterest = () => {
+const SelectInterest = ({ onClose }) => {
   const [selectedInterests, setSelectedInterests] = useState([]); // State variable to store selected interests
   const history = useNavigate(); // Navigation hook for handling history
 
@@ -38,11 +38,11 @@ const SelectInterest = () => {
     } catch (error) {
       // Handle the error if needed
     }
-
-    // Add a delay before navigating to "/profile"
-    setTimeout(() => {
-      history('/profile', { state: { id: userId } });
-    }, 600);
+    onClose();
+    // // Add a delay before navigating to "/profile"
+    // setTimeout(() => {
+    //   history('/profile', { state: { id: userId } });
+    // }, 600);
   };
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const SelectInterest = () => {
 
     <div className="Interest">
       <fieldset className="checkbox-group">
-        <legend className="checkbox-group-legend">Edit your themes</legend>
+        <legend className="checkbox-group-legend">Edit Your Themes</legend>
         <div className="checkbox">
 
           <label className="checkbox-wrapper">
