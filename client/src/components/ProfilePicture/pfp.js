@@ -5,6 +5,7 @@ import Modal from '../Profile/locationModal';
 import './pfp.css';
 import canadaFlag from '../../images/canada-flag.png'; // Import the Canada flag image
 import Interests from '../interestSelection/selectInterest';
+import defaultPfp from '../../images/defaultPfp.png';; // Import the default profile picture
 
 const Pfp = () => {
   const [selectedProfilePic, setSelectedProfilePic] = useState(null);
@@ -39,12 +40,23 @@ const Pfp = () => {
   const handleSubmit = async () => {
     const userId = localStorage.getItem('userId');
     try {
+      // Create an object for the POST request body
+      const requestBody = {
+        profilePic: null,
+      };
       // Create a new FormData object and append the selected profile picture to it
       const formData = new FormData();
-      formData.append('profilePic', selectedProfilePic);
-
-      // Send a POST request to the server to upload the profile picture
-      await axios.post(`http://localhost:5000/upload-profile-pic/${userId}`, formData);
+      if(selectedProfilePic) {
+        formData.append('profilePic', selectedProfilePic);
+         // Send a POST request to the server to upload the profile picture
+        await axios.post(`http://localhost:5000/upload-profile-pic/${userId}`, formData);
+      }
+      else {
+        // If no profile picture selected, include defaultPfp URL in the request body
+        requestBody.profilePic = defaultPfp;
+        // Send a POST request to the server to upload the default picture
+        await axios.post(`http://localhost:5000/upload-default-pic/${userId}`, requestBody);
+      }
 
       // Make a POST request to update the phone number
       await axios.post('http://localhost:5000/updatePhoneNumber', {
@@ -142,7 +154,7 @@ const Pfp = () => {
         <br />
 
     
-        <h2 className="step-title">STEP 2: Upload your profile picture</h2>
+        <h2 className="step-title">STEP 2: Upload your profile picture (Optional)</h2>
         <br />
         <input
           type="file"
