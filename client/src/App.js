@@ -105,10 +105,10 @@ const App = () => {
           path="/request"
           element={<PrivateRoute element={<Request />} path="/request" />}
         /> */}
-        <Route
+        {/* <Route
           path="/currentFriend"
           element={<PrivateRoute element={<CurrentFriend />} path="/currentFriend" />}
-        />
+        /> */}
       </Routes>
     </div>
   );
