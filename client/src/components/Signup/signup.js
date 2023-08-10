@@ -9,7 +9,7 @@ function Signup() {
 
     const signInHistory = useNavigate();
     const loginHistory = useNavigate();
-  
+    const [isLoading, setLoading] = useState(false);
     const [emailSignup, setSignupEmail] = useState("");
     const [passwordSignup, setSignupPassword] = useState("");
     const [fname, setFname] = useState("");
@@ -18,6 +18,7 @@ function Signup() {
   
     const [emailLogin, setLoginEmail] = useState("");
     const [passwordLogin, setLoginPassword] = useState("");
+    
 
   
     const handleRegClick = (event) => {
@@ -32,6 +33,7 @@ function Signup() {
       e.preventDefault();
   
       try {
+        setLoading(true);
         const response = await axios.post("/signup", {
           email: emailSignup,
           password: passwordSignup,
@@ -43,13 +45,12 @@ function Signup() {
         if (response.data === "exist") {
           alert("User already exists");
         } else if (response.data.status === "notexist") {
-            // Reset input fields after successful account creation
+            alert("Successfully Created an account, email was sent please verify your account to login");
             setSignupEmail("");
             setSignupPassword("");
             setFname("");
             setLname("");
-            // Show successful account creation alert
-            alert("Successfully Created an account, email was sent please verify your account to login");
+            setLoading(false); 
             // Navigate to the login page
             handleSignClick();
         } else if (response.data === "emptyPassword") {
@@ -60,7 +61,7 @@ function Signup() {
       } catch (error) {
         alert("Wrong details");
         console.log(error);
-      }
+      } 
     }
   
     // Function to handle the form submission for user login
@@ -113,6 +114,7 @@ function Signup() {
             <input
               type="fname"
               placeholder="First Name"
+              value={fname}
               onChange={(e) => {
                 setFname(e.target.value);
               }}
@@ -120,6 +122,7 @@ function Signup() {
             <input
               type="lname"
               placeholder="Last Name"
+              value={lname}
               onChange={(e) => {
                 setLname(e.target.value);
               }}
@@ -127,6 +130,7 @@ function Signup() {
             <input
               type="email"
               placeholder="Email"
+              value={emailSignup}
               onChange={(e) => {
                 setSignupEmail(e.target.value);
               }}
@@ -135,12 +139,12 @@ function Signup() {
             <input
               type="password"
               placeholder="Password"
+              value={passwordSignup}
               onChange={(e) => {
                 setSignupPassword(e.target.value);
               }}
             />
-            <button onClick={submitSignup}>Register</button>
-            { }
+            <button onClick={submitSignup} disabled={isLoading} className={isLoading ? "disabled-button" : ""}>Register</button>
           </form>
         </div>
 
