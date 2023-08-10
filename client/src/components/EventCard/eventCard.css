@@ -25,15 +25,24 @@
   background: none;
   float: left;
   height: 100%;
-  width: 125px;
+  width: 12.5%;
   position: relative;
 }
 
 .event-image {
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   height: 100%;
+}
+
+@media screen and (max-width: 1919px) and (max-height: 1079px) {
+  .event-image {
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 100%;
+  }
 }
 
 .event-image:after {
