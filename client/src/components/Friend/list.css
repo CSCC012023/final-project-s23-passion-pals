@@ -1,145 +1,197 @@
+.background-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-item {
+  list-style: none;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px 15px 10px 25px;
+  border: 1px solid #ccc;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+
+
+
+
+#query {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 19px;
+  padding: 5px;
+  font-family: calibri light;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+
+#users select {
+  width: 120px;
+  margin-left: 230px;
+  margin-top: -45px;
+  border-radius: 0 3px 3px 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  position: absolute;
+  padding: 7.5px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+#users select:focus,
+#query:focus {
+  border: 1px solid rgb(73, 162, 225);
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
+  outline: none;
+}
+
+
+/* Actually being used */
 .friend-container {
-    position: relative;
-    margin: 50px auto;
-    max-width: 800px;
-    padding: 20px;
-  }
-  
-  .background-container {
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .profile-pic img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .user-item {
-    list-style: none;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 10px 15px 10px 25px;
-    border: 1px solid #ccc;
-    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
-    margin-bottom: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    cursor: pointer;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-info {
-    flex: 1;
-    margin-left: 10px;
-  }
-  
-  .name {
-    font-weight: bold;
-    color:white;
-  }
-  
-  .email {
-    color: black;
-    font-size: small;
-  }
-  
-  .button-container {
-    text-align: center;
-    margin-top: 5px;
-  }
-  
-  .add-button,
-  .remove-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-button {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .remove-button {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  #users {
-    background: rgb(255, 255, 255);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 280px;
-    width: 800px;
-    padding: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    box-shadow: inset 1px 1px 0 white;
-    max-height: 450px;
-  }
-  
-  #users ul {
-    margin: 0 auto;
-    padding: 0;
-    max-height: 390px;
-    overflow-y: auto;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 5px 5px 0 5px;
-    border-left: none;
-    border-right: none;
-  }
-  
-  #query {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 19px;
-    padding: 5px;
-    font-family: calibri light;
-    margin-bottom: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-    box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1);
-  }
-  
-  #users span {
-    display: block;
-    position: absolute;
-    background: rgb(73, 162, 225);
-    bottom: -35px;
-    left: -1px;
-    width: 3500px;
-    border-radius: 0 0 5px 5px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: inset 1px 1px rgba(255, 255, 255, 0.5);
-  }
-  
-  #users select {
-    width: 120px;
-    margin-left: 230px;
-    margin-top: -45px;
-    border-radius: 0 3px 3px 0;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    position: absolute;
-    padding: 7.5px;
-    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
-  }
-  
-  #users select:focus,
-  #query:focus {
-    border: 1px solid rgb(73, 162, 225);
-    box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
-    outline: none;
-  }
-  
+  gap: 10px;
+  flex-direction: row;
+  padding-bottom: 2%;
+  min-width: 400px;
+  color: black
+}
+
+#users {
+  background: #37465B;
+  padding: 15px;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: inset 1px 1px 0 #37465B;
+  max-height: 450px;
+}
+
+#users ul {
+  margin: 0;
+  max-height: 390px;
+  overflow-y: auto;
+  padding: 5px 5px 0px 5px;
+}
+
+#users li {
+  list-style: none;
+  background-color: #455163;
+  background-image:
+    linear-gradient(90deg,
+      #786cfc,
+      #5AFFE7 10px,
+      #08C6AB 11px,
+      #5a8681 10px,
+      transparent 11px);
+  padding: 10px 15px 10px 25px;
+  box-shadow: inset 1px 1px 0 #455163;
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+span.counter {
+  display: block;
+  background: #08C6AB;
+  border-radius: 0 0 5px 5px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.friend-req {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.name {
+  display: block;
+  font-weight: bolder;
+  color: white;
+}
+
+.email {
+  display: block;
+  color: white;
+  font-size: small;
+  font-weight: bold;
+}
+
+.friend-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.add-button,
+.remove-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.add-button {
+  background-color: #08C6AB;
+}
+
+.remove-button {
+  margin-left: 5px;
+  background-color: #2e756b;
+}
+
+.profile-pic img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: #37465B 3px solid;
+}
+
+#users ul::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  /* Set the width of the scrollbar */
+}
+
+/* Target the scrollbar thumb (the draggable part) */
+#users ul::-webkit-scrollbar-thumb {
+  background-color: #08C6AB;
+  /* Set the color of the scrollbar thumb */
+  border-radius: 4px;
+  /* Add rounded corners to the thumb */
+}
+
+/* Target the scrollbar thumb on hover */
+#users ul::-webkit-scrollbar-thumb:hover {
+  background-color: #0eb190;
+  /* Set a different color for the thumb when hovered */
+}
