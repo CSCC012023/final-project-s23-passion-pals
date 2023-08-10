@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
+import InterestModal from '../interestSelection/interestPopup';
 import Modal from './locationModal'
 import EventCard from '../EventCard/eventCard';
 import Popup from '../EventCard/eventPopup';
@@ -16,6 +17,7 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem('userId');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInterestsModalOpen, setIsInterestsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
   const [events, setEvents] = useState([]);
@@ -200,6 +202,12 @@ export default function Profile() {
     }
   };
 
+  const handleCloseInterestsModal = () => {
+    if (user.interest.length > 0) {
+      setIsInterestsModalOpen(false);
+    }
+  };
+
   const handleEnroll = (eventId) => {
     if (enrolledEvents.includes(eventId)) {
       // Unenroll from the event
@@ -245,12 +253,12 @@ export default function Profile() {
                 </Link>
               </div>
               <div className="hover-container">
-                <Link to="/selectEdit" className="edit-button">
+                <button onClick={() => setIsInterestsModalOpen(true)} className="edit-button">
                   <div className="icon-container">
                     <i className='bx bxs-edit-alt'></i>
                     <span className="icon-text">Edit Themes</span>
                   </div>
-                </Link>
+                </button>
               </div>
               <div className="hover-container">
                 <button onClick={() => setIsModalOpen(true)} className='edit-button'>
@@ -270,6 +278,10 @@ export default function Profile() {
                 }}
                 onDelete={handleDeleteLocation}
                 user={user}
+              />
+              <InterestModal
+                isOpen={isInterestsModalOpen}
+                onClose={handleCloseInterestsModal}
               />
             </div>
           </>
