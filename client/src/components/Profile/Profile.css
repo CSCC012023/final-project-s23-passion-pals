@@ -180,6 +180,10 @@
     width: auto;
   }
 
+  .pwhite-text {
+    color: white !important;
+  }
+
   .profile-details h2 {
     font-size: 60px;
     margin-bottom: 5px;
@@ -306,4 +310,6 @@
     font-size: 20px;
     margin-bottom: 5px;
   }
+
+
 }
