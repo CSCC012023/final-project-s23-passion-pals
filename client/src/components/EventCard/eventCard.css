@@ -14,6 +14,7 @@
   margin-bottom: 25px;
   transition: all 300ms ease-out;
   width: 100%;
+  margin-left: 20px;
 }
 
 .event-card:hover {

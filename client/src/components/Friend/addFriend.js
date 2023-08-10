@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './list.css';
-import './search.css';
+import { useNavigate } from 'react-router-dom';
 import img1 from '../../images/user-circle.png';
-import FriendList from './request';
-
-// IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NO LONGER BEING USED. INSTEAD USING friendPage
 
 
-const Friend = () => {
+const AddFriend = () => {
   const [data, setData] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [query, setQuery] = useState('');
   const [requestedUsers, setRequestedUsers] = useState([]);
   const [currentFriends, setCurrentFriends] = useState([]);
+  const [currentFriendMode, setCurrentFriendMode] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  let filteredData = [];
 
   // Fetch the current user's friends list from the backend and store the friend IDs in currentFriends state
   const userId = localStorage.getItem('userId'); // Get the current user's ID from localStorage
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/users');
         setData(response.data);
+        setAllUsers(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -33,8 +31,6 @@ const Friend = () => {
 
     fetchData();
   }, []);
-
-
 
   // Fetch the current user's sent requests from the backend
   useEffect(() => {
@@ -50,8 +46,17 @@ const Friend = () => {
     fetchSentRequests();
   }, [userId]);
 
-  let filteredData = [];
-  if (data && data.length > 0) {
+  useEffect(() => {
+    if (currentFriendMode) {
+      const friendUsers = allUsers.filter(user => currentFriends.includes(user._id));
+      setData(friendUsers);
+    }
+    else {
+      setData(allUsers);
+    }
+  }, [currentFriendMode]);
+
+  if ((query.length > 0 || currentFriendMode) && data && data.length > 0) {
     filteredData = data.filter(
       (item) =>
         (item.fname && item.fname.toLowerCase().includes(query.toLowerCase())) ||
@@ -59,7 +64,9 @@ const Friend = () => {
         (item.email && item.email.toLowerCase().includes(query.toLowerCase()))
     );
   }
+
   filteredData = filteredData.filter((item) => item._id !== userId);
+
   useEffect(() => {
     const fetchCurrentFriends = async () => {
       try {
@@ -73,6 +80,7 @@ const Friend = () => {
 
     fetchCurrentFriends();
   }, [userId]);
+
   const handleButtonClick = async (userIdToAdd) => {
     if (userId === userIdToAdd) {
       console.log("Cannot add yourself as a friend");
@@ -142,72 +150,111 @@ const Friend = () => {
     }
   };
 
+  const handleSendMessage = async (friendId, friendName) => {
+    try {
+      // Check if the conversation with the friend already exists based on conditions
+      const checkConversationResponse = await axios.get(`/checkValidConversation/${localStorage.getItem('userId')}/${friendId}`);
+      const conversationExists = checkConversationResponse.data.hasValidConversation;
+
+      if (!conversationExists) {
+        // Create a new conversation with the friend
+        const conversationObject = {
+          members: [localStorage.getItem('userId'), friendId],
+          event: friendName,
+        };
+
+        const conversationResponse = await axios.post('/createConversation', conversationObject);
+        console.log('Conversation created:', conversationResponse.data);
+        // You can do further actions if needed after successful conversation creation
+      } else {
+        console.log('Conversation already exists with this friend.');
+      }
+
+      // Redirect to the messenger page regardless of whether the conversation exists or was just created
+      navigate(`/messenger?friendId=${friendId}`);
+    } catch (error) {
+      console.error('Error creating or checking conversation:', error);
+    }
+  };
+
   return (
-    <div className="background-container">
-      <div className="friend-container">
+    <div className='app-container'>
+      <div className="add-friend-container">
+        <h1 className='friend-title'> {currentFriendMode ? 'Your Current Friends' : 'Add New Friends'}</h1>
         <div className="search-container">
           <input
             type="text"
+            className="search-input"
             placeholder="Search..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <div className="search"></div>
-          {query !== '' && (
-            <div id="users">
-              <ul id="users_ul">
-                {filteredData.map((item, index) => {
-                  const { fname, lname, email, _id, profilePic } = item;
-                  const fullName = `${fname} ${lname}`;
+          <button
+            className='friend-button'
+            onClick={() => setCurrentFriendMode((prev) => !prev)}>
+            {currentFriendMode ? 'Search Users' : 'Your Friends'}
+          </button>
+        </div>
+        <div id="users" className='friend-content'>
+          {filteredData.length === 0 ? (<p>No users found.</p>) : (
+            <ul id="users_ul">
+              {filteredData.map((item, index) => {
+                const { fname, lname, email, _id, profilePic } = item;
+                const fullName = `${fname} ${lname}`;
 
-                  const isRequested = requestedUsers.includes(_id);
-                  const isFriend = currentFriends.includes(_id);
+                const isRequested = requestedUsers.includes(_id);
+                const isFriend = currentFriends.includes(_id);
 
-                  return (
-                    <li key={index} className="user-item">
-                      <div className="profile-pic">
-                        <img
-                          src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
-                          alt={fullName}
-                        />
-                      </div>
-                      <div className="user-info">
-                        <div className="name">{fullName}</div>
-                        <div className="email">{email}</div>
-                      </div>
-                      <div className="button-container">
-                        {isFriend || isRequested ? (
+                return (
+                  <li key={index} className="user-item">
+                    <div className="profile-pic">
+                      <img
+                        src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
+                        alt={fullName}
+                      />
+                    </div>
+                    <div className="user-info">
+                      <div className="name">{fullName}</div>
+                      <div className="email">{email}</div>
+                    </div>
+                    <div className="friend-button-container">
+                      {currentFriendMode ? (
+                        <button
+                          className={`add-button`}
+                          onClick={() => handleSendMessage(_id, fullName)}>
+                          Message
+                        </button>
+                      ) :
+                        isRequested ? (
                           <button
-                            className={`requested-button ${isFriend || isRequested ? 'disabled' : ''
-                              }`}
-                            disabled
-                          >
-                            {isFriend ? 'Added' : 'Request Sent'}
+                            className={`requested-button greyed-out`}
+                            disabled>
+                            Request Sent
                           </button>
+                        ) : isFriend ? (
+                          <div>
+                            <button
+                              className={`requested-button greyed-out`}
+                              disabled>
+                              Added
+                            </button>
+                            <button
+                              className="remove-button"
+                              onClick={() => handleDeleteClick(_id)}
+                            >
+                              Remove
+                            </button>
+                          </div>
                         ) : (
                           <button className="add-button" onClick={() => handleButtonClick(_id)}>
                             Add
                           </button>
                         )}
-
-                        {isRequested ? (
-                          <button className="requested-button" disabled>
-                            {/* Empty space for the requested button */}
-                          </button>
-                        ) : (
-                          <button
-                            className="remove-button"
-                            onClick={() => handleDeleteClick(_id)}
-                          >
-                            Remove
-                          </button>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
       </div>
@@ -215,4 +262,4 @@ const Friend = () => {
   );
 };
 
-export default Friend;
+export default AddFriend;

@@ -5,7 +5,7 @@ import Signup from "./components/Signup/signup";
 import Dash from "./components/Dashboard/dashBoard";
 import Select from "./components/interestSelection/selectInterest";
 import SelectEdition from "./components/interestSelection/selectEdit";
-import Friend from "./components/Friend/friend";
+import Friend from "./components/Friend/addFriend";
 import Form from "./components/Form/Form";
 import Profile from "./components/Profile/Profile";
 import UpdateProfile from "./components/Profile/UpdateProfile";
@@ -105,10 +105,10 @@ const App = () => {
           path="/request"
           element={<PrivateRoute element={<Request />} path="/request" />}
         /> */}
-        <Route
+        {/* <Route
           path="/currentFriend"
           element={<PrivateRoute element={<CurrentFriend />} path="/currentFriend" />}
-        />
+        /> */}
       </Routes>
     </div>
   );
