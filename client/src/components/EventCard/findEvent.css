@@ -36,6 +36,72 @@
   margin-bottom: 10px;
 }
 
+.popup-button {
+  margin-top: 5px;
+  border: none;
+  background-color: #08C6AB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s, background-color 0.3s;
+  cursor: pointer;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  width: 100%;
+  overflow: hidden;
+
+}
+
+.popup-button:hover {
+  background-color: #079a87;
+}
+
+.icon {
+  font-size: 30px;
+  transition: transform 0.3s;
+}
+
+.button-text {
+  margin-left: 7px;
+  opacity: 0;
+}
+
+.popup-button.hovered .icon {
+  color: #fff;
+}
+
+.popup-button.hovered .button-text {
+  animation: slide-in 0.5s forwards;
+}
+
+.popup-button.hovered .icon {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-10px);
+  }
+}
+
 /*button toggle on and off and hold color shenanigans*/
 .button-off {
   background-color: #08C6AB;

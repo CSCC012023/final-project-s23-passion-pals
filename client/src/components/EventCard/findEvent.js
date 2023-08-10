@@ -6,6 +6,7 @@ import EventCard from './eventCard';
 import './findEvent.css';
 import io from 'socket.io-client';
 import PopupNotification from '../Dashboard/PopupNotification';
+import RequestModal from '../Friend/requestPopup.js';
 
 
 export default function FindEvent() {
@@ -32,6 +33,8 @@ export default function FindEvent() {
   const [isFriendFilterOn, setIsFriendFilterOn] = useState(false);
   const [isRecommendedOn, setisRecommendedOn] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   // Save current page to local storage
   useEffect(() => {
@@ -395,7 +398,20 @@ export default function FindEvent() {
     }
   }, [isRecommendedOn, isUserLocationFilterOn, isFriendFilterOn, events, preferredLocations, friendEnrolledEvents]);
 
+  //button stuff for friend request
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const [isHovered, setIsHovered] = useState(false);
 
+  const handleHover = () => {
+    setIsHovered(true);
+  };
+
+  const handleLeave = () => {
+    setIsHovered(false);
+  };
+  //end of button stuff
 
 
   // Enroll or unenroll from an event
@@ -441,28 +457,38 @@ export default function FindEvent() {
   // Cards generated from data in the database
   return (
     <div className='page-container'>
-      {showNotification && <PopupNotification />}
-      <div className="findEvent-sidebar">
+      {showNotification && <PopupNotification handleClick={() => setIsModalOpen(true)} />}
+      <div className='under-sidebar'>
+        <div className="findEvent-sidebar">
 
-        {/* Toggle button for recommended events */}
-        <button onClick={handleToggleRecommendedFilter} className={`toggle-button ${isRecommendedOn ? 'button-on' : 'button-off'}`}>
-          Recommended
-        </button>
+          {/* Toggle button for recommended events */}
+          <button onClick={handleToggleRecommendedFilter} className={`toggle-button ${isRecommendedOn ? 'button-on' : 'button-off'}`}>
+            Recommended
+          </button>
 
-        {/* Toggle button for events user's friends are in */}
-        <button onClick={handleToggleFriendFilter} className={`toggle-button ${isFriendFilterOn ? 'button-on' : 'button-off'}`}>
-          Your friends are in
-        </button>
+          {/* Toggle button for events user's friends are in */}
+          <button onClick={handleToggleFriendFilter} className={`toggle-button ${isFriendFilterOn ? 'button-on' : 'button-off'}`}>
+            Your friends are in
+          </button>
 
-        {/* Toggle button for user's preferred locations */}
-        <button onClick={handleToggleUserLocationFilter} className={`toggle-button ${isUserLocationFilterOn ? 'button-on' : 'button-off'}`}>
-          Your locations
-        </button>
+          {/* Toggle button for user's preferred locations */}
+          <button onClick={handleToggleUserLocationFilter} className={`toggle-button ${isUserLocationFilterOn ? 'button-on' : 'button-off'}`}>
+            Your locations
+          </button>
 
-        <div className="filter-container">
-          <span className='filter-label'>Filter by Themes</span>
-          <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+          <div className="filter-container">
+            <span className='filter-label'>Filter by Themes</span>
+            <CheckBox handleFilters={selectedFilters => handleFilters(selectedFilters, 'themes')} />
+          </div>
         </div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className={`popup-button ${isHovered ? 'hovered' : ''}`}
+          onMouseEnter={handleHover}
+          onMouseLeave={handleLeave}>
+          <i class='icon fa-solid fa-user-plus'></i>
+          {isHovered && <span className="button-text">Friend Requests</span>}
+        </button>
       </div>
       <div className="findEvent-container"> {/*I won't lie this isn't necessary but moving the css breaks the layout so just leave this lol*/}
         <div className="event-card-container">
@@ -494,8 +520,13 @@ export default function FindEvent() {
             containerClassName={'pagination-container'}
             activeClassName={'active-page'}
           />
+          {/* Render the modal */}
         </div>
       </div>
+      <RequestModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }

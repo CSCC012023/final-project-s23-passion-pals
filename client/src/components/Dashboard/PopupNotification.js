@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 import './PopupNotification.css';
 
-const PopupNotification = () => {
+const PopupNotification = ({ handleClick }) => {
 
 
   const navigate = useNavigate(); // Get the navigate function from useNavigate
@@ -15,7 +15,7 @@ const PopupNotification = () => {
   };
 
   return (
-    <div id="reminderContainer" onClick={handleNotificationClick}>
+    <div id="reminderContainer" onClick={handleClick}>
       <div id="reminderHeader">
         <span>New Friend Request!</span>
       </div>
