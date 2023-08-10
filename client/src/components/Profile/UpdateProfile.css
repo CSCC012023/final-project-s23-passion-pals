@@ -1,18 +1,22 @@
 body {
   background-color: #212B38;
   font-family: Arial, sans-serif;
+  margin: 0; /* Reset default body margin */
+  padding: 0; /* Reset default body padding */
 }
 
 .update-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh; /* Increased height */
+  min-height: 100vh; /* Use min-height for better responsiveness */
+  padding: 20px; /* Add padding for spacing */
 }
 
 .update-form {
-  width: 600px; /* Increased width */
-  padding: 30px; /* Increased padding */
+  width: 100%;
+  max-width: 600px; /* Set a max-width to avoid excessive width on larger screens */
+  padding: 30px;
   background-color: #37465B;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
