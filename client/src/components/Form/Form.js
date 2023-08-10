@@ -5,7 +5,7 @@ import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
-import logo from '../../images/logo.png'; 
+import logo from '../../images/logo.png';
 
 import {
   Button,
@@ -106,7 +106,7 @@ const Form = (event) => {
 
     // Check if user state is available (user data is fetched)
     if (user) {
-    // Use user.email as the eventCreator in postData
+      // Use user.email as the eventCreator in postData
       const eventPostData = {
         ...postData,
         eventCreator: user.email,
@@ -117,6 +117,7 @@ const Form = (event) => {
         try {
           await axios.patch(`http://localhost:5000/events/${eventData.event._id}`, eventPostData);
           console.log('updated Data:', eventPostData);
+          window.location.reload();
         } catch (error) {
           console.log("Error updating event: ", error);
         }
@@ -130,7 +131,7 @@ const Form = (event) => {
           event: postData.eventName, // Set the event name as the "event" field
           eventId: postId,
         };
-      
+
         try {
           // Make an HTTP POST request to save the conversation
           const response = await axios.post("http://localhost:5000/createConversation", conversationObject);
@@ -208,7 +209,7 @@ const Form = (event) => {
     <div className="form_container">
       <form autoComplete="off" noValidate onSubmit={handleSubmit} className="form">
         <Typography variant="h3" className="heading">
-          {eventData ? "Edit Event" : "Create Event"}        
+          {eventData ? "Edit Event" : "Create Event"}
         </Typography>
         <input
           name="name"
@@ -257,7 +258,7 @@ const Form = (event) => {
                 />
               }
               label="Gaming"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
 
             <FormControlLabel
@@ -271,7 +272,7 @@ const Form = (event) => {
                 />
               }
               label="Nature"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -284,7 +285,7 @@ const Form = (event) => {
                 />
               }
               label="Creativity"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -297,7 +298,7 @@ const Form = (event) => {
                 />
               }
               label="Festivals"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -310,7 +311,7 @@ const Form = (event) => {
                 />
               }
               label="Sports"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -323,7 +324,7 @@ const Form = (event) => {
                 />
               }
               label="Culinary"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -336,7 +337,7 @@ const Form = (event) => {
                 />
               }
               label="Adventure"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
             <FormControlLabel
               control={
@@ -349,12 +350,12 @@ const Form = (event) => {
                 />
               }
               label="Health"
-              style = {{color: "white"}}
+              style={{ color: "white" }}
             />
           </div>
         </FormControl>
-       {/* Move the Date field to the left */}
-       <FormControl fullWidth>
+        {/* Move the Date field to the left */}
+        <FormControl fullWidth>
           <Typography variant="h7" style={{ color: "white", fontWeight: "bold" }}>
             Select Event Date
           </Typography>
@@ -379,7 +380,7 @@ const Form = (event) => {
         />
 
         <br />
-  
+
         <CountrySelector postData={postData} setPostData={setPostData} />
 
         <input
@@ -396,29 +397,29 @@ const Form = (event) => {
           type="number"
           className="input"
           placeholder="Enter available spots"
-          value={postData.spots || ""}          
+          value={postData.spots || ""}
           onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
-        <FileBase
-          type="file"
-          multiple={false}
-          onDone={({ base64 }) => {
+          <FileBase
+            type="file"
+            multiple={false}
+            onDone={({ base64 }) => {
+              setPostData({
+                ...postData,
+                eventImage: base64,
+              });
+            }}
+          />
+          {/* Outside the FileBase component */}
+          {!postData.eventImage && (
             setPostData({
               ...postData,
-              eventImage: base64,
-            });
-          }}
-        />
-         {/* Outside the FileBase component */}
-         {!postData.eventImage && (
-          setPostData({
-            ...postData,
-            eventImage: logo, // Set to default image URL
-          })
-        )};
+              eventImage: logo, // Set to default image URL
+            })
+          )};
         </div>
-        
+
 
         {isError && (
           <Alert severity="error" className="alert">

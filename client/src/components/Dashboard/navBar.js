@@ -42,6 +42,18 @@ export default function Navbar() {
                         </Link>
                     </li>
                     <li>
+                        {/* Find Events link */}
+                        <Link to="/findEvent"
+                            className={`link-style ${isActive('/findEvent') ? 'onTab' : ''}`}
+                            onMouseEnter={() => handleButtonHighlight('findEvent')}
+                            onMouseLeave={() => handleButtonHighlight(null)}>
+                            <div className={`icons  ${highlightedButton === 'findEvent' ? 'fa-beat' : ''}`}>
+                                <i className="fa-solid fa-house"></i>
+                            </div>
+                            <span className="button-text">Find Events</span>
+                        </Link>
+                    </li>
+                    <li>
                         {/* Profile link */}
                         <Link to="/profile"
                             className={`link-style ${isActive('/profile') ? 'onTab' : ''}`}
@@ -60,7 +72,7 @@ export default function Navbar() {
                             onMouseEnter={() => handleButtonHighlight('friend')}
                             onMouseLeave={() => handleButtonHighlight(null)}>
                             <div className={`icons  ${highlightedButton === 'friend' ? 'fa-beat' : ''}`}>
-                                <i className="fa-solid fa-user-plus"></i>
+                                <i className="fa-solid fa-user-group"></i>
                             </div>
                             <span className="button-text">Add Friends</span>
                         </Link>
@@ -87,18 +99,6 @@ export default function Navbar() {
                                 <i className="fa-solid fa-square-plus"></i>
                             </div>
                             <span className="button-text">Create Event</span>
-                        </Link>
-                    </li>
-                    <li>
-                        {/* Find Events link */}
-                        <Link to="/findEvent"
-                            className={`link-style ${isActive('/findEvent') ? 'onTab' : ''}`}
-                            onMouseEnter={() => handleButtonHighlight('findEvent')}
-                            onMouseLeave={() => handleButtonHighlight(null)}>
-                            <div className={`icons  ${highlightedButton === 'findEvent' ? 'fa-beat' : ''}`}>
-                                <i className="fa-solid fa-magnifying-glass"></i>
-                            </div>
-                            <span className="button-text">Find Events</span>
                         </Link>
                     </li>
                     <li>

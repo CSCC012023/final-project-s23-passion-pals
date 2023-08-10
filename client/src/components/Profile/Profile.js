@@ -293,11 +293,11 @@ export default function Profile() {
       <div className='card-container-wrapper'>
         <div className='card-container'>
           <h1>Enrolled Events</h1>
-          <br/>
+          <br />
           {events.length === 0 ? (
             <div>
-                <h4 style={{ color: 'white', fontWeight: 'bold' }}>You're not enrolled in any events!</h4>
-                <Link to='/findEvent' style={{ color: 'white' }}>Find Events</Link>
+              <h4 style={{ color: 'white', fontWeight: 'bold' }}>You're not enrolled in any events!</h4>
+              <Link to='/findEvent' style={{ color: 'white' }}>Find Events</Link>
             </div>
           ) : (
             <div className='event-card-container'>

@@ -114,4 +114,11 @@ body {
         opacity: 0;
     }
 
+    .nav .onTab {
+        background-color: #08C6AB;
+        border-radius: 30px;
+        width: 110%;
+        scale: 1.4;
+    }
+
 }
