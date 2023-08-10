@@ -1,5 +1,5 @@
 import React from "react";
-import SelectInterest from "./selectInterest";
+import SelectInterest from "./selectEdit";
 import "./interestPopup.css";
 
 function InterestModal({ isOpen, onClose }) {
