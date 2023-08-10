@@ -50,7 +50,7 @@ export default function Navbar() {
                             <div className={`icons  ${highlightedButton === 'findEvent' ? 'fa-beat' : ''}`}>
                                 <i className="fa-solid fa-house"></i>
                             </div>
-                            <span className="button-text">Find Events</span>
+                            <span className="button-text">Home</span>
                         </Link>
                     </li>
                     <li>
@@ -74,7 +74,7 @@ export default function Navbar() {
                             <div className={`icons  ${highlightedButton === 'friend' ? 'fa-beat' : ''}`}>
                                 <i className="fa-solid fa-user-group"></i>
                             </div>
-                            <span className="button-text">Add Friends</span>
+                            <span className="button-text">Friends</span>
                         </Link>
                     </li>
                     {/* <li>
