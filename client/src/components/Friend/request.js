@@ -90,10 +90,12 @@ const FriendList = () => {
               <li key={index}>
                 <div className="friend-req">
                   <div className='profile-and-text'>
-                    <span className="name">{fullName}</span>
-                    <span className="email">{email}</span>
                     <div className="profile-pic">
                       <img src={`data:image/jpeg;base64,${profilePic}`} alt="Profile" />
+                    </div>
+                    <div className="text-container">
+                      <span className="name">{fullName}</span>
+                      <span className="email">{email}</span>
                     </div>
                   </div>
                   <div className="friend-button-container">
