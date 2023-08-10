@@ -26,15 +26,17 @@ const EmailVerify = () => {
   return (
     <React.Fragment>
       {validUrl ? (
-        <div className={styles.container}>
-          <img src={success} alt="success_img" className={styles.success_img} />
-          <h1>Email verified successfully</h1>
-          <Link to="/signup">
-            <button className={styles.green_btn}>Login</button>
-          </Link>
-        </div>
+         <div className={styles.container}>
+         <img src={success} alt="success_img" className={styles.success_img} />
+         <h1>Thank you</h1>
+         <p>Your email has been successfully verified </p>
+         <Link to="/signup">
+           <button className={styles.green_btn}>Continue</button>
+         </Link>
+       </div>
       ) : (
-        <h1>404 Not Found</h1>
+        <div className={styles.container}><h1>404 Not Found</h1></div>
+        
       )}
     </React.Fragment>
   );
