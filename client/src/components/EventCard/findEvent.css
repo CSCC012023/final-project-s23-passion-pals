@@ -20,6 +20,10 @@
   border-radius: 15px;
 }
 
+.under-sidebar {
+  width: 250px;
+}
+
 /*the buttons*/
 .toggle-button {
   display: block;
