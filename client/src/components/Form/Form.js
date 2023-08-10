@@ -5,6 +5,7 @@ import axios from "axios";
 import { createPost } from "../../actions/posts";
 import "./FormStyles.css";
 import CountrySelector from './countrySelector';
+import logo from '../../images/logo.png'; 
 
 import {
   Button,
@@ -399,12 +400,26 @@ const Form = (event) => {
           onChange={(e) => setPostData({ ...postData, spots: e.target.value })}
         />
         <div className="file-input">
-          <FileBase
-            type="file"
-            multiple={false}
-            onDone={({ base64 }) => setPostData({ ...postData, eventImage: base64 })}
-          />
+        <FileBase
+          type="file"
+          multiple={false}
+          onDone={({ base64 }) => {
+            setPostData({
+              ...postData,
+              eventImage: base64,
+            });
+          }}
+        />
+         {/* Outside the FileBase component */}
+         {!postData.eventImage && (
+          setPostData({
+            ...postData,
+            eventImage: logo, // Set to default image URL
+          })
+        )};
         </div>
+        
+
         {isError && (
           <Alert severity="error" className="alert">
             Please fill in all the required fields and ensure the spots value is greater than 0.

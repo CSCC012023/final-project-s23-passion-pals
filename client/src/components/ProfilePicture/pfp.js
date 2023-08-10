@@ -5,7 +5,7 @@ import Modal from '../Profile/locationModal';
 import './pfp.css';
 import canadaFlag from '../../images/canada-flag.png'; // Import the Canada flag image
 import Interests from '../interestSelection/selectInterest';
-import defaultPfp from '../../images/defaultPfp.png';; // Import the default profile picture
+import defaultPfp from '../../images/defaultPfp.png'; // Import the default profile picture
 
 const Pfp = () => {
   const [selectedProfilePic, setSelectedProfilePic] = useState(null);
