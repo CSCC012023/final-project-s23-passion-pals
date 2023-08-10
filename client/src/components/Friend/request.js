@@ -105,7 +105,7 @@ const FriendList = () => {
             );
           })}
         </ul>
-        <span>Number of friend requests: {data.length}</span>
+        <span className="counter">Number of friend requests: {data.length}</span>
       </div>
     </div>
   );
