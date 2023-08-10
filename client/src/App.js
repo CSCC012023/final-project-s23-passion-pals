@@ -63,10 +63,10 @@ const App = () => {
           path="/select"
           element={<PrivateRoute element={<Select />} path="/select" />}
         />
-        <Route
+        {/* <Route
           path="/selectEdit"
           element={<PrivateRoute element={<SelectEdition />} path="/selectEdit" />}
-        />
+        /> */}
         <Route path="/signup" element={<Signup />} />
         <Route path=":userid/verify/" element={<EmailVerify />} />
         <Route
