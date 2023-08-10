@@ -88,7 +88,7 @@ const SelectInterest = ({ onClose }) => {
 
     <div className="Interest">
       <fieldset className="checkbox-group">
-        <legend className="checkbox-group-legend">Edit your Themes</legend>
+        <legend className="checkbox-group-legend">Edit Your Themes</legend>
         <div className="checkbox">
 
           <label className="checkbox-wrapper">
