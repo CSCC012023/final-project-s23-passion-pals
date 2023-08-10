@@ -329,7 +329,7 @@ export default function Profile() {
                 handleEditEvent={() => handleOpenEditForm(event)}
               />
             ))}
-            <Popup isOpen={openEditForm} onClose={() => setOpenEditForm(false)}>
+            <Popup isOpen={openEditForm} onClose={() => setOpenEditForm(false)} className="anotherclass">
               <Form event={selectedEvent} />
             </Popup>
           </div>

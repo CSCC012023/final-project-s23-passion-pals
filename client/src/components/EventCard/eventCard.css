@@ -249,6 +249,10 @@
   margin-bottom: auto;
 }
 
+.popup-metadata-container {
+  overflow: hidden;
+}
+
 /* .popup-event-description {
 
 } */
