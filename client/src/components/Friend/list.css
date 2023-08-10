@@ -6,18 +6,47 @@
   align-items: center;
 }
 
-.user-item {
-  list-style: none;
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 10px 15px 10px 25px;
-  border: 1px solid #ccc;
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
-  margin-bottom: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  cursor: pointer;
-  border-radius: 3px;
+.add-friend-container {
+  gap: 10px;
+  flex-direction: row;
+  padding-bottom: 2%;
+  width: 500px;
+  color: black;
+}
+
+.search-container {
   display: flex;
+  align-items: center;
+  /* Align items vertically */
+  margin-bottom: 10px;
+  /* Optional margin for spacing */
+}
+
+/* Style for the search input */
+.search-input {
+  height: 40px;
+  width: 100%;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+#users.friend-content {
+  min-height: 420px;
+  border-radius: 20px;
+}
+
+.friend-content p {
+  display: flex;
+  justify-content: center;
+  color: white !important;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -25,10 +54,6 @@
   flex: 1;
   margin-left: 10px;
 }
-
-
-
-
 
 #query {
   width: 100%;
@@ -70,13 +95,13 @@
   flex-direction: row;
   padding-bottom: 2%;
   min-width: 400px;
-  color: black
+  color: black;
 }
 
 #users {
   background: #37465B;
   padding: 15px;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 20px 20px 0px 0px;
   box-shadow: inset 1px 1px 0 #37465B;
   max-height: 450px;
 }
@@ -90,14 +115,7 @@
 
 #users li {
   list-style: none;
-  background-color: #455163;
-  background-image:
-    linear-gradient(90deg,
-      #786cfc,
-      #5AFFE7 10px,
-      #08C6AB 11px,
-      #5a8681 10px,
-      transparent 11px);
+  background-color: #08C6AB;
   padding: 10px 15px 10px 25px;
   box-shadow: inset 1px 1px 0 #455163;
   margin-bottom: 5px;
@@ -107,12 +125,13 @@
 }
 
 span.counter {
-  display: block;
-  background: #08C6AB;
-  border-radius: 0 0 5px 5px;
+  display: flex;
+  background: #212B38;
+  border-radius: 0 0 20px 20px;
   padding: 10px;
   color: white;
   font-weight: bold;
+  justify-content: center;
 }
 
 .friend-req {
@@ -123,10 +142,17 @@ span.counter {
 
 .profile-and-text {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
+}
+
+.text-container {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .name {
@@ -150,16 +176,24 @@ span.counter {
 }
 
 .add-button,
-.remove-button {
+.remove-button,
+.requested-button {
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   color: white;
+  width: 70px;
+  transition: all 0.2s ease-in-out;
 }
 
 .add-button {
-  background-color: #08C6AB;
+  background-color: #27bd72;
+}
+
+.add-button:hover {
+  background-color: #1e995d;
+  transition: all 0.2s ease-in-out;
 }
 
 .remove-button {
@@ -167,11 +201,25 @@ span.counter {
   background-color: #2e756b;
 }
 
+.remove-button:hover {
+  background-color: #1e5a50;
+  transition: all 0.2s ease-in-out;
+}
+
+.friend-button-container button.greyed-out {
+  background-color: grey;
+  color: white;
+  /* You can adjust the opacity to control the level of greying out */
+  cursor: not-allowed;
+  /* Add any additional styling you want for the disabled button */
+}
+
 .profile-pic img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
+  background-color: white;
   border: #37465B 3px solid;
 }
 

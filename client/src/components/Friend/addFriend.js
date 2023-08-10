@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './list.css';
-import './search.css';
 import img1 from '../../images/user-circle.png';
-import FriendList from './request';
-
-// IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NO LONGER BEING USED. INSTEAD USING friendPage
 
 
-const Friend = () => {
+const AddFriend = () => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [requestedUsers, setRequestedUsers] = useState([]);
   const [currentFriends, setCurrentFriends] = useState([]);
+  let filteredData = [];
 
   // Fetch the current user's friends list from the backend and store the friend IDs in currentFriends state
   const userId = localStorage.getItem('userId'); // Get the current user's ID from localStorage
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +26,6 @@ const Friend = () => {
 
     fetchData();
   }, []);
-
-
 
   // Fetch the current user's sent requests from the backend
   useEffect(() => {
@@ -50,8 +41,7 @@ const Friend = () => {
     fetchSentRequests();
   }, [userId]);
 
-  let filteredData = [];
-  if (data && data.length > 0) {
+  if (data && data.length > 0 && query.length > 0) {
     filteredData = data.filter(
       (item) =>
         (item.fname && item.fname.toLowerCase().includes(query.toLowerCase())) ||
@@ -59,7 +49,9 @@ const Friend = () => {
         (item.email && item.email.toLowerCase().includes(query.toLowerCase()))
     );
   }
+
   filteredData = filteredData.filter((item) => item._id !== userId);
+
   useEffect(() => {
     const fetchCurrentFriends = async () => {
       try {
@@ -73,6 +65,7 @@ const Friend = () => {
 
     fetchCurrentFriends();
   }, [userId]);
+
   const handleButtonClick = async (userIdToAdd) => {
     if (userId === userIdToAdd) {
       console.log("Cannot add yourself as a friend");
@@ -143,76 +136,74 @@ const Friend = () => {
   };
 
   return (
-    <div className="background-container">
-      <div className="friend-container">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <div className="search"></div>
-          {query !== '' && (
-            <div id="users">
-              <ul id="users_ul">
-                {filteredData.map((item, index) => {
-                  const { fname, lname, email, _id, profilePic } = item;
-                  const fullName = `${fname} ${lname}`;
+    <div className="add-friend-container">
 
-                  const isRequested = requestedUsers.includes(_id);
-                  const isFriend = currentFriends.includes(_id);
+      <div className="search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search..."
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </div>
+      <div id="users" className='friend-content'>
+        {filteredData.length === 0 ? (<p>No users found.</p>) : (
+          <ul id="users_ul">
+            {filteredData.map((item, index) => {
+              const { fname, lname, email, _id, profilePic } = item;
+              const fullName = `${fname} ${lname}`;
 
-                  return (
-                    <li key={index} className="user-item">
-                      <div className="profile-pic">
-                        <img
-                          src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
-                          alt={fullName}
-                        />
-                      </div>
-                      <div className="user-info">
-                        <div className="name">{fullName}</div>
-                        <div className="email">{email}</div>
-                      </div>
-                      <div className="button-container">
-                        {isFriend || isRequested ? (
-                          <button
-                            className={`requested-button ${isFriend || isRequested ? 'disabled' : ''
-                              }`}
-                            disabled
-                          >
-                            {isFriend ? 'Added' : 'Request Sent'}
-                          </button>
-                        ) : (
-                          <button className="add-button" onClick={() => handleButtonClick(_id)}>
-                            Add
-                          </button>
-                        )}
+              const isRequested = requestedUsers.includes(_id);
+              const isFriend = currentFriends.includes(_id);
 
-                        {isRequested ? (
-                          <button className="requested-button" disabled>
-                            {/* Empty space for the requested button */}
-                          </button>
-                        ) : (
-                          <button
-                            className="remove-button"
-                            onClick={() => handleDeleteClick(_id)}
-                          >
-                            Remove
-                          </button>
-                        )}
+              return (
+                <li key={index} className="user-item">
+                  <div className="profile-pic">
+                    <img
+                      src={profilePic ? `data:image/jpeg;base64,${profilePic}` : img1}
+                      alt={fullName}
+                    />
+                  </div>
+                  <div className="user-info">
+                    <div className="name">{fullName}</div>
+                    <div className="email">{email}</div>
+                  </div>
+                  <div className="friend-button-container">
+                    {isRequested ? (
+                      <button
+                        className={`requested-button greyed-out`}
+                        disabled>
+                        Request Sent
+                      </button>
+                    ) : isFriend ? (
+                      <div>
+                        <button
+                          className={`requested-button greyed-out`}
+                          disabled>
+                          Added
+                        </button>
+                        <button
+                          className="remove-button"
+                          onClick={() => handleDeleteClick(_id)}
+                        >
+                          Remove
+                        </button>
                       </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
+                    ) : (
+                      <button className="add-button" onClick={() => handleButtonClick(_id)}>
+                        Add
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
 };
 
-export default Friend;
+export default AddFriend;
