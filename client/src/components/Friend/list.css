@@ -1,0 +1,280 @@
+.background-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-container {
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  min-height: 100vh;
+  /* Ensure the container takes at least the full viewport height */
+  background-color: #212B38;
+  /* Background color */
+}
+
+.add-friend-container {
+  gap: 10px;
+  flex-direction: row;
+  padding-bottom: 2%;
+  width: 500px;
+  color: black;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  /* Align items vertically */
+  margin-bottom: 10px;
+  /* Optional margin for spacing */
+}
+
+/* Style for the search input */
+.search-input {
+  height: 40px;
+  width: 100%;
+  margin-right: 5px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+#users.friend-content {
+  min-height: 420px;
+  border-radius: 20px;
+}
+
+.friend-content p {
+  display: flex;
+  justify-content: center;
+  color: white !important;
+}
+
+.friend-button {
+  width: 100px;
+  background-color: #08C6AB;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.friend-button:hover {
+  background-color: #079a87;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+#query {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 19px;
+  padding: 5px;
+  font-family: calibri light;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+
+#users select {
+  width: 120px;
+  margin-left: 230px;
+  margin-top: -45px;
+  border-radius: 0 3px 3px 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  position: absolute;
+  padding: 7.5px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.friend-title {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+
+#users select:focus,
+#query:focus {
+  border: 1px solid rgb(73, 162, 225);
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.1);
+  outline: none;
+}
+
+
+/* Actually being used */
+.friend-request-container {
+  gap: 10px;
+  flex-direction: row;
+  padding-bottom: 2%;
+  min-width: 400px;
+  color: black;
+}
+
+#users {
+  background: #37465B;
+  padding: 15px;
+  border-radius: 20px 20px 0px 0px;
+  box-shadow: inset 1px 1px 0 #37465B;
+  max-height: 450px;
+}
+
+#users ul {
+  margin: 0;
+  max-height: 390px;
+  overflow-y: auto;
+  padding: 5px 5px 0px 5px;
+}
+
+#users li {
+  list-style: none;
+  background-color: #08C6AB;
+  padding: 10px 15px 10px 25px;
+  box-shadow: inset 1px 1px 0 #455163;
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+span.counter {
+  display: flex;
+  background: #212B38;
+  border-radius: 0 0 20px 20px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  justify-content: center;
+}
+
+.friend-req {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile-and-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.text-container {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.name {
+  display: block;
+  font-weight: bolder;
+  color: white;
+}
+
+.email {
+  display: block;
+  color: white;
+  font-size: small;
+  font-weight: bold;
+}
+
+.friend-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.add-button,
+.remove-button,
+.requested-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  width: 70px;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-button {
+  background-color: #27bd72;
+}
+
+.add-button:hover {
+  background-color: #1e995d;
+  transition: all 0.2s ease-in-out;
+}
+
+.remove-button {
+  margin-left: 5px;
+  background-color: #2e756b;
+}
+
+.remove-button:hover {
+  background-color: #1e5a50;
+  transition: all 0.2s ease-in-out;
+}
+
+.friend-button-container button.greyed-out {
+  background-color: grey;
+  color: white;
+  /* You can adjust the opacity to control the level of greying out */
+  cursor: not-allowed;
+  /* Add any additional styling you want for the disabled button */
+}
+
+.profile-pic img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: white;
+  border: #37465B 3px solid;
+}
+
+#users ul::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  /* Set the width of the scrollbar */
+}
+
+/* Target the scrollbar thumb (the draggable part) */
+#users ul::-webkit-scrollbar-thumb {
+  background-color: #08C6AB;
+  /* Set the color of the scrollbar thumb */
+  border-radius: 4px;
+  /* Add rounded corners to the thumb */
+}
+
+/* Target the scrollbar thumb on hover */
+#users ul::-webkit-scrollbar-thumb:hover {
+  background-color: #0eb190;
+  /* Set a different color for the thumb when hovered */
+}

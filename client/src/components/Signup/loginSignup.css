@@ -1,0 +1,446 @@
+@import url("https://font.googleapis.com/css2?family=Poppins");
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.loginSignup * {
+    box-sizing: border-box;
+}
+
+.loginSignup {
+    display: flex;
+    background-color: #212B38;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.loginSignup h1 {
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin: 0;
+    margin-bottom: 15px;
+    color: white !important;
+}
+
+.loginSignup h1.title {
+    font-size: 45px;
+    line-height: 45px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+    
+}
+
+.loginSignup p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+    text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+    color: white !important;
+}
+
+.loginSignup span {
+    /*just like an inline text thing*/
+    font-size: 14px;
+    margin-top: 25px;
+}
+
+.loginSignup a {
+    /*socials anchor. probably not used*/
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+    transition: 0.3s ease-in-out;
+}
+
+.loginSignup a:hover {
+    /*when you hover over soemthing with the anchor tag*/
+    color: #4bb6b7;
+}
+
+.content {
+    /*the class content in the html file*/
+    display: flex;
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.content .checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content input {
+    accent-color: #333;
+    width: 12px;
+    height: 12px;
+}
+
+.content label {
+    font-size: 14px;
+    user-select: none;
+    padding-left: 5px;
+}
+
+.loginSignup button {
+    position: relative;
+    border-radius: 20px;
+    border: 1px solid #0BC6AB;
+    background-color: #0BC6AB;
+    color: #fff;
+    /*text color*/
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px;
+    padding: 12px 80px;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    /*makes the first letter in each word capitalized*/
+    transition: 0.3s ease-in-out;
+    /*transition effect for things that happen to the button*/
+}
+
+.loginSignup button:hover {
+    letter-spacing: 3px;
+}
+
+.loginSignup button:active {
+    transform: scale(0.95);
+    /*its hard to tell if you just click, so hold click. makes the thing smaller on click*/
+}
+
+.loginSignup button:focus {
+    outline: none;
+}
+
+.loginSignup button.ghost {
+    background-color: rgba(225, 225, 225, 0.2);
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+/*the next 5 things with the i are targetting a specific icon*/
+/*the arrow thing that pops up when you hover*/
+.loginSignup button.ghost i {
+    position: absolute;
+    opacity: 0;
+    /*its invisible normally*/
+    transition: 0.3s ease-in-out;
+    /*transition effect on it*/
+}
+
+.loginSignup button.ghost i.register {
+    right: 70px;
+    /*youve got 2 'ghost' buttons. this is just shifting the icon over a bit because in the html its positioned weird*/
+}
+
+.loginSignup button.ghost i.login {
+    left: 70px;
+}
+
+.loginSignup button.ghost:hover i.register {
+    right: 40px;
+    opacity: 1;
+    /*hover effect on that icon. move it over and make it visible*/
+}
+
+.loginSignup button.ghost:hover i.login {
+    left: 40px;
+    opacity: 1;
+}
+
+.loginSignup form {
+    background-color: #37465B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.loginSignup input {
+    background-color: #eee;
+    border-radius: 10px;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 25px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 500px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Set the left position to 0 to align the form container to the left */
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+/*tldr on all of this, transition works by adding the panel-active class in the js script
+ which causes a new set of rules when added or removed*/
+
+/*BOTH login and register start on the left half, but login is in front
+when the button is clicked it adds the panel-active class, so when that happens everything shifts right and the zscore changes 
+under the overlay to make register appear
+*/
+.login-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+/*how the panels move side to side*/
+.container.right-panel-active .login-container {
+    transform: translateX(100%);
+}
+
+/*register starts invisible. opacity 0 and low zscore*/
+.register-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+    /*zindex is basically depth. its behind everything else on the screen*/
+    animation: shiftleft 0.6s;
+    /*shiftleft animation is defined below*/
+}
+
+/*^unless it has the active class added to it from the js code*/
+.container.right-panel-active .register-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    /*moves to the front*/
+    animation: shiftright 0.6s;
+    /*shiftright animation is defined below*/
+}
+
+/*basically first half dont appear, second half appear. 
+in the context of register as both register and login move right
+register is made visible and then put on top of login*/
+@keyframes shiftright {
+
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+@keyframes shiftleft {
+
+    0%,
+    49.99% {
+        opacity: 1;
+        z-index: 5;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+        z-index: 1;
+    }
+}
+
+@keyframes gif1 {
+    0% {
+        background-image: url('../../images/dancing-in-the-heights.gif');
+    }
+
+    33% {
+        background-image: url('../../images/having-fun.gif');
+    }
+
+    66% {
+        background-image: url('../../images/crowd-surfing.gif');
+    }
+
+    100% {
+        background-image: url('../../images/dancing-in-the-heights.gif');
+    }
+}
+
+@keyframes gif2 {
+    0% {
+        background-image: url('../../images/having-fun.gif');
+    }
+
+    33% {
+        background-image: url('../../images/crowd-surfing.gif');
+    }
+
+    66% {
+        background-image: url('../../images/dancing-in-the-heights.gif');
+    }
+
+    100% {
+        background-image: url('../../images/having-fun.gif');
+    }
+}
+
+@keyframes gif3 {
+    0% {
+        background-image: url('../../images/crowd-surfing.gif');
+    }
+
+    33% {
+        background-image: url('../../images/dancing-in-the-heights.gif');
+    }
+
+    66% {
+        background-image: url('../../images/having-fun.gif');
+    }
+
+    100% {
+        background-image: url('../../images/crowd-surfing.gif');
+    }
+}
+
+/*the thing on top that cover login and signup transitions*/
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+/*it starts on the right side so when login/signup move right overlay goes left*/
+.container.right-panel-active .overlay-container {
+    transform: translate(-100%);
+}
+
+/*the entire overlay is double the width of the card*/
+.overlay {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    /* Adjust the width to accommodate three gifs */
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+    animation: gif1 9s infinite;
+    /* Adjust the duration based on the total animation time */
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+    animation: gif2 9s infinite;
+    /* Adjust the duration based on the total animation time */
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+    animation: gif3 9s infinite;
+    /* Adjust the duration based on the total animation time */
+}
+
+/*i think all this does is darken the image behind a bit but idk*/
+.overlay::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to top,
+            rgba(56, 94, 109, 0.4) 40%,
+            rgba(56, 94, 109, 0));
+}
+
+/*honestly im not sure but i think its basically shifting the components of the overlay
+around and then letting overflow:hidden hide things it sends out of bounds*/
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5px;
+    height: 40px;
+    width: 40px;
+    transition: 0.3s ease-in-out;
+}
+
+.social-container a:hover {
+    border: 1px solid #4bb6b7;
+}
+
+.disabled-button {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  

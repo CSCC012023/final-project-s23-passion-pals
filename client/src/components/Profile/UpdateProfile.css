@@ -1,0 +1,78 @@
+body {
+  background-color: #212B38;
+  font-family: Arial, sans-serif;
+  margin: 0; /* Reset default body margin */
+  padding: 0; /* Reset default body padding */
+}
+
+.update-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Use min-height for better responsiveness */
+  padding: 20px; /* Add padding for spacing */
+}
+
+.update-form {
+  width: 100%;
+  max-width: 600px; /* Set a max-width to avoid excessive width on larger screens */
+  padding: 30px;
+  background-color: #37465B;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px; /* Increased spacing between form groups */
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 10px; /* Increased spacing below the labels */
+}
+
+.form-input {
+  width: 100%; /* Input fields take up full width */
+  padding: 15px; /* Increased padding */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px; /* Adjust the font size as needed */
+}
+
+.update-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #0BC6AB;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px; /* Adjust the font size as needed */
+  font-weight: bold;
+}
+
+.update-button:hover {
+  background-color: #46e1ca;
+}
+
+.uphone-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.uphone-prefix {
+  margin-right: 10px; /* Add spacing between the "+1" and the input */
+  color: #ffffff;
+}
+
+.uphone-input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
