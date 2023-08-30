@@ -11,10 +11,21 @@ import http from 'http'
 import { Server } from 'socket.io'
 import conversationRoute from './routes/conversation.js';
 import messagesRoute from './routes/messages.js';
-// Twillo Credentials
-const accountSid = 'AC0664ca12e251bb0cc81429ce614298ce';
-const authToken = '46b8801fecc8ef107cf5d66c7c55bf9c';
-const twilioPhoneNumber = '+16672305883';
+// Import the dotenv package to load environment variables from .env file
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Read Twilio credentials from environment variables
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+
+// Check if credentials are available
+if (!accountSid || !authToken || !twilioPhoneNumber) {
+  console.error("Twilio credentials are missing or incomplete");
+  process.exit(1); // Exit the application with an error code
+}
+
 // Create a Twilio client
 const twilioClient = twilio(accountSid, authToken);
 
