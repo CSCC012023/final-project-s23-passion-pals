@@ -15,7 +15,7 @@ export default function FindEvent() {
     return storedPage ? parseInt(storedPage) : 0; // get stored page or default to 0
   });
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 6; // set to 3 for demo purposes
+  const itemsPerPage = 4; // set to 3 for demo purposes
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState('');
   const [enrolledEvents, setEnrolledEvents] = useState([]);
@@ -264,15 +264,22 @@ export default function FindEvent() {
           const allFriendEvents = friendEvents.flat();
           //Convert eventIds into their details
           const friendEnrolledEventDetails = allFriendEvents.map(eventId => {
-            return (events.find(event => event._id === eventId));
+            return (events.filter(event => event._id === eventId));
           });
           const friendCreatedEvent = friendEmails.map(email => {
-            return events.find(event => event.eventCreator === email);
+            return events.filter(event => event.eventCreator === email);
           });
           // Filter out any 'undefined' values from the array and update the original array
           const excludeUndefinedenrol = friendEnrolledEventDetails.filter(event => event !== undefined);
           const excludeUndefinedcreate = friendCreatedEvent.filter(event => event !== undefined);
-          const finalReturn = excludeUndefinedenrol.concat(excludeUndefinedcreate);
+
+
+          // Combine all the friend enrolled events into a single array
+          const flatFriendEnrol = excludeUndefinedenrol.flat();
+          const allFriendCreatedEvents = excludeUndefinedcreate.flat();
+
+          // Combine all events into a single array
+          const finalReturn = [...flatFriendEnrol, ...allFriendCreatedEvents];
           setFriendEnrolledEvents([...new Set(finalReturn)]); //remove duplicate elements with Set
         })
         .catch(error => {
@@ -389,6 +396,7 @@ export default function FindEvent() {
         const friendFilteredEvents = finalEvents.filter((event) =>
           friendEnrolledEvents.some((friendEvent) => event._id === friendEvent._id)
         );
+        console.log(friendEnrolledEvents)
         finalEvents = friendFilteredEvents;
       }
       console.log(finalEvents);
