@@ -4,7 +4,9 @@
   </a>
   <h2 align="center">PassionPals: Connecting People Based on Shared Passions</h2>
 </p>
-
+  <a href="https://github.com/CSCC012023/final-project-s23-passion-pals" align="center">
+    Link to original repository in course org
+  </a>
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
@@ -33,6 +35,7 @@
         <li><a href="#contribution">Contributions</a></li>
       </ul>
     </li>
+    <li><a href="#video-demo">Video Demo</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -130,6 +133,8 @@ npm start
 
 ### Contribution
 We are using git flow for this project. We name our branches based on the features being implemented and developed in the branch, such as "message" for developing a message system. Otherwise, we have the main branch and development. We are not using any public ticketing or issue website. We will be using pull requests.
+
+## [Video Demo](https://www.youtube.com/watch?v=Ef_Qj6rHB5I)
 
 ## Acknowledgements
 - [Amitoz Jatana](https://github.com/A-Jatana)
