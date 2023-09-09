@@ -59,6 +59,9 @@
  - Node.js
  - HTML
  - CSS
+ - Socket.io
+ - Axios
+ - Twilio
 
 ### Features
  - #### Signup / Login
