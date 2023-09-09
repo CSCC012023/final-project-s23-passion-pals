@@ -14,11 +14,14 @@
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#features">Features</a>
             <ul>
-        		    <li><a href="#assessments-/-courses-/-grading">Assessments / Courses / Grading</a></li>
-                <li><a href="#survey-/-rating">Survey / Rating</a></li>
-                <li><a href="#hiring-/-finding-opportunities">Hiring / Finding Opportunities</a></li>
-                <li><a href="#real-time-chat">Real-Time Chat</a></li>
-                <li><a href="#giving-garden-/-social-initiatives">Giving Garden / Social Initiatives</a></li>
+        		    <li><a href="#signup-/-login">Signup / Login</a></li>
+                <li><a href="#waitlist">Waitlist</a></li>
+                <li><a href="#find-/-filter-/-join-events">Find / Filter / Join Events</a></li>
+                <li><a href="#create-event">Create Event</a></li>
+                <li><a href="#edit-profile-and-events">Edit Profile and Events</a></li>
+                <li><a href="#friends">Friends</a></li>
+                <li><a href="#chat-with-friends">Chat With Friends</a></li>
+                <li><a href="#group-chat-for-events">Group Chat for Events</a></li>
       		  </ul>
         </li>
       </ul>
@@ -58,6 +61,33 @@
  - CSS
 
 ### Features
+ - #### Signup / Login
+   
+ - #### Waitlist
+
+ - #### Find / Filter / Join Events
+<p align="center">
+  <img src="readme_files/filter_events.gif" alt="Logo">
+
+ - #### Create event
+<p align="center">
+  <img src="readme_files/create_event.gif" alt="Logo">
+
+ - #### Edit Profile and Events
+<p align="center">
+  <img src="readme_files/edit_info.gif" alt="Logo">  
+ 
+ - #### Friends
+<p align="center">
+  <img src="readme_files/friends.gif" alt="Logo">
+ 
+ - #### Chat With Friends
+<p align="center">
+  <img src="readme_files/friend_chat.gif" alt="Logo">
+ 
+ - #### Group Chat for Events
+<p align="center">
+  <img src="readme_files/group_chat.gif" alt="Logo">
 
 ## Getting Started
 ### Installation
