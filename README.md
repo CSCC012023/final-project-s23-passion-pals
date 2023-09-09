@@ -14,9 +14,9 @@
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#features">Features</a>
             <ul>
-        		    <li><a href="#signup-/-login">Signup / Login</a></li>
+        		    <li><a href="#signup--login">Signup / Login</a></li>
                 <li><a href="#waitlist">Waitlist</a></li>
-                <li><a href="#find-/-filter-/-join-events">Find / Filter / Join Events</a></li>
+                <li><a href="#find--filter--join-events">Find / Filter / Join Events</a></li>
                 <li><a href="#create-event">Create Event</a></li>
                 <li><a href="#edit-profile-and-events">Edit Profile and Events</a></li>
                 <li><a href="#friends">Friends</a></li>
